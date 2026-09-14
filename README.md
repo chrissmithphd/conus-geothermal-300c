@@ -22,7 +22,7 @@ This project maps the depth required to reach **300°C** temperatures across the
 
 ### Depth to 300°C Map
 
-![Depth to 300°C Map](plots/depth_to_300c_all_categories.png)
+![Depth to 300°C Map](plots/depth_to_300c_heatmap_smooth.png)
 
 *Map showing estimated drilling depths required to reach 300°C across CONUS. Red/orange regions indicate shallower, more accessible resources; gray regions require depths exceeding 10 km.*
 

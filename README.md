@@ -10,8 +10,8 @@ This project maps the depth required to reach **300°C** temperatures across the
 
 ### Key Findings
 
-- **Only ~2-3% of CONUS** can access 300°C within relatively shallow depths (≤4 km)
-- **~85% of CONUS** requires drilling deeper than 10 km to reach supercritical conditions
+- **Only ~5% of CONUS** can access 300°C within proven drilling depths (≤7 km)
+- **83% of CONUS** requires drilling deeper than 10 km to reach supercritical conditions
 - **Western US** (Basin & Range, Cascades, Yellowstone) offers the most accessible resources
 - **Eastern/Central US** faces significant technical challenges (>15 km drilling required)
 - **Each additional kilometer of drilling capability** substantially expands accessible territory

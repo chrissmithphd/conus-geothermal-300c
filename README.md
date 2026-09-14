@@ -1,502 +1,339 @@
-# Depth to 300°C: Mapping Supercritical Geothermal Resources Across the Continental United States
+<div align="center">
 
-**A comprehensive analysis of drilling depths required to access supercritical geothermal conditions (300°C) across CONUS**
+# 🌋 Depth to 300 °C
 
----
+### Mapping supercritical geothermal accessibility across the conterminous United States
 
-## 🌋 Executive Summary
+[![Model cells](https://img.shields.io/badge/model_cells-534%2C942-2E7BC4)](#the-grid)
+[![Stanford](https://img.shields.io/badge/Stanford-0–7_km-8C1515)](https://data.openei.org/submissions/7669)
+[![SMU](https://img.shields.io/badge/SMU-7.5–10_km-0033A0)](https://www.smu.edu/dedman/academics/departments/earth-sciences/research/geothermallab/datamaps/temperaturemaps)
+[![License](https://img.shields.io/badge/code-MIT-green)](#license)
 
-This project maps the depth required to reach **300°C** temperatures across the continental United States, identifying regions where supercritical geothermal energy resources may be accessible. By combining high-resolution Stanford geothermal models (0-7 km) with digitized SMU temperature-at-depth maps (7.5-10 km), we provide the first comprehensive assessment of supercritical geothermal accessibility across CONUS.
+**How deep must you drill to hit 300 °C?**
+Across 82.8 % of the lower 48, the answer is *deeper than 10 km* — beyond anything
+the geothermal industry has ever drilled.
 
-### Key Findings
-
-- **Only ~5% of CONUS** can access 300°C within proven drilling depths (≤7 km)
-- **83% of CONUS** requires drilling deeper than 10 km to reach supercritical conditions
-- **Western US** (Basin & Range, Cascades, Yellowstone) offers the most accessible resources
-- **Eastern/Central US** faces significant technical challenges (>15 km drilling required)
-- **Each additional kilometer of drilling capability** substantially expands accessible territory
-
----
-
-## 📊 Results Preview
-
-### Depth to 300°C Map
-
-![Depth to 300°C Map](plots/depth_to_300c_all_categories.png)
-
-*Map showing estimated drilling depths required to reach 300°C across CONUS. Red/orange regions indicate shallower, more accessible resources; gray regions require depths exceeding 10 km.*
-
-### Area Distribution
-
-![Area Distribution](plots/depth_to_300c_distribution.png)
-
-*Distribution of CONUS land area by depth category. The majority of the country requires advanced drilling technology (>7 km) to access supercritical temperatures.*
+</div>
 
 ---
 
-## 🎯 Project Motivation
+## The headline
 
-### Why 300°C?
+| Question | Answer |
+|---|---|
+| Reachable within **4 km**? | **0.00 %** of CONUS |
+| Reachable within **5 km**? | **0.00 %** — three model cells, total |
+| Reachable within **6 km**? | **0.19 %** |
+| Reachable within **7 km**? | **4.98 %** ← today's proven drilling envelope |
+| Reachable within **8 km**? | **5.36 %** |
+| Reachable within **10 km**? | **17.18 %** |
+| Requires **> 10 km** | **82.82 %** |
 
-**Supercritical water** (above 374°C at high pressure, or ~300°C practical target) represents the frontier of geothermal energy:
-
-- **10× higher energy density** than conventional geothermal
-- **Smaller surface footprint** per megawatt generated
-- **Key to next-generation EGS** (Enhanced Geothermal Systems)
-- **DOE target** for advanced geothermal development
-
-### Research Questions
-
-1. What percentage of CONUS can realistically access 300°C resources?
-2. Where are the most accessible supercritical geothermal regions?
-3. How does drilling depth capability affect resource accessibility?
-4. What is the relationship between tectonic setting and resource depth?
+> Pushing the drilling envelope from 7 km to 10 km **triples** the accessible land area —
+> from ~429,000 km² to ~1,477,000 km². That single step is the highest-leverage technology
+> target in the whole dataset.
 
 ---
 
-## 📚 Data Sources
+## The map
 
-### Primary: Stanford Thermal Earth Model (2024)
+![Depth required to reach 300 °C — continuous field](plots/depth_to_300c_heatmap.png)
 
-**Source:** [OpenEI Data Submission 7669](https://data.openei.org/submissions/7669)  
-**Reference:** Aljubran, M.J. & Horne, R.N. (2024). DOI: [10.1186/s40517-024-00304-7](https://doi.org/10.1186/s40517-024-00304-7)
+*Continuous nearest-neighbour field at ~3 km resolution. State outlines are US Census
+TIGER 2023 boundaries. Everything grey needs more than 10 km of hole.*
 
-- **Coverage:** 0-7 km depth at 1 km intervals
-- **Resolution:** 534,942 grid points (~4 km spacing)
-- **Method:** Physics-informed neural network trained on bottomhole temperature data
-- **Validation:** Mean absolute error of 4.8°C
-- **Vintage:** 2024 (most recent CONUS-wide thermal model)
+**🔍 [Open the interactive, zoomable version →](https://chrissmithphd.github.io/conus-geothermal-300c/)**
 
-**Data Quality:** ⭐⭐⭐⭐⭐ Excellent
+<details>
+<summary><b>Same data, every model cell plotted discretely</b> (click to expand)</summary>
 
-### Secondary: SMU Geothermal Laboratory (2011)
+<br>
 
-**Source:** [SMU Geothermal Lab Temperature Maps](https://www.smu.edu/dedman/academics/departments/earth-sciences/research/geothermallab/datamaps/temperaturemaps)  
-**Reference:** Blackwell et al. (2011)
+![Depth required to reach 300 °C — all cells](plots/depth_to_300c_points.png)
 
-- **Coverage:** 3.5-10 km depth at 0.5-1 km intervals
-- **Format:** PNG images (digitized to ~450k points per depth)
-- **Method:** Empirical model from well temperature measurements
-- **Temperature Resolution:** ±25°C (binned by color class)
-- **Vintage:** 2011
+All 534,942 cells drawn individually. The rare shallow cells (green = 5–6 km,
+blue = 4–5 km) are drawn larger and painted last so they don't vanish at CONUS scale.
 
-**Data Quality:** ⭐⭐⭐ Good (approximate due to image digitization)
+</details>
 
 ---
 
-## 🔬 Methodology
+## Where the accessible resource actually is
 
-### 1. Data Acquisition
+Every accessible cell sits west of roughly **−100° longitude**. The dividing line is
+tectonic, not arbitrary: it separates the actively extending, thin-crust West from the cold,
+thick, stable craton under the eastern two-thirds of the country.
 
-#### Stanford Data
-- Downloaded from ArcGIS REST services
-- 7 depth layers: 0, 1, 3, 4, 5, 6, 7 km
-- GeoJSON format with precise temperature values
+| Province | States | Typical depth to 300 °C |
+|---|---|---|
+| **Basin & Range** | NV, UT, S. ID | 6–8 km — largest contiguous target |
+| **Cascade arc** | OR, WA, N. CA | 6–7 km, locally 5–6 km |
+| **Snake River Plain / Yellowstone** | ID, WY, MT | 6–8 km |
+| **Salton Trough / Imperial Valley** | S. CA | 6–7 km |
+| **Rio Grande Rift** | NM, W. TX | 7–10 km |
+| **Great Plains → Atlantic** | ~40 states | **> 10 km** |
 
-#### SMU Data
-- Downloaded PNG temperature maps (7 depths)
-- Digitized using color-to-temperature mapping
-- Georeferenced to CONUS extent
-- Validated against original images
+The handful of shallowest cells (**4–5 km**, three cells total) fall along the
+Oregon/Washington Cascade axis and coastal Northern California.
 
-### 2. Temperature-to-Depth Interpolation
+---
 
-For each Stanford grid location (534,942 points):
+## Area breakdown
+
+![Area distribution by depth bin](plots/depth_to_300c_distribution.png)
+
+| Depth bin | Area (km²) | % of CONUS | Cumulative % |
+|---|---:|---:|---:|
+| ≤ 4 km | 0 | 0.00 | 0.00 |
+| 4–5 km | 46 | 0.00 | 0.00 |
+| 5–6 km | 16,285 | 0.19 | 0.19 |
+| 6–7 km | 412,296 | 4.79 | 4.98 |
+| 7–8 km | 32,000 | 0.37 | 5.36 |
+| 8–10 km | 1,016,841 | 11.82 | 17.18 |
+| **> 10 km** | **7,122,540** | **82.82** | 100.00 |
+| *Total* | *8,600,008* | *100.00* | |
+
+Areas are **latitude-weighted** (`A = R² · cos φ · Δφ · Δλ`), not raw cell counts, so
+Montana cells are not over-credited relative to Texas cells.
+
+---
+
+## Why 300 °C
+
+Supercritical and superhot geothermal systems are the step change the industry is chasing:
+
+- **~5–10× the energy per well** of a conventional 150–200 °C hydrothermal system
+- **Far smaller surface footprint** per installed megawatt
+- **Baseload, dispatchable, zero-carbon** — the profile the grid is short of
+- An explicit **US DOE Geothermal Technologies Office** target
+
+The reason it isn't everywhere already is the subject of this repository: the heat is real,
+but it is *deep*.
+
+---
+
+## Data sources
+
+### Primary — Stanford Thermal Earth Model (2024) · 0–7 km
+
+**Aljubran & Horne (2024)**, *Geothermal Energy* 12(1) · DOI [10.1186/s40517-024-00304-7](https://doi.org/10.1186/s40517-024-00304-7)
+Dataset: [OEDI submission 7669](https://data.openei.org/submissions/7669) · Live model: [stm.stanford.edu](https://stm.stanford.edu/)
+
+<a name="the-grid"></a>
+
+| | |
+|---|---|
+| Depth levels | 0, 1, 2, 3, 4, 5, 6, 7 km |
+| Cells | 534,942 per level (~4 km spacing, ~18 km² per cell) |
+| Method | Physics-informed graph neural network on bottom-hole temperatures |
+| Reported error | **MAE 4.8 °C** |
+| Coverage | 24.54–49.37 °N, −124.74 to −66.97 °W · complete CONUS |
+| Missing values | **zero** |
+
+**Access note:** the published bulk file is a 5.7 GB CSV. This project instead pulled the
+per-depth **ArcGIS FeatureServer** layers, which return the same predictions as paginated
+GeoJSON — one clean file per depth, ~132–145 MB each. See [`download_stanford.py`](download_stanford.py).
+
+### Secondary — SMU Geothermal Laboratory (2011) · 7.5–10 km
+
+**Blackwell et al. (2011)** · [SMU Geothermal Lab temperature maps](https://www.smu.edu/dedman/academics/departments/earth-sciences/research/geothermallab/datamaps/temperaturemaps)
+
+Only **rendered PNG maps** are public; the underlying grids are sold, not published. To get
+numbers beyond Stanford's 7 km ceiling, the published maps were **digitised**: legend colours
+were matched to their temperature classes, map pixels classified by nearest colour, and the
+result georeferenced to the CONUS extent.
+
+| | |
+|---|---|
+| Depth levels | 3.5, 4.5, 5.5, 6.5, **7.5, 8.5, 10** km |
+| Points recovered | 3,447,978 (~400–550 k per level) |
+| Temperature resolution | **±12.5 °C** (25 °C legend classes, midpoint assigned) |
+| Classification rate | ~41–47 % of pixels (remainder is ocean, borders, legend, text) |
+| Positional accuracy | ~±5–10 km (no georeferencing metadata in the source images) |
+
+<details>
+<summary><b>Digitisation validation</b> — original vs. reconstructed (click to expand)</summary>
+
+<br>
+
+![SMU digitisation check](plots/smu_digitized_6.5km_comparison.png)
+
+Left: published SMU 6.5 km map. Centre: extracted map area. Right: reconstructed temperature
+field. Every major thermal province is reproduced.
+
+![All SMU depths](plots/smu_digitized_all_depths.png)
+
+</details>
+
+> ⚠️ **This is an approximate re-digitisation of published figures, not the original SMU
+> model.** It is used only to bin depths *beyond* Stanford's validated range, never to
+> override Stanford where both exist.
+
+---
+
+## Method
+
+```
+Stanford GeoJSON (0–7 km)          SMU PNG maps (3.5–10 km)
+        │                                   │
+        │ 8 depth layers                    │ colour → temperature class
+        │ exact °C per cell                 │ pixel classification
+        ▼                                   ▼
+  linear interpolation                georeference to CONUS
+  T(z) → depth where T = 300 °C             │
+        │                                   │
+        ├── crossing found ≤ 7 km ──────────┤
+        │   → depth_300_km (continuous)     │
+        │                                   ▼
+        └── not reached by 7 km ──→ nearest-neighbour lookup of
+                                    SMU 7.5 / 8.5 / 10 km temperatures
+                                            │
+                                            ▼
+                                    assign deeper bin, or > 10 km
+```
+
+**1 · Interpolate the Stanford profile.** For each of the 534,942 cells, take the eight
+modelled temperatures and linearly interpolate to find where the profile crosses 300 °C.
 
 ```python
-def interpolate_depth_to_300c(depths, temperatures):
-    """
-    Linear interpolation to find depth where T = 300°C
-    """
-    if max(temperatures) < 300:
-        return NaN  # Not reached within Stanford data
-    
-    # Linear interpolation between depth layers
-    depth_300 = interp1d(temperatures, depths)(300)
-    return depth_300
+if temperatures.max() < 300:
+    return np.nan                      # not reached inside 0–7 km
+return float(interp1d(temperatures, depths)(300))
 ```
 
-**Example:** If temperatures are 250°C at 6 km and 320°C at 7 km:
-- Interpolated depth to 300°C = 6 + (300-250)/(320-250) × 1 = **6.71 km**
+Worked example — 250 °C at 6 km, 320 °C at 7 km:
+`6 + (300 − 250)/(320 − 250) × 1 =` **6.71 km**
 
-### 3. SMU Extension for Deep Locations
+Result: **27,488 cells (5.1 %)** cross 300 °C within 7 km.
 
-For locations not reaching 300°C by 7 km:
+**2 · Extend with SMU past 7 km.** For the 507,454 cells that don't cross inside Stanford's
+range, look up the digitised SMU temperature at 7.5, 8.5 and 10 km by nearest neighbour and
+assign the first bin where 300 °C is met. This recovers **63,933** more cells. The remaining
+**443,521** are classified `> 10 km`.
 
-1. **Match SMU grid to Stanford locations** (nearest neighbor interpolation)
-2. **Check SMU temperatures** at 7.5, 8.5, 10 km
-3. **Assign depth category** based on when 300°C is first reached
-4. **Mark as ">10 km"** if not reached by 10 km
+**3 · Bin, weight, report.** Assign the seven project bins, weight each cell by its true
+latitude-corrected surface area, and tabulate.
 
-### 4. Depth Binning
+---
 
-Assigned each location to one of seven categories:
+## Results file
 
-| Bin | Depth Range | Description |
-|-----|-------------|-------------|
-| 1 | ≤4 km | Most accessible (current EGS targets) |
-| 2 | 4-5 km | Accessible with proven technology |
-| 3 | 5-6 km | Moderate depth (commercial feasibility) |
-| 4 | 6-7 km | Deep but within Stanford's validated range |
-| 5 | 7-8 km | Very deep (frontier of current drilling) |
-| 6 | 8-10 km | Frontier depth (SMU data, approximate) |
-| 7 | >10 km | Currently impractical |
+[`data/processed/conus_depth_to_300c.csv`](data/processed) (also Parquet)
 
-### 5. Area-Weighted Statistics
+| column | meaning |
+|---|---|
+| `lat`, `lon` | cell centre, WGS 84 decimal degrees |
+| `depth_300_km` | interpolated crossing depth; `NaN` where 300 °C is not reached by 10 km |
+| `depth_bin` | one of the seven categories |
+| `source` | `Stanford` (continuous interpolation) or `SMU digitized` (binned) |
 
-Calculated proper surface area accounting for latitude:
+The `source` column matters: Stanford rows carry a genuine continuous depth estimate, SMU
+rows carry only a bin. Filter on it before doing anything quantitative with `depth_300_km`.
 
-```python
-area_km2 = R² × cos(latitude) × Δlat × Δlon
+---
+
+## Reproduce it
+
+```bash
+python -m venv .venv && source .venv/bin/activate
+pip install numpy pandas matplotlib scipy pillow pyarrow geopandas plotly
+
+python download_stanford.py        # ~1 GB from ArcGIS FeatureServer
+python digitize_all_smu_maps.py    # PNG maps → 3.4 M gridded points
+python calculate_depth_to_300c.py  # interpolate + bin + area-weight
+python create_final_maps_v4.py     # publication maps with TIGER state outlines
+python create_final_map.py         # interactive zoomable HTML
 ```
 
-Where R = 6371 km (Earth radius)
-
-This corrects for the fact that grid cells at higher latitudes (e.g., Montana) cover less actual surface area than cells at lower latitudes (e.g., Texas).
-
----
-
-## 📈 Detailed Results
-
-### Temperature Statistics by Depth
-
-![Stanford Temperature at 0 km](plots/temperature_maps.png)
-
-*Stanford temperature data showing surface temperatures (top) and 1 km depth (bottom). Notice the dramatic increase in spatial temperature variability at depth.*
-
-### Geographic Patterns
-
-#### Hottest Regions (300°C at ≤7 km)
-
-1. **Yellowstone Hot Spot** (Wyoming/Montana)
-   - Depth to 300°C: ~4-6 km
-   - Source: Mantle plume thermal anomaly
-
-2. **Basin & Range Province** (Nevada, Utah, Idaho)
-   - Depth to 300°C: ~5-7 km
-   - Source: Extensional tectonics, thin crust
-
-3. **Cascade Volcanic Arc** (Oregon, Washington, N. California)
-   - Depth to 300°C: ~5-7 km
-   - Source: Active subduction-related volcanism
-
-4. **Imperial Valley / Salton Trough** (S. California)
-   - Depth to 300°C: ~4-5 km
-   - Source: Active spreading center
-
-5. **Rio Grande Rift** (New Mexico)
-   - Depth to 300°C: ~6-7 km
-   - Source: Continental rifting
-
-#### Coolest Regions (300°C at >10 km)
-
-- **Great Plains** (Kansas, Nebraska, Oklahoma)
-- **Midwest** (Illinois, Iowa, Missouri, Indiana)
-- **Appalachian Region** (Pennsylvania, West Virginia, Virginia)
-- **Southeast** (Georgia, Alabama, Mississippi, Carolinas)
-- **Great Lakes Region** (Michigan, Wisconsin)
-
-*These regions are underlain by thick, cold cratonic lithosphere with low heat flow.*
+State outlines come from the US Census cartographic boundary file `cb_2023_us_state_20m`,
+downloaded into `data/raw/boundaries/`.
 
 ---
 
-## 📊 Area Statistics
+## Limitations — read before citing
 
-### Distribution by Depth Category
-
-[*Results will be added after calculation completes*]
-
-### Cumulative Accessibility
-
-[*Results will be added after calculation completes*]
-
----
-
-## 🗺️ Interactive Analysis
-
-### Stanford Temperature Data (0-7 km)
-
-![Stanford Data Histograms](plots/temperature_histograms.png)
-
-*Temperature distributions at surface (0 km) and 1 km depth. Surface temperatures reflect climate patterns; subsurface temperatures reveal geothermal gradients.*
-
-### SMU Digitized Data (3.5-10 km)
-
-![SMU Digitized Maps](plots/smu_digitized_all_depths.png)
-
-*Digitized SMU temperature maps extending from 3.5 km to 10 km depth. Note the progressive temperature increase and expanding hot zones with depth.*
+| Issue | Consequence |
+|---|---|
+| **Stanford stops at 7 km** | Everything deeper leans on the coarser digitised SMU layers |
+| **SMU is binned to 25 °C** | ±12.5 °C → roughly **±400 m** of depth uncertainty at a 30 °C/km gradient |
+| **SMU digitisation is approximate** | A cell shown as 287.5 °C could genuinely be at 300 °C. Some cells binned 5–7 km here may in truth be shallower. |
+| **SMU vintage is 2011** | 13 years older than Stanford; less well data behind it |
+| **Linear T(z) between layers** | Real profiles curve; expect ~10–20 % depth error where the gradient changes with depth |
+| **~4 km cells** | Sub-grid thermal anomalies are smoothed away |
+| **Single 300 °C threshold** | True supercritical conditions depend on pressure, so the target °C should really vary with depth |
+| **No extrapolation performed** | By design. Cells beyond 10 km are reported as `> 10 km`, never as an invented number. |
 
 ---
 
-## 💡 Key Insights
+## What's next
 
-### 1. Geographic Accessibility
+**Coal-plant overlay.** Intersect operating and recently retired coal generators with the
+accessible depth bins to find sites where existing transmission, cooling water, land rights
+and workforce could be repurposed for supercritical geothermal. Details in
+[`FUTURE_WORK.md`](FUTURE_WORK.md).
 
-**The Western US is fundamentally different from the East:**
-
-- **Western US:** Active tectonics, thin crust, high heat flow
-  - Average geothermal gradient: 35-45°C/km
-  - 300°C reachable at 5-8 km in many locations
-  
-- **Eastern US:** Stable craton, thick crust, low heat flow
-  - Average geothermal gradient: 20-25°C/km
-  - 300°C typically at >12 km depth
-
-### 2. Drilling Technology Impact
-
-**Current practical drilling limit: ~7-8 km**
-
-- Proven at commercial scale
-- Cost: $10-30M per well
-- Technology: Conventional rotary drilling
-
-**Frontier drilling capability: 8-10 km**
-
-- Limited commercial deployment
-- Cost: $30-100M per well  
-- Technology: Advanced rotary, possible hybrid methods
-
-**Future "moon shot" target: >10 km**
-
-- No commercial precedent
-- Cost: >$100M per well
-- Technology: Novel drilling methods needed (plasma, millimeter-wave, etc.)
-
-### 3. Incremental Value of Deeper Drilling
-
-Each additional kilometer of drilling capability unlocks substantial new territory:
-
-- **5 km → 6 km:** Opens up additional Basin & Range locations
-- **6 km → 7 km:** Expands to peripheral western states
-- **7 km → 8 km:** Begins to access Rocky Mountain regions
-- **8 km → 10 km:** Makes parts of the Great Plains accessible
-- **>10 km:** Required for most of central and eastern US
-
-### 4. Economic Implications
-
-**Resource Concentration:**
-- ~15-20% of CONUS land area (≤7 km depth)
-- Concentrated in ~10 western states
-- Policy implication: Geothermal development likely to remain regionally focused
-
-**Technology Development Priority:**
-- Achieving 10 km drilling capability would:
-  - Nearly double accessible area (from ~15% to ~30% of CONUS)
-  - Open resources in 15+ additional states
-  - Justify major R&D investment
+Given the west-of-100° pattern above, the likely candidates are Wyoming, New Mexico, Utah
+and Nevada plants — while most of the eastern coal fleet sits on rock that needs a hole
+nobody has drilled yet.
 
 ---
 
-## 🔧 Technical Details
-
-### Data Processing Pipeline
+## Repository layout
 
 ```
-1. Data Acquisition
-   ├── Stanford: ArcGIS REST API → GeoJSON
-   └── SMU: PNG images → Digitized CSV
-
-2. Data Validation
-   ├── Stanford: Check grid alignment, missing values
-   └── SMU: Visual comparison, pattern reproduction
-
-3. Depth Calculation
-   ├── Stanford: Linear interpolation to 300°C
-   └── SMU: Nearest-neighbor matching + category assignment
-
-4. Binning & Statistics
-   ├── Assign depth bins
-   └── Calculate area-weighted statistics
-
-5. Visualization
-   ├── CONUS map with depth categories
-   └── Distribution charts
-```
-
-### Uncertainty and Limitations
-
-#### Temperature Uncertainty
-
-**Stanford:**
-- Reported MAE: ±4.8°C
-- At 30°C/km gradient: ±160m depth uncertainty
-- Higher uncertainty at greater depths (sparser validation data)
-
-**SMU:**
-- Digitization binning: ±12.5°C per color class
-- At 30°C/km gradient: ±400m depth uncertainty
-- Geographic uncertainty: ±5-10 km (approximate georeferencing)
-
-#### Depth Limitations
-
-**Stanford:** Validated to 7 km only
-- Beyond 7 km: rely on SMU (lower quality)
-- Most of CONUS extends beyond 7 km depth
-
-**SMU:** Based on 2011 data
-- 13 years older than Stanford
-- Limited by available well data at the time
-- No published validation metrics
-
-#### Simplifying Assumptions
-
-1. **Linear temperature gradient** between depth layers
-   - Reality: May have curvature or discontinuities
-   - Impact: Depth estimates may vary by ±10-20%
-
-2. **Static thermal model**
-   - Reality: Temperature varies with groundwater flow, season
-   - Impact: Temporal variability not captured
-
-3. **Vertical heat flow assumed**
-   - Reality: Lateral heat flow exists near faults, intrusions
-   - Impact: Local hot spots may be underestimated
-
-4. **Single temperature threshold (300°C)**
-   - Reality: Supercritical conditions vary with pressure (depth)
-   - Impact: Actual P-T conditions may differ
-
----
-
-## 📦 Repository Structure
-
-```
-geo/
-├── README.md                          # This file
+├── README.md
+├── index.html                          # interactive map landing page
+├── download_stanford.py                # Stanford ArcGIS → GeoJSON
+├── digitize_smu_maps.py                # SMU PNG digitisation prototype
+├── digitize_all_smu_maps.py            # all 7 SMU depths
+├── explore_stanford_data.py            # exploratory stats + plots
+├── calculate_depth_to_300c.py          # main analysis
+├── create_final_maps_v4.py             # publication maps (TIGER outlines)
+├── create_final_map.py                 # interactive Plotly map
 ├── data/
-│   ├── raw/
-│   │   ├── stanford/                 # Stanford GeoJSON files (0-7 km)
-│   │   └── smu/
-│   │       ├── images/               # Original SMU PNG maps
-│   │       └── manifest.json         # SMU data metadata
-│   └── processed/
-│       ├── smu_digitized/            # Digitized SMU CSV/Parquet
-│       └── conus_depth_to_300c.csv   # Final depth-to-300°C grid
-├── plots/                            # All generated visualizations
-├── scripts/
-│   ├── download_stanford.py          # Download Stanford data
-│   ├── digitize_smu_maps.py          # Digitize SMU PNG maps
-│   ├── explore_stanford_data.py      # Stanford data EDA
-│   ├── calculate_depth_to_300c.py    # Main analysis script
-│   └── digitize_all_smu_maps.py      # Batch SMU digitization
+│   ├── raw/{stanford,smu,boundaries}/  # untouched source data + manifests
+│   └── processed/                      # digitised SMU + final depth grid
+├── plots/
 └── docs/
-    ├── DATA_ACQUISITION_REPORT.md    # Data acquisition details
-    ├── DATASET_SUMMARY.md            # Stanford dataset documentation
-    └── SMU_DIGITIZATION_REPORT.md    # SMU digitization validation
+    ├── DATA_ACQUISITION_REPORT.md
+    ├── DATASET_SUMMARY.md
+    └── SMU_DIGITIZATION_REPORT.md
 ```
 
----
-
-## 🚀 Reproducing This Analysis
-
-### Prerequisites
-
-```bash
-# Python 3.8+
-pip install numpy pandas matplotlib scipy pillow pyarrow
-```
-
-### Step 1: Download Stanford Data
-
-```bash
-python3 download_stanford.py
-```
-
-This will download ~1.2 GB of temperature data from Stanford's ArcGIS services.
-
-### Step 2: Digitize SMU Maps
-
-```bash
-python3 digitize_all_smu_maps.py
-```
-
-Converts 7 PNG images into ~3.4M gridded data points.
-
-### Step 3: Run Analysis
-
-```bash
-python3 calculate_depth_to_300c.py
-```
-
-Calculates depth to 300°C for all 534,942 CONUS grid locations.
-
-### Step 4: Explore Results
-
-```bash
-python3 explore_stanford_data.py
-```
-
-Generates exploratory visualizations and statistics.
+Large source and derived data files are gitignored; the manifests in
+`data/raw/*/manifest.json` record exactly what was fetched, from where, and when.
 
 ---
 
-## 📖 References
+## References
 
-### Primary Publications
-
-1. **Aljubran, M.J. & Horne, R.N.** (2024). "Conterminous US Geothermal Heat Flow Map and Uncertainty Quantification from Physics-Informed Neural Networks and Data Assimilation." *Geothermal Energy*, 12(1). DOI: 10.1186/s40517-024-00304-7
-
-2. **Blackwell, D.D. et al.** (2011). "Temperature-at-Depth Maps for the Conterminous US and Geothermal Resource Estimates." GRC Transactions, 35.
-
-### Supporting Resources
-
-3. **U.S. DOE Geothermal Technologies Office** - EGS and supercritical geothermal research
-4. **OpenEI Geothermal Data Repository** - [data.openei.org](https://data.openei.org)
-5. **SMU Geothermal Laboratory** - [smu.edu/geothermal](https://www.smu.edu/dedman/academics/departments/earth-sciences/research/geothermallab)
-
-### Related Projects
-
-- **USGS National Geothermal Data System** - Well temperature database
-- **GeoVision Analysis** - DOE's geothermal potential assessment
-- **FORGE Initiative** - Enhanced Geothermal Systems research
+1. **Aljubran, M. J. & Horne, R. N.** (2024). Thermal Earth model for the conterminous
+   United States using an interpolative physics-informed graph neural network.
+   *Geothermal Energy* **12**(1). DOI [10.1186/s40517-024-00304-7](https://doi.org/10.1186/s40517-024-00304-7) · [arXiv:2403.09961](https://arxiv.org/abs/2403.09961)
+2. **Blackwell, D. D., Richards, M., Frone, Z., et al.** (2011). Temperature-at-depth maps
+   for the conterminous US and geothermal resource estimates. *GRC Transactions* **35**.
+3. **US Census Bureau** (2023). Cartographic Boundary Files — States (1:20,000,000).
+4. **OpenEI / NREL** — [Geothermal Data Repository](https://gdr.openei.org)
 
 ---
 
-## 🤝 Contributing
+## License
 
-This is a research project. Contributions welcome:
+Code: **MIT**. Analysis, figures and documentation: **CC BY 4.0**.
+Stanford model data is public (DOE-funded). SMU map images remain the property of the SMU
+Geothermal Laboratory and are reproduced here only to validate the digitisation.
 
-- **Data:** Updated temperature models, validation data
-- **Analysis:** Improved interpolation methods, uncertainty quantification
-- **Visualization:** Interactive maps, 3D visualizations
-- **Applications:** Integration with drilling cost models, site screening tools
+## Acknowledgments
 
----
-
-## 📄 License
-
-**Data:**
-- Stanford model: Public (DOE-funded research)
-- SMU maps: Public display; higher-resolution data available for purchase
-
-**Code:** MIT License
-
-**Analysis & Documentation:** CC BY 4.0
+Stanford Geothermal Program · SMU Geothermal Laboratory · US DOE Geothermal Technologies
+Office · OpenEI / NREL · US Census Bureau
 
 ---
 
-## 👤 Author
+<div align="center">
 
-**Christopher Smith**  
-GitHub: [@chrissmithphd](https://github.com/chrissmithphd)
+**Christopher Smith** · [@chrissmithphd](https://github.com/chrissmithphd)
 
----
+*Last updated 2026-09-14*
 
-## 🙏 Acknowledgments
-
-- **Stanford Geothermal Program** - For publishing the most comprehensive CONUS thermal model
-- **SMU Geothermal Laboratory** - For decades of temperature-at-depth mapping
-- **U.S. Department of Energy** - For funding geothermal research and open data
-- **OpenEI** - For hosting and maintaining geothermal datasets
-
----
-
-## 📧 Contact
-
-For questions, collaborations, or access to processed datasets:
-- Open an issue on this repository
-- Contact via GitHub profile
-
----
-
-*Last updated: 2026-09-14*
+</div>

@@ -52,3 +52,11 @@ data/processed/smu_digitized/*.parquet
 
 # Keep sample data or small files if needed
 # (add specific exceptions here)
+
+# superseded map-rendering experiments (v4 is the one the README uses)
+create_final_maps_v2.py
+create_final_maps_v3.py
+plots/depth_to_300c_heatmap_v2.png
+plots/depth_to_300c_heatmap_v3.png
+plots/depth_to_300c_points_states_v2.png
+plots/depth_to_300c_points_v3.png

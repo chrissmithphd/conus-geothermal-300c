@@ -1,0 +1,83 @@
+{
+  "dataset": "SMU Geothermal Laboratory Temperature-at-Depth Maps",
+  "source": "https://www.smu.edu/dedman/academics/departments/earth-sciences/research/geothermallab/datamaps/temperaturemaps",
+  "reference": "Blackwell et al. (2011)",
+  "vintage": "2011",
+  "download_date": "2026-09-14T11:27:00Z",
+  "status": "LIMITED_AVAILABILITY",
+  "notes": [
+    "Only low-resolution image files are publicly available",
+    "Higher resolution gridded data available for purchase from geothermal@smu.edu",
+    "Images downloaded are small PNG files suitable for visualization only",
+    "No machine-readable gridded temperature data obtained"
+  ],
+  "depth_levels": {
+    "3.5km": {
+      "file": "images/smu_2011_3point5km_temperature.png",
+      "format": "PNG image",
+      "resolution": "Low resolution for web display",
+      "size_bytes": 399360
+    },
+    "4.5km": {
+      "file": "images/smu_2011_4point5km_temperature.png",
+      "format": "PNG image",
+      "resolution": "Low resolution for web display",
+      "size_bytes": 442368
+    },
+    "5.5km": {
+      "file": "images/smu_2011_5point5km_temperature.png",
+      "format": "PNG image",
+      "resolution": "Low resolution for web display",
+      "size_bytes": 463872
+    },
+    "6.5km": {
+      "file": "images/smu_2011_6point5km_temperature.png",
+      "format": "PNG image",
+      "resolution": "Low resolution for web display",
+      "size_bytes": 484352
+    },
+    "7.5km": {
+      "file": "images/smu_2011_7point5km_temperature.png",
+      "format": "PNG image",
+      "resolution": "Low resolution for web display",
+      "size_bytes": 802816
+    },
+    "8.5km": {
+      "file": "images/smu_2011_8point5km_temperature.png",
+      "format": "PNG image",
+      "resolution": "Low resolution for web display",
+      "size_bytes": 806912
+    },
+    "10km": {
+      "file": "images/smu_2011_10km_temperature.png",
+      "format": "PNG image",
+      "resolution": "Low resolution for web display",
+      "size_bytes": 794624
+    }
+  },
+  "limitations": [
+    "Images are low resolution and not suitable for quantitative analysis",
+    "No coordinate system information available from images alone",
+    "Temperature scale would need to be extracted from image legend",
+    "Spatial accuracy limited by image resolution",
+    "No metadata about projection, datum, or temperature units in downloadable files"
+  ],
+  "alternative_sources_investigated": [
+    {
+      "repository": "OpenEI/OEDI",
+      "url": "https://data.openei.org",
+      "result": "No SMU gridded temperature data found"
+    },
+    {
+      "repository": "Geothermal Data Repository",
+      "url": "https://gdr.openei.org",
+      "result": "No SMU temperature-at-depth grids found"
+    },
+    {
+      "source": "GRC Library PDF",
+      "url": "http://pubs.geothermal-library.org/lib/grc/1029452.pdf",
+      "result": "Access denied (403)"
+    }
+  ],
+  "recommendation": "For quantitative analysis at depths >7 km, consider: (1) purchasing high-resolution SMU data, (2) using only Stanford data (0-7 km) and noting depth limitations, or (3) identifying alternative temperature models from recent DOE-funded EGS projects"
+}

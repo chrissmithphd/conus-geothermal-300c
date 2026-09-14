@@ -1,0 +1,48 @@
+{
+  "dataset": "Stanford Thermal Earth Model for the Conterminous United States",
+  "source": "https://data.openei.org/submissions/7669",
+  "reference": "Aljubran & Horne (2024)",
+  "doi": "10.1186/s40517-024-00304-7",
+  "download_date": "2026-09-14T16:26:37.901797Z",
+  "layers": {
+    "0km": {
+      "url": "https://services.arcgis.com/7CRlmWNEbeCqEJ6a/arcgis/rest/services/stm_interpignn_0km/FeatureServer/0",
+      "output_file": "data/raw/stanford/temperature_0km.json",
+      "feature_count": 534942
+    },
+    "1km": {
+      "url": "https://services.arcgis.com/7CRlmWNEbeCqEJ6a/arcgis/rest/services/Stanford_Temperature_Predictions_at_1km/FeatureServer/0",
+      "output_file": "data/raw/stanford/temperature_1km.json",
+      "feature_count": 534942
+    },
+    "2km": {
+      "url": "https://services.arcgis.com/7CRlmWNEbeCqEJ6a/arcgis/rest/services/Stanford_Temperature_Predictions_at_2km/FeatureServer/0",
+      "error": "HTTPSConnectionPool(host='services.arcgis.com', port=443): Max retries exceeded with url: /7CRlmWNEbeCqEJ6a/arcgis/rest/services/Stanford_Temperature_Predictions_at_2km/FeatureServer/0/query?where=1%3D1&returnCountOnly=true&f=json (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x782ec843a000>: Failed to establish a new connection: [Errno 101] Network is unreachable'))"
+    },
+    "3km": {
+      "url": "https://services.arcgis.com/7CRlmWNEbeCqEJ6a/arcgis/rest/services/Stanford_Temperature_Predictions_at_3km/FeatureServer/0",
+      "output_file": "data/raw/stanford/temperature_3km.json",
+      "feature_count": 534942
+    },
+    "4km": {
+      "url": "https://services.arcgis.com/7CRlmWNEbeCqEJ6a/arcgis/rest/services/Stanford_Temperature_Predictions_at_4km/FeatureServer/0",
+      "output_file": "data/raw/stanford/temperature_4km.json",
+      "feature_count": 534942
+    },
+    "5km": {
+      "url": "https://services.arcgis.com/7CRlmWNEbeCqEJ6a/arcgis/rest/services/Stanford_Temperature_Predictions_at_5km/FeatureServer/0",
+      "output_file": "data/raw/stanford/temperature_5km.json",
+      "feature_count": 534942
+    },
+    "6km": {
+      "url": "https://services.arcgis.com/7CRlmWNEbeCqEJ6a/arcgis/rest/services/Stanford_Temperature_Predictions_at_6km/FeatureServer/0",
+      "output_file": "data/raw/stanford/temperature_6km.json",
+      "feature_count": 534942
+    },
+    "7km": {
+      "url": "https://services.arcgis.com/7CRlmWNEbeCqEJ6a/arcgis/rest/services/Stanford_Temperature_Predictions_at_7km/FeatureServer/0",
+      "output_file": "data/raw/stanford/temperature_7km.json",
+      "feature_count": 534942
+    }
+  }
+}

@@ -1,0 +1,54 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv/
+venv/
+ENV/
+env/
+
+# Data files (too large for git)
+data/raw/stanford/*.json
+data/raw/smu/images/*.png
+data/processed/*.csv
+data/processed/*.parquet
+data/processed/smu_digitized/*.csv
+data/processed/smu_digitized/*.parquet
+
+# Keep directory structure but not large files
+!data/raw/stanford/.gitkeep
+!data/raw/smu/.gitkeep
+!data/processed/.gitkeep
+
+# Logs and temporary files
+*.log
+*.tmp
+.DS_Store
+.vscode/
+.idea/
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb
+
+# Task outputs
+/tmp/
+
+# Keep manifests and metadata
+!data/raw/stanford/manifest.json
+!data/raw/smu/manifest.json
+
+# Documentation (keep these)
+!docs/
+!*.md
+
+# Plots (keep these - they're for the README)
+!plots/*.png
+
+# Scripts (keep these)
+!*.py
+
+# Keep sample data or small files if needed
+# (add specific exceptions here)

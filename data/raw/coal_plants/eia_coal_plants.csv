@@ -1,0 +1,341 @@
+plant_name,lat,lon,capacity_mw,status,retirement_year,state,plant_code
+Scherer,33.0606,-83.8075,3564.0,Operating,2022.0,GA,6257.0
+Bowen,34.1256,-84.9222,3498.6,Operating,,GA,703.0
+Gibson,38.372222,-87.765833,3339.5,Operating,,IN,6113.0
+Monroe (MI),41.8906,-83.3464,3279.6,Operating,,MI,1733.0
+John E Amos,38.4731,-81.8233,2932.6,Operating,,WV,3935.0
+James H Miller Jr,33.6319,-87.0597,2822.0,Operating,,AL,6002.0
+W A Parish,29.4828,-95.6311,2736.8,Operating,,TX,3470.0
+Rockport,37.9256,-87.0372,2600.0,Operating,,IN,6166.0
+"Gavin Power, LLC",38.9347,-82.1158,2600.0,Operating,,OH,8102.0
+Cumberland (TN),36.3903,-87.6539,2600.0,Operating,,TN,3399.0
+Roxboro,36.4833,-79.0731,2558.2,Operating,,NC,2712.0
+Paradise,37.2608,-86.9783,2558.2,Retired,2020.0,KY,1378.0
+Sherburne County,45.3808,-93.8931,2469.3,Operating,2023.0,MN,6090.0
+Cross,33.371506,-80.113235,2451.5,Operating,,SC,130.0
+Crystal River,28.9656,-82.6977,2442.7,Operating,2018.0,FL,628.0
+Navajo,36.9047,-111.3886,2409.3,Retired,2019.0,AZ,4941.0
+Labadie,38.562244,-90.837686,2389.4,Operating,,MO,2103.0
+Martin Lake,32.2606,-94.5706,2379.6,Operating,,TX,6146.0
+Colstrip,45.8831,-106.614,2363.4,Operating,2020.0,MT,6076.0
+Ghent,38.7497,-85.035,2225.9,Operating,,KY,1356.0
+Jeffrey Energy Center,39.286453,-96.117231,2160.0,Operating,,KS,6068.0
+AES Petersburg,38.5281,-87.2525,2146.7,Operating,2023.0,IN,994.0
+FirstEnergy Harrison Power Station,39.384167,-80.3325,2052.0,Operating,,WV,3944.0
+Homer City Generating Station,40.512825,-79.196107,2012.0,Retired,2024.0,PA,3122.0
+Monticello,33.0917,-95.0417,1980.0,Retired,2018.0,TX,6147.0
+Conemaugh,40.3842,-79.0611,1951.0,Operating,,PA,3118.0
+R M Schahfer,41.2164,-87.0261,1943.4,Operating,2021.0,IN,6085.0
+Wansley,33.41342,-85.032329,1904.0,Retired,2022.0,GA,6052.0
+Baldwin Energy Complex,38.205,-89.8544,1894.1,Operating,2020.0,IL,889.0
+Cardinal,40.2522,-80.6486,1880.4,Operating,,OH,2828.0
+Keystone,40.6604,-79.3411,1872.0,Operating,,PA,3136.0
+Laramie River Station,42.108889,-104.8825,1863.0,Operating,,WY,6204.0
+Limestone,31.4219,-96.2525,1849.8,Operating,,TX,298.0
+San Juan,36.8006,-108.4386,1848.0,Retired,2022.0,NM,2451.0
+Independence Steam Electric Station,35.678442,-91.408761,1800.0,Operating,,AR,6641.0
+White Bluff,34.4228,-92.1406,1800.0,Operating,,AR,6009.0
+Oak Grove (TX),31.1803,-96.4866,1795.4,Operating,,TX,6180.0
+Powerton,40.5408,-89.6786,1785.6,Operating,,IL,879.0
+Walter Scott Jr Energy Center,41.18,-95.8408,1778.9,Operating,2015.0,IA,1082.0
+Prairie State Generating Station,38.279167,-89.666944,1766.0,Operating,,IL,55856.0
+Springerville,34.3186,-109.1639,1765.8,Operating,,AZ,8223.0
+Iatan,39.4472,-94.98,1753.9,Operating,,MO,6065.0
+Mill Creek (KY),38.0525,-85.9103,1717.2,Operating,2024.0,KY,1364.0
+Kingston,35.8992,-84.5194,1700.0,Operating,,TN,3407.0
+Fayette Power Project,29.9172,-96.7506,1690.0,Operating,,TX,6179.0
+Welsh,33.05522,-94.839993,1674.0,Operating,2016.0,TX,6139.0
+Mt Storm,39.2008,-79.2636,1662.4,Operating,,WV,3954.0
+Intermountain Power Project,39.509731,-112.58018,1640.0,Retired,2025.0,UT,6481.0
+Four Corners,36.69,-108.4814,1636.2,Operating,,NM,2442.0
+Comanche (CO),38.2081,-104.5747,1635.3,Operating,2022.0,CO,470.0
+Mitchell (WV),39.8297,-80.8153,1632.6,Operating,,WV,3948.0
+H L Spurlock,38.7,-83.8181,1608.5,Operating,,KY,6041.0
+La Cygne,38.3481,-94.6456,1598.9,Operating,,KS,1241.0
+Shawnee,37.1517,-88.775,1575.0,Operating,,KY,1379.0
+J H Campbell,42.910296,-86.20074,1560.8,Operating,,MI,1710.0
+St Clair,42.7642,-82.4719,1547.0,Retired,2022.0,MI,1743.0
+J K Spruce,29.309722,-98.3203,1488.5,Operating,,TX,7097.0
+Johnsonville,36.0278,-87.9861,1485.2,Retired,2017.0,TN,3406.0
+Hunter,39.1747,-111.0289,1472.2,Operating,,UT,6165.0
+Barry,31.0069,-88.0103,1464.5,Operating,2015.0,AL,3.0
+Transalta Centralia Generation,46.755938,-122.859764,1459.8,Operating,2020.0,WA,3845.0
+Seminole (FL),29.733056,-81.632778,1429.2,Operating,2024.0,FL,136.0
+Craig (CO),40.4627,-107.5912,1427.6,Operating,,CO,6021.0
+Gorgas,33.644344,-87.196486,1416.7,Retired,2019.0,AL,8.0
+Elm Road Generating Station,42.8492,-87.8336,1402.6,Operating,,WI,56068.0
+Trimble County,38.5847,-85.4117,1400.1,Operating,,KY,6071.0
+Belle River,42.7756,-82.495,1395.0,Operating,,MI,6034.0
+Nebraska City,40.6214,-95.7764,1389.6,Operating,,NE,6096.0
+Harllee Branch,33.195,-83.2983,1387.2,Retired,2015.0,GA,709.0
+Brandon Shores,39.182073,-76.537151,1370.2,Operating,,MD,602.0
+Pleasants Power Station,39.366667,-81.294444,1368.0,Operating,,WV,6004.0
+Gerald Gentleman,41.0808,-101.1408,1362.6,Operating,,NE,6077.0
+St Johns River Power Park,30.4308,-81.5508,1358.0,Retired,2018.0,FL,207.0
+Chesterfield,37.3822,-77.3833,1352.9,Retired,2023.0,VA,3797.0
+Colbert,34.7439,-87.8486,1350.0,Retired,2016.0,AL,47.0
+Kincaid Generation LLC,39.590556,-89.496389,1319.0,Operating,,IL,876.0
+Clifty Creek,38.7378,-85.4206,1303.8,Operating,,IN,983.0
+Mountaineer,38.9794,-81.9344,1300.0,Operating,,WV,6264.0
+New Madrid,36.5147,-89.5617,1300.0,Operating,,MO,2167.0
+Miami Fort,39.1128,-84.8036,1278.0,Operating,2015.0,OH,2832.0
+Big Cajun 2,30.7261,-91.3692,1276.9,Operating,,LA,6055.0
+Winyah,33.33184,-79.357236,1275.8,Operating,,SC,6249.0
+Gallatin (TN),36.3156,-86.4006,1255.2,Operating,,TN,3403.0
+Morgantown Generating Plant,38.3592,-76.9767,1252.0,Retired,2022.0,MD,1573.0
+Rush Island,38.131248,-90.263157,1242.0,Retired,2024.0,MO,6155.0
+South Oak Creek,42.8457,-87.8294,1240.0,Operating,2024.0,WI,4041.0
+Newton,38.9361,-88.2781,1234.8,Operating,2016.0,IL,6017.0
+Pleasant Prairie,42.5381,-87.9033,1233.2,Retired,2018.0,WI,6170.0
+Coal Creek,47.377743,-101.157058,1209.6,Operating,,ND,6030.0
+Big Brown,31.8206,-96.0544,1186.8,Retired,2018.0,TX,3497.0
+Thomas Hill,39.5522,-92.6381,1181.7,Operating,,MO,2168.0
+Jim Bridger,41.7378,-108.7875,1161.9,Operating,,WY,8066.0
+FirstEnergy Fort Martin Power Station,39.710833,-79.9275,1152.0,Operating,,WV,3943.0
+G G Allen,35.1897,-81.0122,1148.4,Retired,2024.0,NC,2718.0
+Sooner,36.45307,-97.05279,1138.0,Operating,,OK,6095.0
+Tolk,34.186494,-102.56999,1135.8,Operating,,TX,6194.0
+GREC,36.190278,-95.2894,1134.0,Operating,2020.0,OK,165.0
+Cholla,34.9394,-110.3033,1128.8,Retired,2025.0,AZ,113.0
+Widows Creek,34.883022,-85.755253,1125.0,Retired,2015.0,AL,50.0
+Columbia (WI),43.4864,-89.4203,1112.0,Operating,,WI,8023.0
+Tanners Creek,39.0814,-84.8594,1100.1,Retired,2015.0,IN,988.0
+Sioux,38.915479,-90.290247,1099.4,Operating,,MO,2107.0
+Victor J Daniel Jr,30.5322,-88.5553,1096.6,Operating,,MS,6073.0
+Kyger Creek,38.9144,-82.1289,1086.5,Operating,,OH,2876.0
+George Neal North,42.32517,-96.37971,1080.3,Operating,2016.0,IA,1091.0
+Merom,39.0694,-87.5108,1080.0,Operating,,IN,6213.0
+Clay Boswell,47.2611,-93.6528,1072.5,Operating,2018.0,MN,1893.0
+Cayuga,39.9242,-87.4244,1062.0,Operating,,IN,1001.0
+Marshall (NC),35.5975,-80.9658,1059.5,Operating,,NC,2727.0
+Huntington,39.3792,-111.0781,1015.5,Operating,,UT,8069.0
+Sandy Creek Energy Station,31.474378,-96.957149,1008.0,Operating,,TX,56611.0
+Weston,44.8606,-89.6553,1005.5,Operating,2015.0,WI,4078.0
+Coffeen,39.0586,-89.4031,1005.4,Retired,2019.0,IL,861.0
+Allen,35.074087,-90.14868,990.0,Retired,2018.0,TN,3393.0
+Antelope Valley,47.370542,-101.83566,954.0,Operating,,ND,6469.0
+Hammond,34.2528,-85.3456,953.0,Retired,2019.0,GA,708.0
+E C Gaston,33.244211,-86.458056,952.0,Operating,,AL,26.0
+Bull Run,36.0211,-84.1567,950.0,Retired,2023.0,TN,3396.0
+Northeastern,36.4317,-95.7008,946.0,Operating,2016.0,OK,2963.0
+J T Deely,29.308056,-98.3228,932.0,Retired,2023.0,TX,6181.0
+Stanton Energy Center,28.4822,-81.1678,929.0,Operating,,FL,564.0
+Will County,41.6334,-88.0629,897.6,Retired,2022.0,IL,884.0
+Wabash River,39.53,-87.4247,860.2,Retired,2016.0,IN,1010.0
+Clover,36.869,-78.704,848.0,Operating,,VA,7213.0
+Edgewater,43.715142,-87.705863,833.7,Operating,2018.0,WI,4050.0
+Warrick,37.915,-87.3328,822.8,Operating,,IN,6705.0
+Coronado,34.5789,-109.2708,821.8,Operating,,AZ,6177.0
+Dave Johnston,42.8378,-105.7769,816.7,Operating,,WY,4158.0
+Big Sandy,38.1707,-82.6176,816.3,Retired,2015.0,KY,1353.0
+Louisa,41.3181,-91.0931,811.9,Operating,,IA,6664.0
+Longview Power Plant,39.707893,-79.958974,807.5,Operating,,WV,56671.0
+Trenton Channel,42.1217,-83.1808,775.5,Retired,2022.0,MI,1745.0
+East Bend,38.9036,-84.8514,772.0,Operating,,KY,6018.0
+Wateree,33.8264,-80.6228,771.8,Operating,,SC,3297.0
+Mayo,36.5278,-78.8917,763.2,Operating,,NC,6250.0
+E W Brown,37.78831,-84.71257,757.1,Operating,2019.0,KY,1355.0
+Milton R Young,47.065854,-101.213093,734.0,Operating,,ND,2823.0
+Chalk Point Steam,38.5444,-76.6861,728.0,Retired,2021.0,MD,65285.0
+Ottumwa,41.0961,-92.555833,725.9,Operating,,IA,6254.0
+Pirkey,32.4607,-94.4852,721.0,Retired,2023.0,TX,7902.0
+Dolet Hills,32.030556,-93.569167,720.7,Retired,2021.0,LA,51.0
+Plum Point Energy Station,35.6644,-89.9489,720.0,Operating,,AR,56456.0
+George Neal South,42.3006,-96.3617,695.9,Operating,,IA,7343.0
+Waukegan,42.3833,-87.8133,681.7,Retired,2022.0,IL,883.0
+Yates,33.4622,-84.8986,679.9,Retired,2015.0,GA,728.0
+Virginia City Hybrid Energy Center,36.916389,-82.338055,668.0,Operating,,VA,56808.0
+Sandow No 5,30.5681,-97.0614,661.5,Retired,2018.0,TX,52071.0
+Williams,33.0158,-79.9297,659.7,Operating,,SC,3298.0
+Leland Olds,47.280769,-101.321213,656.0,Operating,,ND,2817.0
+River Rouge,42.2739,-83.1119,650.6,Retired,2021.0,MI,1740.0
+Chesapeake,36.7711,-76.3019,649.5,Retired,2015.0,VA,3803.0
+Meramec,38.4017,-90.3358,648.0,Retired,2022.0,MO,2104.0
+Cane Run,38.1831,-85.8892,644.6,Retired,2015.0,KY,1363.0
+Boardman,45.693182,-119.808819,642.2,Retired,2020.0,OR,6106.0
+Coleto Creek,28.7128,-97.214167,622.4,Operating,,TX,6178.0
+Dallman,39.754803,-89.602389,617.8,Operating,2024.0,IL,963.0
+R S Nelson,30.2844,-93.2911,614.6,Operating,,LA,1393.0
+Philip Sporn,38.9669,-81.9231,610.0,Retired,2015.0,WV,3938.0
+John W Turk Jr Power Plant,33.649722,-93.811944,609.0,Operating,,AR,56564.0
+Bailly,41.645,-87.1225,603.5,Retired,2018.0,IN,995.0
+Kenneth C Coleman,37.9631,-86.7911,602.0,Retired,2020.0,KY,1381.0
+Allen S King,45.03,-92.7786,598.4,Operating,,MN,1915.0
+Northside Generating Station,30.4172,-81.5525,595.0,Operating,,FL,667.0
+Sandow No 4,30.565871,-97.064032,590.6,Retired,2018.0,TX,6648.0
+Dickerson,39.2097,-77.4644,588.0,Retired,2020.0,MD,65284.0
+Seward (PA),40.40625,-79.03366,585.0,Operating,,PA,3130.0
+Muskogee,35.76135,-95.28732,572.0,Operating,,OK,2952.0
+Hawthorn,39.1306,-94.4778,569.0,Operating,,MO,2079.0
+Lawrence Energy Center,39.0072,-95.269167,566.0,Operating,2015.0,KS,1250.0
+Montrose,38.3114,-93.9348,564.0,Retired,2018.0,MO,2080.0
+Brame Energy Center,31.395,-92.716667,558.0,Operating,,LA,6190.0
+Flint Creek,36.2561,-94.5241,558.0,Operating,,AR,6138.0
+Pawnee,40.2217,-103.6803,552.3,Operating,,CO,6248.0
+Dan E Karn,43.644996,-83.840074,544.0,Retired,2023.0,MI,1702.0
+Michigan City,41.7208,-86.9086,540.0,Operating,,IN,997.0
+Lowman Energy Center,31.488019,-87.910747,538.0,Retired,2020.0,AL,56.0
+A B Brown,37.9053,-87.715,530.4,Retired,2023.0,IN,6137.0
+Sibley,39.178319,-94.184445,524.0,Retired,2018.0,MO,2094.0
+Red Hills Generating Facility,33.3761,-89.2183,513.7,Operating,,MS,55076.0
+D B Wilson,37.4497,-87.0806,509.4,Operating,,KY,6823.0
+Wood River,38.8639,-90.1347,500.1,Retired,2016.0,IL,898.0
+Bonanza,40.0864,-109.2844,499.5,Operating,,UT,7790.0
+John Twitty Energy Center,37.151706,-93.38804,494.0,Operating,,MO,6195.0
+Havana,40.2797,-90.08,488.0,Retired,2019.0,IL,891.0
+Dry Fork Station,44.388889,-105.460833,483.7,Operating,,WY,56609.0
+Hayden,40.4856,-107.185,465.4,Operating,,CO,525.0
+Merrimack,43.1411,-71.4692,459.2,Operating,,NH,2364.0
+Presque Isle,46.5789,-87.395,450.0,Retired,2019.0,MI,1769.0
+Big Stone,45.303652,-96.510067,450.0,Operating,,SD,6098.0
+Coyote,47.221447,-101.815722,450.0,Operating,,ND,8222.0
+Hugo,34.0158,-95.3206,446.0,Operating,,OK,6772.0
+Big Bend,27.7944,-82.4036,445.5,Retired,2021.0,FL,645.0
+Indian River Generating Station,38.5857,-75.2341,445.5,Retired,2025.0,DE,594.0
+Kanawha River,38.2056,-81.4211,439.2,Retired,2017.0,WV,3936.0
+Asheville,35.4731,-82.5417,413.6,Retired,2020.0,NC,2706.0
+San Miguel,28.7044,-98.4775,410.0,Operating,,TX,6183.0
+HMP&L Station Two Henderson,37.6469,-87.5028,405.0,Retired,2019.0,KY,1382.0
+R D Morrow,31.2186,-89.394,400.0,Retired,2018.0,MS,6061.0
+Bridgeport Station,41.1706,-73.1844,400.0,Retired,2021.0,CT,568.0
+Indiantown Cogeneration LP,27.0389,-80.5125,395.4,Retired,2020.0,FL,50976.0
+John P Madgett,44.303583,-91.912647,387.0,Operating,,WI,4271.0
+Naughton,41.7581,-110.5983,380.8,Operating,,WY,4162.0
+Yorktown,37.2144,-76.4611,375.0,Retired,2019.0,VA,3809.0
+F B Culley,37.9111,-87.3275,368.9,Operating,,IN,1012.0
+C D McIntosh Jr,28.0801,-81.9229,363.8,Retired,2021.0,FL,676.0
+Wyodak,44.290128,-105.381482,362.1,Operating,,WY,6101.0
+North Omaha,41.32909,-95.94466,353.6,Operating,,NE,2291.0
+Pulliam,44.54,-88.0086,350.2,Retired,2018.0,WI,4072.0
+River Valley,35.1931,-94.6458,350.0,Operating,,OK,10671.0
+Major Oak Power,31.091925,-96.69503,349.2,Operating,,TX,7030.0
+Holcomb,37.9308,-100.9725,348.7,Operating,,KS,108.0
+Genoa,43.5589,-91.2325,345.6,Retired,2021.0,WI,4143.0
+J R Whiting,41.792114,-83.44948,345.4,Retired,2016.0,MI,1723.0
+O H Hutchings,39.6088,-84.2921,345.0,Retired,2015.0,OH,2848.0
+Cooper,36.9981,-84.5919,344.0,Operating,,KY,1384.0
+Lansing Smith,30.2686,-85.7003,340.0,Retired,2016.0,FL,643.0
+Glen Lyn,37.3706,-80.8633,337.5,Retired,2015.0,VA,3776.0
+Archer Daniels Midland Decatur,39.870074,-88.890756,335.0,Operating,,IL,10865.0
+Edwardsport,38.8067,-87.2472,331.5,Operating,,IN,1004.0
+Eckert Station,42.71839,-84.55808,331.0,Retired,2021.0,MI,1831.0
+Whelan Energy Center,40.580872,-98.312437,324.3,Operating,,NE,60.0
+B C Cobb,43.258768,-86.242268,312.6,Retired,2016.0,MI,1695.0
+J C Weadock,43.639927,-83.844712,312.6,Retired,2016.0,MI,1720.0
+Hennepin Power Station,41.3028,-89.315,306.3,Retired,2019.0,IL,892.0
+Eagle Valley (IN),39.48517,-86.4183,301.6,Retired,2016.0,IN,991.0
+R Gallagher,38.2636,-85.8381,300.0,Retired,2021.0,IN,1008.0
+Reid Gardner,36.657347,-114.633263,294.8,Retired,2017.0,NV,2324.0
+Rawhide,40.860905,-105.021207,293.6,Operating,,CO,6761.0
+Muscatine Plant #1,41.3917,-91.0569,293.5,Operating,2024.0,IA,1167.0
+North Valmy,40.881317,-117.151605,289.8,Operating,,NV,8224.0
+Black Dog,44.8108,-93.2501,276.8,Retired,2015.0,MN,1904.0
+Lansing,43.3359,-91.1675,274.5,Retired,2023.0,IA,1047.0
+Marion,37.619747,-88.953114,272.0,Operating,2020.0,IL,976.0
+Sikeston Power Station,36.8791,-89.6209,261.0,Operating,,MO,6768.0
+Nearman Creek,39.1681,-94.6975,261.0,Operating,,KS,6064.0
+Escalante,35.4159,-108.082,257.0,Retired,2020.0,NM,87.0
+Archer Daniels Midland Cedar Rapids,41.9221,-91.6875,256.1,Operating,,IA,10864.0
+Taconite Harbor Energy Center,47.5314,-90.9114,252.0,Retired,2023.0,MN,10075.0
+TS Power Plant,40.7461,-116.5297,242.0,Operating,,NV,56224.0
+Clinch River,36.9333,-82.1997,237.5,Retired,2015.0,VA,3775.0
+Frank E Ratts,38.5201,-87.2662,233.2,Retired,2015.0,IN,1043.0
+Tecumseh Energy Center,39.0539,-95.568889,232.0,Retired,2018.0,KS,1252.0
+Sheldon,40.5589,-96.7847,228.7,Operating,,NE,2277.0
+Nelson Dewey Generating Station,42.7225,-91.0085,227.2,Retired,2015.0,WI,4054.0
+Dale,37.8806,-84.2619,216.0,Retired,2016.0,KY,1385.0
+Asbury,37.361315,-94.58926,212.8,Retired,2020.0,MO,2076.0
+Kraft,32.1486,-81.1458,207.9,Retired,2015.0,GA,733.0
+Ray D Nixon,38.633451,-104.70577,207.0,Operating,,CO,8219.0
+Apache Station,32.0603,-109.8931,204.0,Operating,,AZ,160.0
+Valmont,40.0195,-105.202,191.7,Retired,2017.0,CO,477.0
+Stanton,47.286643,-101.331908,190.2,Retired,2017.0,ND,2824.0
+Carbon,39.7272,-110.8644,188.6,Retired,2015.0,UT,3644.0
+Green River,37.3636,-87.1214,188.6,Retired,2015.0,KY,1357.0
+Kennecott Power Plant,40.7119,-112.1225,182.0,Retired,2019.0,UT,56163.0
+Archer Daniels Midland Clinton,41.8206,-90.2097,180.0,Operating,,IA,10860.0
+McIntosh,32.356287,-81.168347,177.6,Retired,2019.0,GA,6124.0
+J E Corette Plant,45.77562,-108.480999,172.8,Retired,2015.0,MT,2187.0
+Cherokee,39.807275,-104.964548,170.5,Retired,2015.0,CO,469.0
+Mitchell (GA),31.444728,-84.134696,163.2,Retired,2016.0,GA,727.0
+Erickson Station,42.692222,-84.657222,154.7,Retired,2022.0,MI,1832.0
+Mecklenburg Power Station,36.59951,-78.52991,139.8,Retired,2019.0,VA,52007.0
+Herbert A Wagner,39.1781,-76.5268,136.0,Retired,2020.0,MD,1554.0
+Northampton Generating Company LP,40.6917,-75.4792,134.1,Operating,,PA,50888.0
+Silver Bay Power,47.286573,-91.260531,131.6,Operating,,MN,10849.0
+Lon Wright,41.4281,-96.4623,130.0,Operating,,NE,2240.0
+Hoot Lake,46.290641,-96.043252,129.4,Retired,2021.0,MN,1943.0
+South Plant (CO),38.824444,-104.833333,125.0,Retired,2022.0,CO,492.0
+Colver Green Energy,40.55108,-78.79794,118.0,Operating,,PA,10143.0
+Wygen III,44.2919,-105.3806,116.0,Operating,,WY,56596.0
+Hardin Generator Project,45.7578,-107.6,115.7,Operating,,MT,55749.0
+R M Heskett,46.8669,-100.8836,115.0,Retired,2022.0,ND,2790.0
+Spruance Operating Services LLC,37.4556,-77.4308,114.8,Retired,2021.0,VA,54081.0
+Nucla,38.2383,-108.5069,113.8,Retired,2019.0,CO,527.0
+Tennessee Eastman Operations,36.5219,-82.5431,110.5,Operating,,TN,50481.0
+Platte,40.854765,-98.348222,109.8,Operating,,NE,59.0
+Schiller,43.0978,-70.7842,100.0,Retired,2025.0,NH,2367.0
+St Nicholas Cogen Project,40.8222,-76.1736,99.2,Operating,,PA,54634.0
+Silver Lake,44.02818,-92.460377,99.0,Retired,2015.0,MN,2008.0
+Scholz,30.6692,-84.8869,98.0,Retired,2015.0,FL,642.0
+Robert A Reid,37.6461,-87.5019,96.0,Retired,2020.0,KY,1383.0
+Grant Town Power Plant,39.561831,-80.163138,95.7,Operating,,WV,10151.0
+Wygen 2,44.2919,-105.3811,95.0,Operating,,WY,56319.0
+Scrubgrass Reclamation CO. LP.,41.2691,-79.8134,94.7,Operating,,PA,50974.0
+Panther Creek Energy Facility,40.8556,-75.8781,94.0,Operating,,PA,50776.0
+Whitewater Valley,39.8028,-84.8953,93.9,Operating,,IN,1040.0
+Wygen 1,44.2858,-105.3833,90.0,Operating,,WY,55479.0
+Healy,63.8542,-148.95,90.0,Operating,,AK,6288.0
+Neil Simpson II,44.2856,-105.3833,90.0,Operating,,WY,7504.0
+John B Rich Memorial Power Station,40.7903,-76.1983,88.4,Operating,,PA,10113.0
+James River Power Station,37.108611,-93.261944,88.0,Retired,2017.0,MO,2161.0
+Shiras,46.530598,-87.392206,77.5,Retired,2019.0,MI,1843.0
+Archer Daniels Midland Columbus,41.416442,-97.286328,71.4,Operating,,NE,57046.0
+TES Filer City Station,44.217299,-86.28905,70.0,Operating,,MI,50835.0
+Morgantown Energy Facility,39.6397,-79.960556,68.9,Operating,,WV,10743.0
+Prairie Creek,41.944039,-91.639167,64.6,Operating,2025.0,IA,1073.0
+James De Young,42.7956,-86.1133,62.8,Retired,2017.0,MI,1830.0
+Argus Cogen Plant,35.765,-117.3833,62.5,Operating,,CA,10684.0
+Orrville,40.850964,-81.765764,59.5,Operating,,OH,2935.0
+Sunnyside Cogen Associates,39.5472,-110.3917,58.1,Operating,,UT,50951.0
+Ebensburg Power,40.455,-78.7472,57.6,Operating,,PA,10603.0
+Painesville,41.7265,-81.254,53.5,Operating,,OH,2936.0
+Lewis & Clark,47.6785,-104.15665,50.0,Retired,2021.0,MT,6089.0
+Wheelabrator Frackville Energy,40.782377,-76.176184,48.0,Retired,2020.0,PA,50879.0
+Foster Wheeler Mt Carmel Cogen,40.811189,-76.452951,47.3,Operating,,PA,10343.0
+Colstrip Energy LP,45.9752,-106.6547,46.1,Operating,,MT,10784.0
+Missouri City,39.231534,-94.307979,46.0,Retired,2016.0,MO,2171.0
+Pixelle Specialty Solutions LLC - Spring,39.870935,-76.868117,45.9,Operating,,PA,50397.0
+Covington Facility,37.799722,-79.9947,44.5,Operating,,VA,50900.0
+WE Soda Alkalai LLC,41.621667,-109.811944,41.0,Operating,,WY,57915.0
+Biron Mill,44.43,-89.78,38.5,Operating,,WI,10234.0
+Columbia (MO),38.964646,-92.316768,38.5,Retired,2019.0,MO,2123.0
+Westwood Generation LLC,40.6191,-76.45,36.0,Operating,,PA,50611.0
+Eielson AFB Central Heat & Power Plant,64.67141,-147.075988,35.0,Operating,2022.0,AK,50392.0
+Peru (IN),40.7551,-86.0575,34.5,Retired,2015.0,IN,1037.0
+University of Alaska Fairbanks,64.854171,-147.822075,30.0,Operating,,AK,50711.0
+General Chemical,41.5933,-109.7542,30.0,Operating,,WY,54318.0
+Univ of NC Chapel Hill Cogen Facility,35.9069,-79.0617,28.0,Operating,,NC,54276.0
+Dover (OH),40.520066,-81.46815,27.5,Operating,,OH,2914.0
+Chena Power Plant,64.847743,-147.735063,27.5,Operating,,AK,79.0
+Crawfordsville Power Plant,40.048889,-86.8992,24.1,Retired,2023.0,IN,1024.0
+Marshall (MO),39.1228,-93.2064,22.5,Retired,2016.0,MO,2144.0
+FWA Central Heat and Power Plant,64.825601,-147.648627,20.0,Operating,,AK,50308.0
+TalenEnergy Montour,41.0714,-76.6672,17.2,Retired,2019.0,PA,3149.0
+American Crystal Sugar Hillsboro,47.437562,-97.06311,13.3,Operating,,ND,54210.0
+Milwaukee County,43.046,-88.0281,11.0,Retired,2016.0,WI,7549.0
+Rhinelander Mill,45.6394,-89.4205,9.3,Operating,,WI,50933.0
+Southern Minnesota Beet Sugar,44.796405,-95.179787,7.5,Operating,,MN,54533.0
+American Crystal Sugar East Grand Forks,47.927202,-97.007153,7.5,Operating,,MN,54214.0
+American Crystal Sugar Crookston,47.76468,-96.633375,6.5,Operating,,MN,54212.0
+Neenah Paper Munising Mill,46.4094,-86.6443,6.2,Operating,,MI,54867.0
+American Crystal Sugar Drayton,48.593158,-97.17608,6.0,Operating,,ND,54213.0
+West Campus Steam Plant,40.792778,-77.864722,6.0,Retired,2015.0,PA,58194.0
+SABIC Innovative Plastics Mt. Vernon,37.910278,-87.926111,5.5,Retired,2017.0,IN,58063.0
+American Crystal Sugar Moorhead,46.9026,-96.76112,5.0,Operating,,MN,54211.0
+Juniata Locomotive Shop,40.533299,-78.384125,4.0,Retired,2015.0,PA,10302.0
+Trinidad (CO),37.178979,-104.487492,3.7,Retired,2017.0,CO,511.0
+SIUC,37.711944,-89.215,3.5,Operating,,IL,57928.0
+MSC Sebewaing,43.741111,-83.447222,2.5,Operating,,MI,57949.0
+Morton Salt Rittman,40.9692,-81.7756,1.5,Retired,2015.0,OH,54335.0
+Western Sugar Cooperative - Billings,45.765346,-108.499232,1.5,Operating,,MT,62319.0

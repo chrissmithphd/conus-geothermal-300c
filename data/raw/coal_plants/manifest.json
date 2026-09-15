@@ -1,0 +1,52 @@
+{
+  "source": "EIA Form 860 - Annual Electric Generator Report",
+  "url": "https://www.eia.gov/electricity/data/eia860/",
+  "data_year": 2025,
+  "download_date": "2026-09-15T12:40:32.832425",
+  "files_used": [
+    "2___Plant_Y2025.xlsx (Plant location data)",
+    "3_1_Generator_Y2025.xlsx (Generator data - Operable and Retired sheets)"
+  ],
+  "filter_criteria": {
+    "fuel_types": [
+      "BIT",
+      "SUB",
+      "LIG",
+      "ANT",
+      "WC",
+      "RC"
+    ],
+    "status": [
+      "Operating",
+      "Retired since 2015"
+    ],
+    "retirement_cutoff_year": 2015
+  },
+  "statistics": {
+    "total_plants": 340,
+    "operating_plants": 213,
+    "retired_plants_since_2015": 127,
+    "total_capacity_mw": 266889.3,
+    "operating_capacity_mw": 195964.19999999998,
+    "retired_capacity_mw": 70925.1,
+    "states_with_coal": 42,
+    "top_states": {
+      "TX": 23211.4,
+      "IN": 19625.6,
+      "KY": 16435.9,
+      "WV": 14120.9,
+      "IL": 13106.9,
+      "GA": 12535.4,
+      "MO": 12434.2,
+      "MI": 11877.8,
+      "AL": 9668.2,
+      "TN": 9090.9
+    }
+  },
+  "notes": [
+    "Capacity aggregated by plant (sum of all coal generators at each plant)",
+    "Plants classified as Operating if any coal generator is still operating",
+    "Coordinates from EIA plant location data",
+    "Plants without coordinates excluded"
+  ]
+}

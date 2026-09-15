@@ -24,74 +24,89 @@ COLORS = {
     ">10 km": "#DDDDDD"
 }
 
-# Data from energy analysis
+# Data from energy analysis (updated Sep 15 2026)
+BINS = ["≤4 km", "4-5 km", "5-6 km", "6-7 km", "7-8 km", "8-10 km", ">10 km"]
+
 CAPACITY_BY_DEPTH = {
+    "≤4 km": 0,
     "4-5 km": 0.3,      # GW
     "5-6 km": 114,
     "6-7 km": 2886,
-    "7-8 km": 224,
-    "8-10 km": 7118,
-    ">10 km": 49858     # Beyond current frontier but not impossible!
+    "7-8 km": 1521,
+    "8-10 km": 10827,
+    ">10 km": 44851
 }
 
 AREA_BY_DEPTH = {
+    "≤4 km": 0,
     "4-5 km": 46,
     "5-6 km": 16285,
     "6-7 km": 412296,
-    "7-8 km": 32000,
-    "8-10 km": 1016841,
-    ">10 km": 7122540
+    "7-8 km": 217321,
+    "8-10 km": 1546782,
+    ">10 km": 6407277
 }
 
 def create_cumulative_capacity_chart():
-    """Bar chart showing cumulative capacity by drilling depth capability."""
-    fig, ax = plt.subplots(figsize=(14, 8))
+    """Bar chart showing capacity by individual depth bin - ALL 7 bins."""
+    fig, ax = plt.subplots(figsize=(16, 9))
 
-    # Drilling scenarios
-    scenarios = [
-        ("≤7 km\n(Proven)", ["4-5 km", "5-6 km", "6-7 km"], 3000),
-        ("≤8 km\n(Advanced)", ["4-5 km", "5-6 km", "6-7 km", "7-8 km"], 3224),
-        ("≤10 km\n(Frontier)", ["4-5 km", "5-6 km", "6-7 km", "7-8 km", "8-10 km"], 10342),
-        ("≤20 km\n(Next-Gen)", ["4-5 km", "5-6 km", "6-7 km", "7-8 km", "8-10 km", ">10 km"], 60200)
-    ]
-
-    x_pos = np.arange(len(scenarios))
-    capacities = [s[2] for s in scenarios]
-    labels = [s[0] for s in scenarios]
+    x_pos = np.arange(len(BINS))
+    capacities = [CAPACITY_BY_DEPTH[b] for b in BINS]
+    colors = [COLORS[b] for b in BINS]
 
     # Create bars
-    bars = ax.bar(x_pos, capacities, color=['#2171B5', '#00B050', '#FF8C00', '#8B0000'],
-                   edgecolor='black', linewidth=1.5, alpha=0.85)
+    bars = ax.bar(x_pos, capacities, color=colors,
+                   edgecolor='black', linewidth=2, alpha=0.9, width=0.7)
 
     # Add US total capacity reference line
     us_total = 1287
-    ax.axhline(y=us_total, color='red', linestyle='--', linewidth=2,
-               label='US Total Capacity (1,287 GW)', zorder=5)
+    ax.axhline(y=us_total, color='red', linestyle='--', linewidth=2.5,
+               label=f'US Total Capacity ({us_total:,} GW)', zorder=5, alpha=0.8)
 
     # Add capacity values on bars
-    for i, (bar, cap) in enumerate(zip(bars, capacities)):
+    for i, (bar, cap, bin_name) in enumerate(zip(bars, capacities, BINS)):
         height = bar.get_height()
-        multiplier = cap / us_total
-        ax.text(bar.get_x() + bar.get_width()/2., height + 500,
-                f'{cap:,.0f} GW\n({multiplier:.1f}× US total)',
-                ha='center', va='bottom', fontsize=12, fontweight='bold')
+
+        if cap == 0:
+            continue
+
+        if height > us_total * 2:  # Tall bars - text inside
+            y_pos = height * 0.5
+            text_color = 'white' if bin_name != ">10 km" else 'black'
+            va = 'center'
+        else:  # Short bars - text above
+            y_pos = height
+            text_color = 'black'
+            va = 'bottom'
+
+        # Format capacity
+        if cap >= 1000:
+            cap_str = f'{cap/1000:.1f}K GW'
+        else:
+            cap_str = f'{cap:.0f} GW'
+
+        ax.text(bar.get_x() + bar.get_width()/2., y_pos,
+                cap_str,
+                ha='center', va=va, fontsize=11, fontweight='bold',
+                color=text_color)
 
     ax.set_ylabel('Generation Capacity (GW)', fontsize=14, fontweight='bold')
-    ax.set_xlabel('Drilling Depth Capability', fontsize=14, fontweight='bold')
-    ax.set_title('Geothermal Energy Potential by Drilling Depth\n'
-                 'Conterminous United States — Typical Development Scenario (20% of area)',
+    ax.set_xlabel('Depth to 300°C', fontsize=14, fontweight='bold')
+    ax.set_title('Geothermal Energy Potential by Depth — All 7 Bins\n'
+                 'Conterminous United States — Typical Development (20% of area, 35 MW/km²)',
                  fontsize=16, fontweight='bold', pad=15)
     ax.set_xticks(x_pos)
-    ax.set_xticklabels(labels, fontsize=12)
+    ax.set_xticklabels(BINS, fontsize=12, fontweight='bold')
     ax.tick_params(axis='y', labelsize=11)
-    ax.set_ylim(0, 65000)
-    ax.legend(fontsize=11, loc='upper left')
+    ax.set_ylim(0, max(capacities) * 1.1)
+    ax.legend(fontsize=12, loc='upper left')
     ax.grid(axis='y', alpha=0.3, linestyle='--')
 
     # Add note
     fig.text(0.5, 0.02,
-             'Based on superhot geothermal power density (30-40 MW/km²). Each 3 km increase in drilling '
-             'depth unlocks thousands of GW. Ultra-deep drilling (>10 km) could access 50,000+ GW.',
+             'Based on superhot geothermal (300-400°C) power density. IDDP-2 demonstrated 45 MW per well at 427°C. '
+             'Each depth bin represents an independent drilling target.',
              ha='center', fontsize=10, style='italic', color='#555', wrap=True)
 
     plt.tight_layout(rect=[0, 0.05, 1, 1])
@@ -103,54 +118,38 @@ def create_cumulative_capacity_chart():
 
 def create_stacked_capacity_chart():
     """Stacked bar showing capacity contribution by depth bin."""
-    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(18, 8))
+    fig, ax = plt.subplots(figsize=(12, 10))
 
-    # Left: Accessible with frontier drilling (≤10 km)
-    bins_accessible = ["4-5 km", "5-6 km", "6-7 km", "7-8 km", "8-10 km"]
-    caps_accessible = [CAPACITY_BY_DEPTH[b] for b in bins_accessible]
-    colors_accessible = [COLORS[b] for b in bins_accessible]
+    # All 7 bins (exclude ≤4 km since it's 0)
+    bins_show = ["4-5 km", "5-6 km", "6-7 km", "7-8 km", "8-10 km", ">10 km"]
+    caps = [CAPACITY_BY_DEPTH[b] for b in bins_show]
+    colors_show = [COLORS[b] for b in bins_show]
 
-    # Right: All depths including ultra-deep
-    bins_all = bins_accessible + [">10 km"]
-    caps_all = [CAPACITY_BY_DEPTH[b] for b in bins_all]
-    colors_all = [COLORS[b] for b in bins_all]
+    total_cap = sum(caps)
 
-    # Create pie charts
-    wedges1, texts1, autotexts1 = ax1.pie(caps_accessible, labels=bins_accessible,
-                                           colors=colors_accessible,
-                                           autopct=lambda pct: f'{pct:.1f}%' if pct > 2 else '',
-                                           startangle=90, textprops={'fontsize': 11})
+    # Create pie chart
+    wedges, texts, autotexts = ax.pie(caps, labels=bins_show,
+                                       colors=colors_show,
+                                       autopct=lambda pct: f'{pct:.1f}%' if pct > 1 else '',
+                                       startangle=90, textprops={'fontsize': 12, 'fontweight': 'bold'})
 
     # Make wedges have black borders
-    for w in wedges1:
+    for w in wedges:
         w.set_edgecolor('black')
-        w.set_linewidth(1.5)
+        w.set_linewidth(2)
 
-    ax1.set_title('Frontier Drilling (≤10 km)\n10,342 GW Total',
-                  fontsize=14, fontweight='bold', pad=10)
+    ax.set_title(f'Geothermal Capacity Distribution by Depth\nTotal: {total_cap:,.0f} GW',
+                  fontsize=16, fontweight='bold', pad=20)
 
-    wedges2, texts2, autotexts2 = ax2.pie(caps_all, labels=bins_all,
-                                           colors=colors_all,
-                                           autopct=lambda pct: f'{pct:.1f}%' if pct > 1 else '',
-                                           startangle=90, textprops={'fontsize': 11})
-
-    for w in wedges2:
-        w.set_edgecolor('black')
-        w.set_linewidth(1.5)
-
-    ax2.set_title('Next-Generation Drilling (≤20 km)\n60,200 GW Total',
-                  fontsize=14, fontweight='bold', pad=10)
-
-    fig.suptitle('Geothermal Capacity Distribution by Depth\n'
-                 'Conterminous United States',
-                 fontsize=16, fontweight='bold', y=0.98)
+    fig.suptitle('Conterminous United States — All Depth Bins',
+                 fontsize=14, y=0.98)
 
     fig.text(0.5, 0.02,
-             'Ultra-deep drilling (>10 km) accesses 50,000+ GW of additional capacity. '
-             'Each depth increment unlocks superhot to supercritical resources (300-450°C).',
+             f'>10 km resources represent 74.5% of CONUS area. '
+             f'Superhot to supercritical resources (300-400°C) at all depths. US Total Capacity: 1,287 GW.',
              ha='center', fontsize=10, style='italic', color='#555')
 
-    plt.tight_layout(rect=[0, 0.05, 1, 0.95])
+    plt.tight_layout(rect=[0, 0.04, 1, 0.96])
     out = PLOT_DIR / "energy_capacity_distribution.png"
     plt.savefig(out, dpi=200, bbox_inches='tight', facecolor='white')
     plt.close()

@@ -17,24 +17,6 @@ the geothermal industry has ever drilled.
 
 ---
 
-## The headline
-
-| Question | Answer |
-|---|---|
-| Reachable within **4 km**? | **0.00 %** of CONUS |
-| Reachable within **5 km**? | **0.00 %** — three model cells, total |
-| Reachable within **6 km**? | **0.19 %** |
-| Reachable within **7 km**? | **4.98 %** ← today's proven drilling envelope |
-| Reachable within **8 km**? | **5.36 %** |
-| Reachable within **10 km**? | **17.18 %** |
-| Requires **> 10 km** | **82.82 %** |
-
-> Pushing the drilling envelope from 7 km to 10 km **triples** the accessible land area —
-> from ~429,000 km² to ~1,477,000 km². That single step is the highest-leverage technology
-> target in the whole dataset.
-
----
-
 ## The map
 
 ![Depth required to reach 300 °C — continuous field](plots/depth_to_300c_heatmap.png)
@@ -100,91 +82,65 @@ Montana cells are not over-credited relative to Texas cells.
 
 ## Energy Generation Potential
 
-Converting area to actual electricity generation capacity using superhot geothermal power densities (30-40 MW/km²):
+![Energy by depth bin](plots/energy_by_depth_bin.png)
 
-![Energy potential by drilling depth](plots/energy_potential_by_drilling_depth.png)
+### Capacity by Depth Bin
 
-### Capacity by Drilling Depth Capability
+| Depth Bin | Area (km²) | Capacity (GW) | % of US Total |
+|-----------|------------|---------------|---------------|
+| ≤4 km | 0 | 0 | 0.0% |
+| 4-5 km | 46 | 0.3 | 0.0% |
+| 5-6 km | 16,285 | 114 | 8.9% |
+| 6-7 km | 412,296 | 2,886 | 224% |
+| 7-8 km | 32,000 | 224 | 17% |
+| 8-10 km | 1,016,841 | 7,118 | 553% |
+| >10 km | 7,122,540 | 49,858 | 3,874% |
 
-| Drilling Depth | Accessible Area | Potential Capacity | % of US Total | vs US Coal |
-|----------------|-----------------|-------------------|---------------|------------|
-| **≤7 km** (Proven) | 429,000 km² | **3,000 GW** | 233% | 17× |
-| **≤8 km** (Advanced) | 461,000 km² | **3,224 GW** | 251% | 18× |
-| **≤10 km** (Frontier) | 1,477,000 km² | **10,342 GW** | 804% | 57× |
-| **≤20 km** (Next-Gen) | 8,600,000 km² | **60,200 GW** | 4,677% | 334× |
+*US Total: 1,287 GW | US Coal: 180 GW*
 
-*US Total Capacity: 1,287 GW | US Coal: 180 GW | US Coal+Gas: 696 GW*
+![Area and capacity](plots/area_and_capacity_by_bin.png)
 
-![Capacity distribution](plots/energy_capacity_distribution.png)
-
-### Power Output Basis
-
-Based on demonstrated performance from supercritical and superhot geothermal projects:
-
-| System Type | Temperature | MW per Well | Example |
-|-------------|-------------|-------------|---------|
-| Conventional | 150-200°C | 4-10 MW | The Geysers, CA (4 MW avg) |
-| Superhot | 300-400°C | 15-30 MW | Estimated from enthalpy scaling |
-| **Supercritical** | **>374°C** | **35-50 MW** | **IDDP-2, Iceland (45 MW at 427°C)** |
-
-**Key insight:** Supercritical wells produce **5-10× more power** than conventional geothermal wells. Moving from 7 km to 10 km drilling capability **triples accessible capacity** (3,000 → 10,342 GW).
-
-> **Assumptions:** 20% development factor (typical scenario), 35 MW/km² power density for superhot systems, proven by Iceland's IDDP-2 demonstration. See [`ENERGY_GENERATION_RESEARCH.md`](ENERGY_GENERATION_RESEARCH.md) for detailed research basis.
+**Basis:** 35 MW/km² power density (superhot geothermal, 300-400°C), 20% development factor. IDDP-2 (Iceland) demonstrated 45 MW per well at 427°C. See [`ENERGY_GENERATION_RESEARCH.md`](ENERGY_GENERATION_RESEARCH.md) for research details.
 
 ---
 
 ## Coal Plant Conversion Analysis
 
-Which existing coal plants could be converted or replaced with geothermal?
-
 ![Coal plants and geothermal overlay](plots/coal_plants_geothermal_overlay.png)
 
-*Coal power plants sized by capacity, colored by geothermal depth at that location. Triangles = operating, circles = retired since 2015.*
+*Coal power plants sized by capacity, colored by geothermal depth. Triangles = operating, circles = retired since 2015.*
 
 ### Summary
 
-Of **340 US coal plants** analyzed:
-- **23 plants (7%)** sit on proven-to-frontier drilling depths (≤10 km)
-- **22 of those 23** are in the western US
-- **317 plants (93%)** require ultra-deep drilling (>10 km)
+**340 US coal plants analyzed:**
+- 23 plants (7%) at ≤10 km depth
+- 22 of those in western US
+- 317 plants (93%) at >10 km depth
 
 ### Top Conversion Candidates
 
-| Rank | Plant | State | Capacity | Status | Depth to 300°C | Category |
-|------|-------|-------|----------|--------|----------------|----------|
-| 1 | **Centralia** | WA | 1,460 MW | Operating | 6.2 km | Proven |
-| 2 | **Huntington** | UT | 1,016 MW | Operating | 6.7 km | Proven |
-| 3 | **Dave Johnston** | WY | 817 MW | Operating | 7.0 km | Proven |
-| 4 | **Boardman** | OR | 642 MW | Retired | 7.0 km | Proven |
-| 5 | **Craig** | CO | 1,428 MW | Operating | 7.5 km | Advanced |
-| 6 | **Navajo** | AZ | 2,409 MW | Retired | 8.5 km | Frontier |
-| 7 | **San Juan** | NM | 1,848 MW | Retired | 10.0 km | Frontier |
+| Rank | Plant | State | Capacity | Status | Depth to 300°C |
+|------|-------|-------|----------|--------|----------------|
+| 1 | Centralia | WA | 1,460 MW | Operating | 6.2 km |
+| 2 | Huntington | UT | 1,016 MW | Operating | 6.7 km |
+| 3 | Dave Johnston | WY | 817 MW | Operating | 7.0 km |
+| 4 | Boardman | OR | 642 MW | Retired | 7.0 km |
+| 5 | Craig | CO | 1,428 MW | Operating | 7.5 km |
+| 6 | Navajo | AZ | 2,409 MW | Retired | 8.5 km |
+| 7 | San Juan | NM | 1,848 MW | Retired | 10.0 km |
 
 ![Western coal plants zoom](plots/coal_plants_western_zoom.png)
 
-*Western states detail showing all 23 plants at proven-to-frontier depths. Most eastern coal plants require ultra-deep drilling.*
+*Western states showing 23 plants at ≤10 km depth.*
 
-### Geographic Reality
+### Geographic Distribution
 
-**Western US:** 44% of coal plants (22 of 50) have proven-to-frontier geothermal resources  
-**Eastern US:** <1% of coal plants (1 of 290) have proven-to-frontier geothermal resources
+**Western US:** 22 of 50 plants (44%) at ≤10 km depth  
+**Eastern US:** 1 of 290 plants (<1%) at ≤10 km depth
 
-**States with Best Conversion Potential:**
-- Utah: 7/7 plants at favorable depths (100%)
-- Nevada: 3/3 plants (100%)
-- Washington: 1/1 plant (100%)
-- Oregon: 1/1 plant (100%, retired)
+**States (100% of plants at ≤10 km):** Utah (7/7), Nevada (3/3), Washington (1/1), Oregon (1/1)
 
-### Advantages of Coal-to-Geothermal Conversion
-
-1. **Existing Transmission:** High-voltage lines already connected to grid
-2. **Workforce Transition:** Power plant operators retain relevant skills
-3. **Land Rights:** Industrial zoning and permits already approved
-4. **Community Stability:** Maintains energy jobs in coal-dependent regions
-
-> **Analysis Details:** See [`COAL_GEOTHERMAL_ANALYSIS.md`](COAL_GEOTHERMAL_ANALYSIS.md) for comprehensive analysis including economic considerations, technical challenges, and detailed site assessments.
-
-**Data:** EIA Form 860 (2025) matched to Stanford Thermal Earth Model (2024)
+**Data:** EIA Form 860 (2025) + Stanford Thermal Earth Model (2024). See [`COAL_GEOTHERMAL_ANALYSIS.md`](COAL_GEOTHERMAL_ANALYSIS.md) for detailed analysis.
 
 ---
 

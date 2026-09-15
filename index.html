@@ -55,13 +55,73 @@
             border-radius: 8px;
             padding: 10px;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            position: relative;
             overflow: hidden;
-        }
-        iframe {
-            width: 100%;
             height: 800px;
-            border: none;
-            border-radius: 4px;
+        }
+        #map-viewer {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            cursor: grab;
+            position: relative;
+        }
+        #map-viewer:active {
+            cursor: grabbing;
+        }
+        #map-image {
+            position: absolute;
+            transform-origin: 0 0;
+            transition: transform 0.1s ease-out;
+            max-width: none;
+        }
+        .zoom-controls {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 10;
+        }
+        .zoom-btn {
+            background: white;
+            border: 2px solid #2d3748;
+            border-radius: 6px;
+            width: 40px;
+            height: 40px;
+            font-size: 24px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            transition: all 0.2s;
+        }
+        .zoom-btn:hover {
+            background: #2d3748;
+            color: white;
+            transform: scale(1.1);
+        }
+        .zoom-btn:active {
+            transform: scale(0.95);
+        }
+        .reset-btn {
+            background: white;
+            border: 2px solid #4299e1;
+            color: #4299e1;
+            font-size: 14px;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            transition: all 0.2s;
+        }
+        .reset-btn:hover {
+            background: #4299e1;
+            color: white;
         }
         .color-legend {
             display: grid;
@@ -108,7 +168,7 @@
             background: #1a202c;
         }
         @media (max-width: 768px) {
-            iframe {
+            .map-container {
                 height: 600px;
             }
             h1 {
@@ -135,56 +195,60 @@
             <div class="instructions">
                 <strong>How to Use:</strong>
                 <ul>
-                    <li><strong>Zoom:</strong> Scroll or use the zoom controls to zoom in/out</li>
+                    <li><strong>Zoom In:</strong> Click the + button or scroll up</li>
+                    <li><strong>Zoom Out:</strong> Click the - button or scroll down</li>
                     <li><strong>Pan:</strong> Click and drag to move around the map</li>
-                    <li><strong>Hover:</strong> Move your mouse over points to see detailed information</li>
-                    <li><strong>Toggle:</strong> Click legend items to show/hide depth categories</li>
+                    <li><strong>Reset:</strong> Click the reset button to return to default view</li>
                 </ul>
             </div>
 
             <h2>Color Legend (Depth Categories)</h2>
             <div class="color-legend">
                 <div class="color-item">
-                    <div class="color-box" style="background: #0000CC;"></div>
-                    <span><strong>≤4 km:</strong> 0.00% (0 locations)</span>
+                    <div class="color-box" style="background: #08306B;"></div>
+                    <span><strong>≤4 km:</strong> 0.00% of CONUS</span>
                 </div>
                 <div class="color-item">
-                    <div class="color-box" style="background: #0066FF;"></div>
-                    <span><strong>4-5 km:</strong> 0.00% (3 locations)</span>
+                    <div class="color-box" style="background: #2171B5;"></div>
+                    <span><strong>4-5 km:</strong> 0.00% of CONUS</span>
                 </div>
                 <div class="color-item">
-                    <div class="color-box" style="background: #00CC00;"></div>
-                    <span><strong>5-6 km:</strong> 0.20% (1,055 locations)</span>
+                    <div class="color-box" style="background: #00B050;"></div>
+                    <span><strong>5-6 km:</strong> 0.19% of CONUS</span>
                 </div>
                 <div class="color-item">
-                    <div class="color-box" style="background: #FFFF00;"></div>
-                    <span><strong>6-7 km:</strong> 4.94% (26,430 locations)</span>
+                    <div class="color-box" style="background: #FFE100;"></div>
+                    <span><strong>6-7 km:</strong> 4.79% of CONUS</span>
                 </div>
                 <div class="color-item">
-                    <div class="color-box" style="background: #FF9900;"></div>
-                    <span><strong>7-8 km:</strong> 0.37% (1,995 locations)</span>
+                    <div class="color-box" style="background: #FF8C00;"></div>
+                    <span><strong>7-8 km:</strong> 2.53% of CONUS</span>
                 </div>
                 <div class="color-item">
-                    <div class="color-box" style="background: #FF3300;"></div>
-                    <span><strong>8-10 km:</strong> 11.58% (61,938 locations)</span>
+                    <div class="color-box" style="background: #E31A1C;"></div>
+                    <span><strong>8-10 km:</strong> 17.99% of CONUS</span>
                 </div>
                 <div class="color-item">
-                    <div class="color-box" style="background: #CCCCCC;"></div>
-                    <span><strong>&gt;10 km:</strong> 82.91% (443,521 locations)</span>
+                    <div class="color-box" style="background: #D9D9D9;"></div>
+                    <span><strong>&gt;10 km:</strong> 74.50% of CONUS</span>
                 </div>
             </div>
 
             <p style="margin-top: 20px;">
-                <strong>Key Finding:</strong> Only 17% of CONUS can access 300°C within 10 km drilling depth.
-                The remaining 83% requires depths exceeding current technological and economic feasibility.
+                <strong>Key Finding:</strong> 25.5% of CONUS can reach 300°C within 10 km drilling depth.
+                Shallow cells (green, blue, navy) are drawn larger to remain visible at continental scale.
             </p>
         </div>
 
         <div class="map-container">
-            <iframe src="plots/depth_to_300c_interactive.html"
-                    title="Interactive Depth to 300°C Map"
-                    loading="lazy">
-            </iframe>
+            <div class="zoom-controls">
+                <button class="zoom-btn" id="zoom-in" title="Zoom In">+</button>
+                <button class="zoom-btn" id="zoom-out" title="Zoom Out">−</button>
+                <button class="reset-btn" id="reset" title="Reset View">Reset</button>
+            </div>
+            <div id="map-viewer">
+                <img id="map-image" src="plots/depth_to_300c_points.png" alt="Depth to 300°C Map">
+            </div>
         </div>
 
         <div class="github-link">
@@ -197,10 +261,144 @@
             <h2>Data Sources</h2>
             <ul>
                 <li><strong>Stanford Thermal Earth Model (2024):</strong> Aljubran & Horne. DOI: 10.1186/s40517-024-00304-7</li>
-                <li><strong>SMU Geothermal Laboratory (2011):</strong> Blackwell et al. Temperature-at-Depth Maps</li>
-                <li><strong>Analysis:</strong> 534,942 grid points across CONUS</li>
+                <li><strong>SMU Geothermal Laboratory (2011):</strong> Blackwell et al. Temperature-at-Depth Maps (upper bin values)</li>
+                <li><strong>Analysis:</strong> 534,942 grid points across CONUS | Updated Sep 15, 2026</li>
             </ul>
+            <p style="margin-top: 15px; font-size: 14px; color: #718096;">
+                Analysis conducted with <a href="https://claude.ai/code" style="color: #4299e1; text-decoration: none;">Claude Code</a> (Sonnet 4.5) by Anthropic.
+            </p>
         </div>
     </div>
+
+    <script>
+        // Zoom and pan implementation
+        const viewer = document.getElementById('map-viewer');
+        const image = document.getElementById('map-image');
+        const zoomInBtn = document.getElementById('zoom-in');
+        const zoomOutBtn = document.getElementById('zoom-out');
+        const resetBtn = document.getElementById('reset');
+
+        let scale = 1;
+        let panning = false;
+        let pointX = 0;
+        let pointY = 0;
+        let start = { x: 0, y: 0 };
+
+        const MIN_SCALE = 0.5;
+        const MAX_SCALE = 5;
+        const ZOOM_SPEED = 0.2;
+
+        function setTransform() {
+            image.style.transform = `translate(${pointX}px, ${pointY}px) scale(${scale})`;
+        }
+
+        function reset() {
+            scale = 1;
+            pointX = 0;
+            pointY = 0;
+            setTransform();
+        }
+
+        function zoom(delta, x, y) {
+            const rect = viewer.getBoundingClientRect();
+            const relX = x - rect.left;
+            const relY = y - rect.top;
+
+            const oldScale = scale;
+            scale = Math.min(MAX_SCALE, Math.max(MIN_SCALE, scale + delta));
+
+            // Adjust pan to zoom toward cursor position
+            pointX = relX - (relX - pointX) * (scale / oldScale);
+            pointY = relY - (relY - pointY) * (scale / oldScale);
+
+            setTransform();
+        }
+
+        // Mouse wheel zoom
+        viewer.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            const delta = e.deltaY > 0 ? -ZOOM_SPEED : ZOOM_SPEED;
+            zoom(delta, e.clientX, e.clientY);
+        });
+
+        // Button controls
+        zoomInBtn.addEventListener('click', () => {
+            const rect = viewer.getBoundingClientRect();
+            zoom(ZOOM_SPEED, rect.left + rect.width / 2, rect.top + rect.height / 2);
+        });
+
+        zoomOutBtn.addEventListener('click', () => {
+            const rect = viewer.getBoundingClientRect();
+            zoom(-ZOOM_SPEED, rect.left + rect.width / 2, rect.top + rect.height / 2);
+        });
+
+        resetBtn.addEventListener('click', reset);
+
+        // Pan functionality
+        viewer.addEventListener('mousedown', (e) => {
+            e.preventDefault();
+            start = { x: e.clientX - pointX, y: e.clientY - pointY };
+            panning = true;
+        });
+
+        viewer.addEventListener('mousemove', (e) => {
+            if (!panning) return;
+            e.preventDefault();
+            pointX = e.clientX - start.x;
+            pointY = e.clientY - start.y;
+            setTransform();
+        });
+
+        viewer.addEventListener('mouseup', () => {
+            panning = false;
+        });
+
+        viewer.addEventListener('mouseleave', () => {
+            panning = false;
+        });
+
+        // Touch support for mobile
+        let initialDistance = 0;
+        let initialScale = 1;
+
+        viewer.addEventListener('touchstart', (e) => {
+            if (e.touches.length === 1) {
+                start = { x: e.touches[0].clientX - pointX, y: e.touches[0].clientY - pointY };
+                panning = true;
+            } else if (e.touches.length === 2) {
+                panning = false;
+                initialDistance = Math.hypot(
+                    e.touches[0].clientX - e.touches[1].clientX,
+                    e.touches[0].clientY - e.touches[1].clientY
+                );
+                initialScale = scale;
+            }
+        });
+
+        viewer.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+            if (e.touches.length === 1 && panning) {
+                pointX = e.touches[0].clientX - start.x;
+                pointY = e.touches[0].clientY - start.y;
+                setTransform();
+            } else if (e.touches.length === 2) {
+                const distance = Math.hypot(
+                    e.touches[0].clientX - e.touches[1].clientX,
+                    e.touches[0].clientY - e.touches[1].clientY
+                );
+                scale = Math.min(MAX_SCALE, Math.max(MIN_SCALE, initialScale * (distance / initialDistance)));
+                setTransform();
+            }
+        });
+
+        viewer.addEventListener('touchend', () => {
+            panning = false;
+        });
+
+        // Initialize - center the image
+        window.addEventListener('load', () => {
+            reset();
+        });
+    </script>
 </body>
 </html>

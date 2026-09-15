@@ -77,7 +77,8 @@ def classify_pixels(map_pixels, legend, max_distance=60):
     valid_mask = closest_distances <= max_distance
 
     temp_classified = np.full(n_pixels, np.nan)
-    temp_classified[valid_mask] = legend['temp_mid'][closest_indices[valid_mask]]
+    # Use upper bin value for optimistic resource assessment
+    temp_classified[valid_mask] = legend['temp_high'][closest_indices[valid_mask]]
 
     temp_map = temp_classified.reshape(height, width)
 

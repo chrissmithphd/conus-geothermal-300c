@@ -22,7 +22,7 @@ the geothermal industry has ever drilled.
 ![Depth required to reach 300 °C — continuous field](plots/depth_to_300c_heatmap.png)
 
 *Continuous nearest-neighbour field at ~3 km resolution. State outlines are US Census
-TIGER 2023 boundaries. Everything grey needs more than 10 km of hole.*
+TIGER 2023 boundaries. Grey regions require >10 km drilling depth.*
 
 **🔍 [Open the interactive, zoomable version →](https://chrissmithphd.github.io/conus-geothermal-300c/)**
 
@@ -374,8 +374,9 @@ Geothermal Laboratory and are reproduced here only to validate the digitisation.
 
 ## Acknowledgments
 
-Stanford Geothermal Program · SMU Geothermal Laboratory · US DOE Geothermal Technologies
-Office · OpenEI / NREL · US Census Bureau
+Data sources: Stanford Geothermal Program · SMU Geothermal Laboratory · US DOE Geothermal Technologies Office · OpenEI / NREL · US Census Bureau
+
+Analysis conducted with [Claude Code](https://claude.ai/code) by Anthropic.
 
 ---
 
@@ -383,6 +384,6 @@ Office · OpenEI / NREL · US Census Bureau
 
 **Christopher Smith** · [@chrissmithphd](https://github.com/chrissmithphd)
 
-*Last updated 2026-09-14*
+*Last updated 2026-09-15*
 
 </div>

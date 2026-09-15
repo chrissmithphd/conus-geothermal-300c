@@ -67,7 +67,7 @@ Oregon/Washington Cascade axis and coastal Northern California.
 | **>10 km** | **6,407,277** | **74.50** | **44,851** | **34.8** |
 | *Total* | *8,600,008* | *100.00* | *60,200* | *46.8* |
 
-Area is **latitude-weighted** (`A = R² · cos φ · Δφ · Δλ`). Capacity assumes 35 MW/km² power density (superhot geothermal, 300-400°C), 20% development. IDDP-2 demonstrated 45 MW/well at 427°C. US total capacity: **1,287 GW** (coal: 180 GW). See [`ENERGY_GENERATION_RESEARCH.md`](ENERGY_GENERATION_RESEARCH.md) for details.
+Area is **latitude-weighted** (`A = R² · cos φ · Δφ · Δλ`). Capacity assumes 35 MW/km² power density (superhot geothermal, 300-400°C), 20% development. IDDP-2 demonstrated 45 MW/well at 427°C. US total capacity: **1,287 GW** (coal: 180 GW). See [`research/ENERGY_GENERATION_RESEARCH.md`](research/ENERGY_GENERATION_RESEARCH.md) for details.
 
 ---
 
@@ -107,7 +107,7 @@ Area is **latitude-weighted** (`A = R² · cos φ · Δφ · Δλ`). Capacity as
 
 **States (100% of plants at ≤10 km):** Utah (7/7), Nevada (3/3), Washington (1/1), Oregon (1/1)
 
-**Data:** EIA Form 860 (2025) + Stanford Thermal Earth Model (2024). See [`COAL_GEOTHERMAL_ANALYSIS.md`](COAL_GEOTHERMAL_ANALYSIS.md) for detailed analysis.
+**Data:** EIA Form 860 (2025) + Stanford Thermal Earth Model (2024). See [`research/COAL_GEOTHERMAL_ANALYSIS.md`](research/COAL_GEOTHERMAL_ANALYSIS.md) for detailed analysis.
 
 ---
 

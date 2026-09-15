@@ -70,9 +70,9 @@ Oregon/Washington Cascade axis and coastal Northern California.
 | 4–5 km | 46 | 0.00 | 0.00 |
 | 5–6 km | 16,285 | 0.19 | 0.19 |
 | 6–7 km | 412,296 | 4.79 | 4.98 |
-| 7–8 km | 32,000 | 0.37 | 5.36 |
-| 8–10 km | 1,016,841 | 11.82 | 17.18 |
-| **> 10 km** | **7,122,540** | **82.82** | 100.00 |
+| 7–8 km | 217,321 | 2.53 | 7.51 |
+| 8–10 km | 1,546,782 | 17.99 | 25.50 |
+| **> 10 km** | **6,407,277** | **74.50** | 100.00 |
 | *Total* | *8,600,008* | *100.00* | |
 
 Areas are **latitude-weighted** (`A = R² · cos φ · Δφ · Δλ`), not raw cell counts, so
@@ -92,13 +92,19 @@ Montana cells are not over-credited relative to Texas cells.
 | 4-5 km | 46 | 0.3 | 0.0% |
 | 5-6 km | 16,285 | 114 | 8.9% |
 | 6-7 km | 412,296 | 2,886 | 224% |
-| 7-8 km | 32,000 | 224 | 17% |
-| 8-10 km | 1,016,841 | 7,118 | 553% |
-| >10 km | 7,122,540 | 49,858 | 3,874% |
+| 7-8 km | 217,321 | 1,521 | 118% |
+| 8-10 km | 1,546,782 | 10,827 | 841% |
+| >10 km | 6,407,277 | 44,851 | 3,485% |
 
 *US Total: 1,287 GW | US Coal: 180 GW*
 
 ![Geothermal metrics by depth](plots/geothermal_metrics_by_depth.png)
+
+*All metrics labeled directly: area (km²), generation capacity (GW), and percentage of CONUS for each depth bin.*
+
+![Energy potential by depth](plots/energy_potential_by_drilling_depth.png)
+
+*Individual depth bins showing generation capacity with US total reference line (1,287 GW).*
 
 **Basis:** 35 MW/km² power density (superhot geothermal, 300-400°C), 20% development factor. IDDP-2 (Iceland) demonstrated 45 MW per well at 427°C. See [`ENERGY_GENERATION_RESEARCH.md`](ENERGY_GENERATION_RESEARCH.md) for research details.
 

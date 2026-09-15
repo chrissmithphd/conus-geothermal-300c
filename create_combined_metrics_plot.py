@@ -91,7 +91,7 @@ def create_combined_metrics():
 
     ax.set_ylabel('Area (km²)', fontsize=14, fontweight='bold')
     ax.set_xlabel('Depth to 300°C', fontsize=14, fontweight='bold')
-    ax.set_title('Geothermal Resource Metrics by Depth — All 7 Bins\nConterminous United States',
+    ax.set_title('Geothermal Resource Metrics by Depth — All 7 Bins\nConterminous United States (Single Plot with Annotated Metrics)',
                 fontsize=16, fontweight='bold', pad=20)
     ax.set_xticks(x_pos)
     ax.set_xticklabels(BINS, fontsize=13, fontweight='bold')

@@ -98,7 +98,7 @@ Montana cells are not over-credited relative to Texas cells.
 
 *US Total: 1,287 GW | US Coal: 180 GW*
 
-![Area and capacity](plots/area_and_capacity_by_bin.png)
+![Geothermal metrics by depth](plots/geothermal_metrics_by_depth.png)
 
 **Basis:** 35 MW/km² power density (superhot geothermal, 300-400°C), 20% development factor. IDDP-2 (Iceland) demonstrated 45 MW per well at 427°C. See [`ENERGY_GENERATION_RESEARCH.md`](ENERGY_GENERATION_RESEARCH.md) for research details.
 

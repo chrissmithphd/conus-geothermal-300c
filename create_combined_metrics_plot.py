@@ -122,7 +122,7 @@ def create_combined_metrics():
            family='monospace')
 
     plt.tight_layout()
-    out = PLOT_DIR / "area_and_capacity_by_bin.png"
+    out = PLOT_DIR / "geothermal_metrics_by_depth.png"
     plt.savefig(out, dpi=200, bbox_inches='tight', facecolor='white')
     plt.close()
     print(f"✅ {out}")

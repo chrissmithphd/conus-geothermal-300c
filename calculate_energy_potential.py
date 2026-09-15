@@ -63,21 +63,21 @@ DEVELOPMENT_FACTORS = {
 # Area Statistics (from depth analysis)
 # ============================================================================
 
-# Area in km² by depth bin
+# Area in km² by depth bin (from calculate_depth_to_300c.py Sep 15 2026)
 AREA_BY_DEPTH = {
     "≤4 km": 0,
     "4-5 km": 46,
     "5-6 km": 16_285,
     "6-7 km": 412_296,
-    "7-8 km": 32_000,
-    "8-10 km": 1_016_841,
-    ">10 km": 7_122_540,
+    "7-8 km": 217_321,
+    "8-10 km": 1_546_782,
+    ">10 km": 6_407_277,
 }
 
 CUMULATIVE_ACCESSIBLE = {
     "≤7 km": 428_627,    # Current proven drilling envelope
-    "≤8 km": 460_627,    # Advanced drilling
-    "≤10 km": 1_477_468,  # Frontier drilling
+    "≤8 km": 645_948,    # Advanced drilling
+    "≤10 km": 2_192_730,  # Frontier drilling
 }
 
 # ============================================================================

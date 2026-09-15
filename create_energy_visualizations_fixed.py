@@ -19,10 +19,10 @@ COLORS = {
     ">10 km": "#D9D9D9"
 }
 
-# Data - INDIVIDUAL bins, not cumulative
+# Data - INDIVIDUAL bins, not cumulative (updated Sep 15 2026)
 BINS = ["≤4 km", "4-5 km", "5-6 km", "6-7 km", "7-8 km", "8-10 km", ">10 km"]
-AREA_KM2 = [0, 46, 16285, 412296, 32000, 1016841, 7122540]
-CAPACITY_GW = [0, 0.3, 114, 2886, 224, 7118, 49858]
+AREA_KM2 = [0, 46, 16285, 412296, 217321, 1546782, 6407277]
+CAPACITY_GW = [0, 0.3, 114, 2886, 1521, 10827, 44851]
 
 def create_capacity_by_bin_chart():
     """Bar chart showing capacity for each individual depth bin."""

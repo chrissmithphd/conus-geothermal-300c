@@ -26,17 +26,9 @@ TIGER 2023 boundaries. Grey regions require >10 km drilling depth.*
 
 **🔍 [Open the interactive, zoomable version →](https://chrissmithphd.github.io/conus-geothermal-300c/)**
 
-<details>
-<summary><b>Same data, every model cell plotted discretely</b> (click to expand)</summary>
-
-<br>
-
 ![Depth required to reach 300 °C — all cells](plots/depth_to_300c_points.png)
 
-All 534,942 cells drawn individually. The rare shallow cells (green = 5–6 km,
-blue = 4–5 km) are drawn larger and painted last so they don't vanish at CONUS scale.
-
-</details>
+*All 534,942 cells drawn individually. Shallow cells (green = 5–6 km, blue = 4–5 km, navy = ≤4 km) are drawn larger and last to remain visible at CONUS scale — this overemphasizes rare shallow resources to show where they exist.*
 
 ---
 

@@ -4,12 +4,18 @@ Create smooth heatmap version of depth-to-300C map with state boundaries.
 """
 import numpy as np
 import pandas as pd
+import geopandas as gpd
 import matplotlib.pyplot as plt
 from matplotlib.colors import ListedColormap, BoundaryNorm
 from scipy.interpolate import griddata
 
 # Load data
 df = pd.read_csv("data/processed/conus_depth_to_300c.csv")
+
+# Load state boundaries
+states = gpd.read_file("data/raw/boundaries/cb_2023_us_state_20m.shp")
+states = states[~states["STUSPS"].isin({"AK", "HI", "PR", "VI", "GU", "MP", "AS"})]
+states = states.to_crs("EPSG:4326")
 
 # Map categories to numeric values for interpolation
 depth_map = {
@@ -54,36 +60,8 @@ norm = BoundaryNorm(boundaries, cmap.N)
 im = ax.contourf(grid_lon_2d, grid_lat_2d, grid_depth,
                  levels=boundaries, cmap=cmap, norm=norm, extend='both')
 
-# Add state boundaries (US states approximate lat/lon lines)
-state_boundaries = {
-    'WA/OR': 46.0, 'OR/CA': 42.0, 'CA/Mexico': 32.5,
-    'ID/MT': 45.0, 'WY/CO': 41.0, 'CO/NM': 37.0, 'NM/Mexico': 32.0,
-    'ND/SD': 46.0, 'SD/NE': 43.0, 'NE/KS': 40.0, 'KS/OK': 37.0, 'OK/TX': 36.5,
-    'MN/IA': 43.5, 'IA/MO': 40.5, 'MO/AR': 36.5,
-    'WI/IL': 42.5, 'IL/KY': 37.0, 'KY/TN': 36.5, 'TN/GA': 35.0, 'GA/FL': 30.7,
-    'VA/NC': 36.5, 'NC/SC': 34.0, 'SC/GA': 32.5
-}
-
-# Vertical state lines (longitude)
-state_lons = {
-    'WA/ID': -117, 'ID/MT': -116, 'ID/WY': -111, 'MT/ND': -104,
-    'WY/NE': -104, 'CO/KS': -102, 'NM/TX': -103, 'TX/OK': -100,
-    'OK/AR': -94.5, 'AR/MS': -91, 'MS/AL': -88, 'AL/GA': -85,
-    'GA/SC': -81, 'SC/NC': -80, 'NC/VA': -77, 'MD/DE': -75.5
-}
-
-# Draw state boundaries
-for name, lat in state_boundaries.items():
-    ax.axhline(lat, color='white', linewidth=1.2, alpha=0.6, zorder=5)
-
-for name, lon in state_lons.items():
-    ax.axvline(lon, color='white', linewidth=1.2, alpha=0.6, zorder=5)
-
-# More detailed grid
-for lon in range(-125, -65, 2):
-    ax.axvline(lon, color='white', linewidth=0.3, alpha=0.3, zorder=4)
-for lat in range(25, 50, 1):
-    ax.axhline(lat, color='white', linewidth=0.3, alpha=0.3, zorder=4)
+# Add state boundaries
+states.boundary.plot(ax=ax, linewidth=0.8, edgecolor='white', alpha=0.7, zorder=5)
 
 # Styling
 ax.set_xlabel('Longitude', fontsize=16, fontweight='bold')
@@ -99,24 +77,9 @@ ax.set_aspect('equal')
 cbar = plt.colorbar(im, ax=ax, orientation='horizontal', pad=0.05,
                      aspect=50, shrink=0.8, ticks=[3, 4.5, 5.5, 6.5, 7.5, 9, 12])
 cbar.set_label('Drilling Depth Required (km)', fontsize=14, fontweight='bold')
-cbar.ax.set_xticklabels(['≤4\n(0.0%)', '4-5\n(0.0%)', '5-6\n(0.2%)',
-                         '6-7\n(4.9%)', '7-8\n(0.4%)', '8-10\n(11.6%)',
-                         '>10\n(82.9%)'], fontsize=11)
-
-# Add summary text (clean, no box clutter)
-summary = (
-    "CONUS Supercritical Geothermal Accessibility\n\n"
-    "Only 5.0% accessible within proven drilling depths (≤7 km)\n"
-    "83% requires depths exceeding current technology (>10 km)\n"
-    "Western US extensional tectonics = high accessibility\n"
-    "Eastern US cratonic stability = very deep requirements"
-)
-
-props = dict(boxstyle='round,pad=0.8', facecolor='white', alpha=0.92,
-             edgecolor='gray', linewidth=1.5)
-ax.text(0.015, 0.97, summary, transform=ax.transAxes,
-       fontsize=11, verticalalignment='top', bbox=props,
-       family='sans-serif', linespacing=1.5)
+cbar.ax.set_xticklabels(['≤4\n(0.0%)', '4-5\n(0.01%)', '5-6\n(0.5%)',
+                         '6-7\n(4.2%)', '7-8\n(2.5%)', '8-10\n(14.4%)',
+                         '>10\n(78.3%)'], fontsize=11)
 
 # Data source (bottom)
 source = "Data: Stanford Thermal Earth Model (2024) + SMU Geothermal Lab (2011) | Analysis: 534,942 grid points"

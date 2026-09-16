@@ -5,12 +5,18 @@ Uses the ACTUAL calculated data without modification.
 """
 import numpy as np
 import pandas as pd
+import geopandas as gpd
 import matplotlib.pyplot as plt
 import plotly.express as px
 import plotly.graph_objects as go
 
 # Load ORIGINAL data
 df = pd.read_csv("data/processed/conus_depth_to_300c.csv")
+
+# Load state boundaries
+states = gpd.read_file("data/raw/boundaries/cb_2023_us_state_20m.shp")
+states = states[~states["STUSPS"].isin({"AK", "HI", "PR", "VI", "GU", "MP", "AS"})]
+states = states.to_crs("EPSG:4326")
 
 print(f"Loaded {len(df):,} grid points")
 print("\nActual distribution:")
@@ -70,15 +76,8 @@ for bin_name in reversed(bin_order):
                   label=f"{bin_name}: {pct:.2f}%",
                   zorder=100-bin_order.index(bin_name))
 
-# State grid lines
-state_lons = [-125, -120, -117, -114, -111, -109, -107, -104, -102, -100,
-              -97, -95, -94, -91, -89, -87, -85, -83, -81, -79, -77, -75, -73, -71, -67]
-for lon in state_lons:
-    ax.axvline(lon, color='white', linewidth=1.2, alpha=0.5, zorder=0)
-
-state_lats = [25, 28, 31, 33, 35, 37, 39, 41, 43, 45, 47, 49]
-for lat in state_lats:
-    ax.axhline(lat, color='white', linewidth=1.2, alpha=0.5, zorder=0)
+# Add state boundaries
+states.boundary.plot(ax=ax, linewidth=0.8, edgecolor='white', alpha=0.7, zorder=50)
 
 ax.set_xlabel('Longitude', fontsize=16, fontweight='bold')
 ax.set_ylabel('Latitude', fontsize=16, fontweight='bold')
@@ -92,7 +91,7 @@ ax.grid(True, alpha=0.15, linestyle=':', linewidth=0.5, color='gray', zorder=0)
 
 # Legend
 legend = ax.legend(loc='lower right', fontsize=14,
-                  title='Depth Category\n(Shallower = More Accessible)',
+                  title='Depth Category',
                   title_fontsize=16,
                   framealpha=0.95,
                   edgecolor='black',
@@ -100,22 +99,6 @@ legend = ax.legend(loc='lower right', fontsize=14,
                   shadow=True,
                   markerscale=2)
 legend.get_title().set_fontweight('bold')
-
-# Summary box
-summary = (
-    "ACTUAL DATA (NO BINNING):\n"
-    f"• 0.00%: ≤4 km (0 locations)\n"
-    f"• 0.00%: 4-5 km (3 locations)\n"
-    f"• 0.2%:  5-6 km (1,055 locations)\n"
-    f"• 4.9%:  6-7 km (26,430 locations)\n"
-    f"• 17.2%: Within 10 km total\n"
-    f"• 82.8%: Requires >10 km"
-)
-
-props = dict(boxstyle='round,pad=1', facecolor='wheat', alpha=0.95, edgecolor='black', linewidth=2)
-ax.text(0.02, 0.98, summary, transform=ax.transAxes,
-       fontsize=12, verticalalignment='top',
-       bbox=props, family='monospace')
 
 plt.tight_layout()
 plt.savefig('plots/depth_to_300c_all_categories.png', dpi=300, bbox_inches='tight', facecolor='white')

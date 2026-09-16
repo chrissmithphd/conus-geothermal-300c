@@ -93,12 +93,13 @@ ax.grid(True, alpha=0.15, linestyle=':', linewidth=0.5, color='gray', zorder=0)
 legend = ax.legend(loc='lower right', fontsize=14,
                   title='Depth Category',
                   title_fontsize=16,
-                  framealpha=0.95,
+                  framealpha=0.98,
                   edgecolor='black',
                   fancybox=True,
                   shadow=True,
                   markerscale=2)
 legend.get_title().set_fontweight('bold')
+legend.set_zorder(300)  # Draw legend on top of everything
 
 plt.tight_layout()
 plt.savefig('plots/depth_to_300c_all_categories.png', dpi=300, bbox_inches='tight', facecolor='white')

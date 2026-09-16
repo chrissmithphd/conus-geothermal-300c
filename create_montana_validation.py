@@ -127,14 +127,15 @@ ax.set_ylim(lat_min, lat_max)
 ax.set_aspect('equal')
 ax.grid(True, alpha=0.2, linestyle=':', linewidth=0.5, color='gray', zorder=0)
 
-# Legend
+# Legend (drawn last with high z-order to appear on top)
 legend = ax.legend(loc='upper right', fontsize=11,
                   title='Depth Category',
                   title_fontsize=12,
-                  framealpha=0.95,
+                  framealpha=0.98,
                   edgecolor='black',
                   fancybox=True)
 legend.get_title().set_fontweight('bold')
+legend.set_zorder(300)  # Ensure legend is on top
 
 # Add scale bar
 scale_lon = lon_min + 1
@@ -243,9 +244,10 @@ ax.grid(True, alpha=0.2, linestyle=':', linewidth=0.5, color='gray', zorder=0)
 legend = ax.legend(loc='lower left', fontsize=10,
                   title='Depth Category',
                   title_fontsize=11,
-                  framealpha=0.95,
+                  framealpha=0.98,
                   edgecolor='black')
 legend.get_title().set_fontweight('bold')
+legend.set_zorder(300)
 
 plt.tight_layout()
 plt.savefig('plots/yellowstone_validation.png', dpi=300, bbox_inches='tight', facecolor='white')

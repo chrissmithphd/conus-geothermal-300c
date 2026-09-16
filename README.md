@@ -106,7 +106,9 @@ Of 534,942 cells analyzed:
 3. **Linear interpolation assumption:** Assumes monotonic temperature increase with depth between sample points
 4. **No direct measurements:** Both datasets are models/interpolations, not borehole measurements
 
-See [`TECHNICAL_IMPROVEMENTS.md`](TECHNICAL_IMPROVEMENTS.md) and [`V1_VS_V2_COMPARISON.md`](V1_VS_V2_COMPARISON.md) for complete technical details.
+See [`research/TECHNICAL_IMPROVEMENTS.md`](research/TECHNICAL_IMPROVEMENTS.md) and [`research/V1_VS_V2_COMPARISON.md`](research/V1_VS_V2_COMPARISON.md) for complete technical details.
+
+**[→ Full methodology validation with regional analysis](VALIDATION.md)**
 
 ### Regional Validation
 

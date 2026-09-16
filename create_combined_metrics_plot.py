@@ -56,7 +56,7 @@ def create_combined_metrics():
             area_str = f'{area:.0f} km²'
 
         if cap >= 1000:
-            cap_str = f'{cap/1000:.1f}K GW'
+            cap_str = f'{cap/1000:.1f} TW'
         elif cap >= 1:
             cap_str = f'{cap:.0f} GW'
         else:
@@ -110,10 +110,10 @@ def create_combined_metrics():
     legend_text = (
         'Each bar shows:\n'
         '  • Area at that depth (km²)\n'
-        '  • Generation capacity (GW)\n'
+        '  • Generation capacity (GW/TW)\n'
         '  • Percentage of CONUS\n\n'
         f'Capacity: 20% development, 35 MW/km²\n'
-        f'US Total Capacity: {us_total:,} GW'
+        f'US Total: {us_total:,} GW'
     )
     ax.text(0.02, 0.98, legend_text,
            transform=ax.transAxes, fontsize=11,

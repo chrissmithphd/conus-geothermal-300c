@@ -112,20 +112,13 @@ See [`research/TECHNICAL_IMPROVEMENTS.md`](research/TECHNICAL_IMPROVEMENTS.md) a
 
 ### Regional Validation
 
-Montana/Yellowstone region showing depth patterns match known geology:
+Montana/Yellowstone region demonstrating methodology validity:
 
 ![Montana regional validation](plots/montana_validation.png)
 
-*Montana region: Eastern plains (>10 km, gray) vs western mountains/Yellowstone (6-8 km, yellow/red). Labeled cities provide geographic reference.*
+*Montana region: Eastern plains (>10 km, gray) vs western mountains/Yellowstone (6-8 km, yellow/red). Clear tectonic boundary visible at ~110°W longitude.*
 
-![Yellowstone close-up](plots/yellowstone_validation.png)
-
-*Yellowstone caldera: Green (5-6 km) concentrated in caldera center, yellow (6-7 km) surrounding, red (8-10 km) periphery. Grid resolution ~3 km clearly visible. Patterns match known active geothermal system.*
-
-**Validation confirms:**
-- Yellowstone/Snake River Plain: 6-8 km (active hotspot) ✓
-- Western MT mountains: 6-9 km (Basin & Range extension) ✓
-- Eastern MT plains: >10 km (stable craton) ✓
+**[→ See complete validation analysis with Yellowstone close-up and methodology verification](VALIDATION.md)**
 
 ---
 

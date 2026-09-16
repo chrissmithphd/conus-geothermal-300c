@@ -7,6 +7,8 @@ import pandas as pd
 import geopandas as gpd
 import matplotlib.pyplot as plt
 from matplotlib.colors import ListedColormap, BoundaryNorm
+from matplotlib.path import Path
+from matplotlib.patches import PathPatch
 from scipy.interpolate import griddata
 
 # Load data
@@ -16,6 +18,9 @@ df = pd.read_csv("data/processed/conus_depth_to_300c.csv")
 states = gpd.read_file("data/raw/boundaries/cb_2023_us_state_20m.shp")
 states = states[~states["STUSPS"].isin({"AK", "HI", "PR", "VI", "GU", "MP", "AS"})]
 states = states.to_crs("EPSG:4326")
+
+# Create a unified US boundary for clipping
+us_boundary = states.union_all()
 
 # Map categories to numeric values for interpolation
 depth_map = {
@@ -59,6 +64,20 @@ norm = BoundaryNorm(boundaries, cmap.N)
 # Plot heatmap
 im = ax.contourf(grid_lon_2d, grid_lat_2d, grid_depth,
                  levels=boundaries, cmap=cmap, norm=norm, extend='both')
+
+# Clip the contour to US boundaries
+# Convert boundary to clip path
+if hasattr(us_boundary, 'geoms'):
+    # MultiPolygon
+    paths = [Path(np.asarray(geom.exterior.coords)) for geom in us_boundary.geoms]
+else:
+    # Single Polygon
+    paths = [Path(np.asarray(us_boundary.exterior.coords))]
+
+clip_path_patch = PathPatch(Path.make_compound_path(*paths), transform=ax.transData, facecolor='none')
+# Apply clipping to all contour collections (stored in axes, not in contourset)
+for coll in ax.collections:
+    coll.set_clip_path(clip_path_patch)
 
 # Add state boundaries
 states.boundary.plot(ax=ax, linewidth=0.8, edgecolor='white', alpha=0.7, zorder=5)

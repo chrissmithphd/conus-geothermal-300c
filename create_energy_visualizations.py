@@ -24,27 +24,27 @@ COLORS = {
     ">10 km": "#DDDDDD"
 }
 
-# Data from energy analysis (updated Sep 15 2026)
+# Data from energy analysis (V2 - grid alignment fixed, updated Sep 16 2026)
 BINS = ["≤4 km", "4-5 km", "5-6 km", "6-7 km", "7-8 km", "8-10 km", ">10 km"]
 
 CAPACITY_BY_DEPTH = {
     "≤4 km": 0,
-    "4-5 km": 0.3,      # GW
-    "5-6 km": 114,
-    "6-7 km": 2886,
-    "7-8 km": 1521,
-    "8-10 km": 10827,
-    ">10 km": 44851
+    "4-5 km": 6.1,      # GW
+    "5-6 km": 252,
+    "6-7 km": 2130,
+    "7-8 km": 1289,
+    "8-10 km": 7345,
+    ">10 km": 39823
 }
 
 AREA_BY_DEPTH = {
     "≤4 km": 0,
-    "4-5 km": 46,
-    "5-6 km": 16285,
-    "6-7 km": 412296,
-    "7-8 km": 217321,
-    "8-10 km": 1546782,
-    ">10 km": 6407277
+    "4-5 km": 867,
+    "5-6 km": 36014,
+    "6-7 km": 304350,
+    "7-8 km": 184173,
+    "8-10 km": 1049286,
+    ">10 km": 5688980
 }
 
 def create_cumulative_capacity_chart():

@@ -20,8 +20,9 @@ COLORS = {
 }
 
 BINS = ["≤4 km", "4-5 km", "5-6 km", "6-7 km", "7-8 km", "8-10 km", ">10 km"]
-AREA_KM2 = [0, 46, 16285, 412296, 217321, 1546782, 6407277]
-CAPACITY_GW = [0, 0.3, 114, 2886, 1521, 10827, 44851]
+# Updated with V2 corrected data (grid alignment fixed)
+AREA_KM2 = [0, 867, 36014, 304350, 184173, 1049286, 5688980]
+CAPACITY_GW = [0, 6.1, 252, 2130, 1289, 7345, 39823]
 
 def create_combined_metrics():
     """Single bar chart with all metrics as text annotations."""

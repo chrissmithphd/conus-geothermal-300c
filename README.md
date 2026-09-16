@@ -10,8 +10,8 @@
 [![License](https://img.shields.io/badge/code-MIT-green)](#license)
 
 **How deep must you drill to hit 300 °C?**
-Across 82.8 % of the lower 48, the answer is *deeper than 10 km* — beyond anything
-the geothermal industry has ever drilled.
+Across 78.3% of the lower 48, the answer is *deeper than 10 km* — beyond anything
+the geothermal industry has ever drilled. Still, 21.7% (1.6 million km²) reaches 300 °C within 10 km.
 
 </div>
 
@@ -59,15 +59,54 @@ Oregon/Washington Cascade axis and coastal Northern California.
 | Depth | Area (km²) | % CONUS | Capacity (GW) | × US Total |
 |---|---:|---:|---:|---:|
 | ≤4 km | 0 | 0.00 | 0 | 0.0 |
-| 4–5 km | 46 | 0.00 | 0.3 | 0.0 |
-| 5–6 km | 16,285 | 0.19 | 114 | 0.1 |
-| 6–7 km | 412,296 | 4.79 | 2,886 | 2.2 |
-| 7–8 km | 217,321 | 2.53 | 1,521 | 1.2 |
-| 8–10 km | 1,546,782 | 17.99 | 10,827 | 8.4 |
-| **>10 km** | **6,407,277** | **74.50** | **44,851** | **34.8** |
-| *Total* | *8,600,008* | *100.00* | *60,200* | *46.8* |
+| 4–5 km | 867 | 0.01 | 6.1 | 0.0 |
+| 5–6 km | 36,014 | 0.50 | 252 | 0.2 |
+| 6–7 km | 304,350 | 4.19 | 2,130 | 1.7 |
+| 7–8 km | 184,173 | 2.54 | 1,289 | 1.0 |
+| 8–10 km | 1,049,286 | 14.45 | 7,345 | 5.7 |
+| **>10 km** | **5,688,980** | **78.32** | **39,823** | **30.9** |
+| **≤10 km** | **1,574,690** | **21.68** | **11,023** | **8.6** |
+| *Total* | *7,263,669* | *100.00* | *50,846* | *39.5* |
 
 Area is **latitude-weighted** (`A = R² · cos φ · Δφ · Δλ`). Capacity assumes 35 MW/km² power density (superhot geothermal, 300-400°C), 20% development. IDDP-2 demonstrated 45 MW/well at 427°C. US total capacity: **1,287 GW** (coal: 180 GW). See [`research/ENERGY_GENERATION_RESEARCH.md`](research/ENERGY_GENERATION_RESEARCH.md) for details.
+
+---
+
+## Data Quality & Methodology
+
+### Grid Alignment Validation ✅
+
+**Critical fix (Sep 16, 2026):** Original analysis (V1) had a data integrity bug. Stanford temperature layers contain identical coordinates but stored in **different orders**. V1 used row index to combine layers, creating fictional temperature profiles from different geographic locations (e.g., combining row 0 from surface layer in Washington with row 0 from 7km layer in Florida).
+
+**V2 improvements:**
+- All Stanford layers sorted by `(lat, lon)` to ensure alignment
+- Explicit grid validation checks coordinate matching before interpolation
+- Geographic distance correction (cos(latitude)) for SMU matching
+- Match distance tracking and filtering (50 km threshold)
+- Cross-validation: Stanford 7km vs SMU 7.5km (r=0.409, RMSE=63°C)
+
+![Cross-validation plot](plots/cross_validation_stanford_smu.png)
+
+*SMU data shows horizontal bands because it was digitized from color-coded temperature maps with discrete bins (~25°C intervals), not continuous measurements.*
+
+### Source Type Distinctions
+
+- **Stanford (0-7 km):** Continuous interpolated depth values (e.g., "crosses 300°C at 6.37 km")
+- **SMU (7.5-10 km):** Categorical upper bounds (e.g., "≥300°C by 8.5 km" means crossing is somewhere in 7.5-8.5 km range)
+
+Of 534,942 cells analyzed:
+- 25,448 (4.8%) reach 300°C within Stanford 7 km depth (interpolated)
+- 88,565 (16.6%) reach 300°C within SMU 10 km depth (upper bounds)
+- 420,929 (78.7%) do not reach 300°C by 10 km depth
+
+### Known Limitations
+
+1. **SMU digitization error:** Temperature maps were digitized from color-coded images, introducing geolocation error, color quantization, and boundary artifacts
+2. **Methodological transition:** At 7 km, analysis switches from Stanford continuous model to SMU digitized bins
+3. **Linear interpolation assumption:** Assumes monotonic temperature increase with depth between sample points
+4. **No direct measurements:** Both datasets are models/interpolations, not borehole measurements
+
+See [`TECHNICAL_IMPROVEMENTS.md`](TECHNICAL_IMPROVEMENTS.md) and [`V1_VS_V2_COMPARISON.md`](V1_VS_V2_COMPARISON.md) for complete technical details.
 
 ---
 

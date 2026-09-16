@@ -2,6 +2,14 @@
 """
 Calculate depth required to reach 300°C across CONUS.
 Combines Stanford (0-7 km) and SMU digitized (7.5-10 km) data.
+
+VERSION 2: Addresses technical improvements from TECHNICAL_IMPROVEMENTS.md
+- Grid alignment validation
+- Geographic distance correction for SMU matching
+- Match distance tracking and quality metrics
+- Improved interpolation for non-monotonic profiles
+- Source type metadata (interpolated vs bounded)
+- Cross-validation in overlap region
 """
 import sys
 import time
@@ -26,6 +34,7 @@ def log(msg):
 # Constants
 TARGET_TEMP = 300  # °C
 EARTH_RADIUS_KM = 6371  # km
+MAX_SMU_MATCH_DISTANCE_KM = 50  # Maximum distance for SMU match to be considered valid
 
 # Output directories
 OUTPUT_DIR = Path("data/processed")
@@ -35,7 +44,12 @@ PLOT_DIR = Path("plots")
 PLOT_DIR.mkdir(exist_ok=True)
 
 def load_stanford_data():
-    """Load all available Stanford temperature layers."""
+    """
+    Load all available Stanford temperature layers.
+
+    CRITICAL FIX: Stanford JSON files have identical coordinates but in different orders.
+    We must sort by (lat, lon) to ensure row-wise alignment across depths.
+    """
     data_dir = Path("data/raw/stanford")
     json_files = sorted(data_dir.glob("temperature_*.json"))
 
@@ -66,10 +80,70 @@ def load_stanford_data():
             })
 
         df = pd.DataFrame(records)
+
+        # CRITICAL: Sort by (lat, lon) to ensure alignment across depths
+        df = df.sort_values(['lat', 'lon']).reset_index(drop=True)
+
         all_data[depth_km] = df
-        log(f"    Loaded {len(df):,} points")
+        log(f"    Loaded {len(df):,} points (sorted by lat, lon)")
 
     return all_data
+
+def validate_grid_alignment(stanford_data):
+    """
+    CRITICAL: Validate that all Stanford depth layers have identical coordinate grids.
+    Returns True if valid, raises ValueError if misaligned.
+    """
+    log("\n" + "="*80)
+    log("GRID ALIGNMENT VALIDATION (CRITICAL)")
+    log("="*80)
+
+    depths = sorted(stanford_data.keys())
+    ref_depth = depths[0]
+    ref_df = stanford_data[ref_depth]
+
+    log(f"  Reference layer: {ref_depth} km ({len(ref_df):,} points)")
+
+    all_aligned = True
+
+    for depth in depths[1:]:
+        test_df = stanford_data[depth]
+
+        # Check length
+        if len(test_df) != len(ref_df):
+            log(f"  ❌ FAILED: {depth} km has {len(test_df):,} points, expected {len(ref_df):,}")
+            all_aligned = False
+            continue
+
+        # Check coordinate match
+        lat_match = np.allclose(ref_df['lat'].values, test_df['lat'].values, atol=1e-6)
+        lon_match = np.allclose(ref_df['lon'].values, test_df['lon'].values, atol=1e-6)
+
+        if not lat_match or not lon_match:
+            log(f"  ❌ FAILED: {depth} km coordinates don't match reference")
+
+            # Show sample mismatches
+            lat_diff = np.abs(ref_df['lat'].values - test_df['lat'].values)
+            lon_diff = np.abs(ref_df['lon'].values - test_df['lon'].values)
+            max_lat_diff = lat_diff.max()
+            max_lon_diff = lon_diff.max()
+
+            log(f"     Max lat difference: {max_lat_diff:.6f}°")
+            log(f"     Max lon difference: {max_lon_diff:.6f}°")
+
+            all_aligned = False
+        else:
+            log(f"  ✅ PASSED: {depth} km grid aligned")
+
+    if not all_aligned:
+        raise ValueError(
+            "Grid alignment validation FAILED. "
+            "Stanford depth layers have different coordinate grids. "
+            "Cannot safely create temperature profiles."
+        )
+
+    log("\n✅ Grid alignment validation PASSED - all layers have identical coordinates")
+    return True
 
 def load_smu_data():
     """Load digitized SMU data."""
@@ -95,42 +169,71 @@ def load_smu_data():
 
     return smu_by_depth
 
-def interpolate_depth_to_temp(depths, temps, target_temp):
+def interpolate_depth_to_temp_improved(depths, temps, target_temp):
     """
-    Interpolate to find depth where temperature reaches target.
-    Returns NaN if target not reached or if not enough data.
+    Improved interpolation to find depth where temperature reaches target.
+
+    Improvements:
+    - Handles non-monotonic profiles by finding first crossing
+    - Uses linear interpolation between bracketing points
+    - Returns NaN if target not reached or if not enough data
     """
     # Need at least 2 points to interpolate
     if len(depths) < 2:
-        return np.nan
+        return np.nan, 'insufficient_data'
 
     # Check if target is reached
     if temps.max() < target_temp:
-        return np.nan  # Not reached
+        return np.nan, 'not_reached'
 
     if temps.min() > target_temp:
-        return 0.0  # Already above target at surface
+        return 0.0, 'surface'
 
-    # Linear interpolation
+    # Find first adjacent pair that brackets target temperature
+    # This handles non-monotonic profiles correctly
+    for i in range(len(depths) - 1):
+        temp1, temp2 = temps[i], temps[i+1]
+        depth1, depth2 = depths[i], depths[i+1]
+
+        # Check if target is between these two temperatures
+        if (temp1 <= target_temp <= temp2) or (temp2 <= target_temp <= temp1):
+            # Linear interpolation between these two points
+            if temp2 == temp1:
+                # Edge case: same temperature at both depths
+                depth_300 = (depth1 + depth2) / 2
+            else:
+                depth_300 = depth1 + (target_temp - temp1) * (depth2 - depth1) / (temp2 - temp1)
+
+            # Constrain to reasonable range
+            if depth_300 < 0:
+                return 0.0, 'interpolated'
+
+            return depth_300, 'interpolated'
+
+    # If we get here, temperature crosses target but we couldn't find bracket
+    # Fall back to scipy interpolation
     try:
         f = interp1d(temps, depths, kind='linear', bounds_error=False, fill_value='extrapolate')
         depth_300 = float(f(target_temp))
 
         # Constrain to reasonable range
         if depth_300 < 0:
-            return 0.0
+            return 0.0, 'interpolated'
         if depth_300 > depths.max() + 1:  # Allow small extrapolation
-            return np.nan
+            return np.nan, 'extrapolation_failed'
 
-        return depth_300
+        return depth_300, 'interpolated'
     except:
-        return np.nan
+        return np.nan, 'interpolation_error'
 
 def calculate_stanford_depth_to_300c(stanford_data):
     """
     Calculate depth to 300°C for each Stanford grid location.
     """
     log("\nCalculating depth to 300°C from Stanford data...")
+
+    # CRITICAL: Validate grid alignment first
+    validate_grid_alignment(stanford_data)
 
     # Get reference grid from first depth layer
     depths = sorted(stanford_data.keys())
@@ -141,6 +244,7 @@ def calculate_stanford_depth_to_300c(stanford_data):
 
     # For each location, collect temperature profile
     depth_to_300 = []
+    interp_status = []
     start_time = time.time()
 
     for idx in range(len(df)):
@@ -151,6 +255,7 @@ def calculate_stanford_depth_to_300c(stanford_data):
             log(f"    Progress: {idx+1:,}/{len(df):,} ({(idx+1)/len(df)*100:.1f}%) - {rate:.0f} pts/sec - ETA: {remaining/60:.1f} min")
 
         # Collect temperature at all depths for this location
+        # NOTE: Grid alignment validated, so iloc[idx] is safe
         temps = []
         depth_list = []
 
@@ -159,12 +264,17 @@ def calculate_stanford_depth_to_300c(stanford_data):
             temps.append(temp)
             depth_list.append(depth_km)
 
-        # Interpolate to find depth where temp = 300°C
-        depth_300 = interpolate_depth_to_temp(np.array(depth_list), np.array(temps), TARGET_TEMP)
+        # Improved interpolation
+        depth_300, status = interpolate_depth_to_temp_improved(
+            np.array(depth_list), np.array(temps), TARGET_TEMP
+        )
         depth_to_300.append(depth_300)
+        interp_status.append(status)
 
     df['depth_300_km'] = depth_to_300
-    df['source'] = 'Stanford'
+    df['source'] = 'stanford'
+    df['source_type'] = 'interpolated'
+    df['interp_status'] = interp_status
 
     # Count how many reached 300°C
     n_reached = df['depth_300_km'].notna().sum()
@@ -174,13 +284,39 @@ def calculate_stanford_depth_to_300c(stanford_data):
     log(f"    Reached 300°C within 7 km: {n_reached:,} ({pct_reached:.1f}%)")
     log(f"    Did not reach 300°C by 7 km: {len(df) - n_reached:,} ({100-pct_reached:.1f}%)")
 
+    # Report interpolation status
+    status_counts = pd.Series(interp_status).value_counts()
+    log(f"\n  Interpolation status:")
+    for status, count in status_counts.items():
+        log(f"    {status}: {count:,} ({count/len(df)*100:.1f}%)")
+
     return df
+
+def haversine_distance(lat1, lon1, lat2, lon2):
+    """
+    Calculate great circle distance between two points on Earth.
+    Returns distance in kilometers.
+    """
+    lat1, lon1, lat2, lon2 = map(np.radians, [lat1, lon1, lat2, lon2])
+
+    dlat = lat2 - lat1
+    dlon = lon2 - lon1
+
+    a = np.sin(dlat/2)**2 + np.cos(lat1) * np.cos(lat2) * np.sin(dlon/2)**2
+    c = 2 * np.arcsin(np.sqrt(a))
+
+    return EARTH_RADIUS_KM * c
 
 def match_smu_to_stanford_grid(stanford_grid, smu_data):
     """
     For Stanford locations that didn't reach 300°C by 7 km,
     look up SMU temperatures at 7.5, 8.5, 10 km to determine deeper category.
-    Uses optimized cKDTree for fast nearest neighbor lookups.
+
+    IMPROVEMENTS:
+    - Uses geographic distance correction (cos(latitude))
+    - Tracks match distances
+    - Applies maximum match distance threshold
+    - Reports match quality statistics
     """
     log("\nMatching SMU data to Stanford grid...")
 
@@ -192,85 +328,275 @@ def match_smu_to_stanford_grid(stanford_grid, smu_data):
         return stanford_grid
 
     # Build KD-trees for SMU data at each depth
+    # Use geographic distance correction: scale longitude by cos(latitude)
     smu_depths = [7.5, 8.5, 10.0]
     smu_trees = {}
+    smu_coords_geographic = {}
     smu_temps_arrays = {}
 
-    log("  Building KD-trees for SMU data...")
+    log("  Building KD-trees for SMU data (with geographic distance correction)...")
     for depth in smu_depths:
         if depth in smu_data:
             smu_df = smu_data[depth]
-            coords = np.column_stack([smu_df['lat'].values, smu_df['lon'].values])
+
+            # Apply geographic correction: scale longitude by cos(latitude)
+            lat_rad = np.radians(smu_df['lat'].values)
+            lon_scaled = smu_df['lon'].values * np.cos(lat_rad)
+
+            coords = np.column_stack([smu_df['lat'].values, lon_scaled])
+            coords_geographic = np.column_stack([smu_df['lat'].values, smu_df['lon'].values])
             temps = smu_df['temperature'].values
 
             # Build KDTree for fast nearest neighbor queries
             tree = cKDTree(coords)
             smu_trees[depth] = tree
+            smu_coords_geographic[depth] = coords_geographic
             smu_temps_arrays[depth] = temps
             log(f"    Built KDTree for {depth} km ({len(smu_df):,} points)")
 
     # Query all no-reach locations at once for better performance
     log(f"\n  Querying SMU temperatures for {len(no_reach):,} locations...")
-    query_coords = np.column_stack([no_reach['lat'].values, no_reach['lon'].values])
+
+    # Apply same geographic correction to query points
+    query_lats = no_reach['lat'].values
+    query_lons = no_reach['lon'].values
+    lat_rad = np.radians(query_lats)
+    lon_scaled = query_lons * np.cos(lat_rad)
+    query_coords = np.column_stack([query_lats, lon_scaled])
 
     smu_temps = {}
+    smu_distances_deg = {}
+    smu_distances_km = {}
     start_time = time.time()
 
     for depth in smu_depths:
         if depth in smu_trees:
             log(f"    Querying {depth} km depth...")
+
             # Query nearest neighbor for all points at once
-            distances, indices = smu_trees[depth].query(query_coords, k=1)
+            distances_deg, indices = smu_trees[depth].query(query_coords, k=1)
+
             # Get temperatures from nearest neighbors
             smu_temps[depth] = smu_temps_arrays[depth][indices]
+            smu_distances_deg[depth] = distances_deg
+
+            # Calculate actual geographic distances using Haversine
+            matched_lats = smu_coords_geographic[depth][indices, 0]
+            matched_lons = smu_coords_geographic[depth][indices, 1]
+
+            distances_km = haversine_distance(
+                query_lats, query_lons,
+                matched_lats, matched_lons
+            )
+            smu_distances_km[depth] = distances_km
+
+            # Report statistics
             elapsed = time.time() - start_time
             log(f"      Completed in {elapsed:.1f}s ({len(no_reach)/elapsed:.0f} queries/sec)")
+            log(f"      Distance stats: min={distances_km.min():.1f} km, "
+                f"median={np.median(distances_km):.1f} km, max={distances_km.max():.1f} km")
+            log(f"      Matches beyond {MAX_SMU_MATCH_DISTANCE_KM} km: "
+                f"{(distances_km > MAX_SMU_MATCH_DISTANCE_KM).sum():,} "
+                f"({(distances_km > MAX_SMU_MATCH_DISTANCE_KM).sum()/len(distances_km)*100:.1f}%)")
         else:
             smu_temps[depth] = np.full(len(no_reach), np.nan)
+            smu_distances_km[depth] = np.full(len(no_reach), np.nan)
 
-    # Add SMU temperatures to no_reach dataframe
+    # Add SMU temperatures and distances to no_reach dataframe
     for depth in smu_depths:
         no_reach[f'smu_temp_{depth}km'] = smu_temps[depth]
+        no_reach[f'smu_dist_{depth}km'] = smu_distances_km[depth]
 
     log("  Categorizing depth bins...")
 
-    # Vectorized categorization for better performance
+    # Vectorized categorization with distance filtering
     def categorize_smu_depth_vectorized(df):
-        """Vectorized depth categorization."""
+        """
+        Vectorized depth categorization.
+
+        NOTE: SMU values are UPPER BOUNDS, not interpolated crossings.
+        If temperature >= 300°C at 8.5 km, the true crossing is somewhere in [7.5, 8.5] km.
+        """
         depth_300 = np.full(len(df), np.nan)
+        source_type = np.full(len(df), 'none', dtype=object)
+        match_distance = np.full(len(df), np.nan)
 
-        # Check 10 km first (most permissive)
-        temp_10 = df.get('smu_temp_10.0km', pd.Series(np.nan, index=df.index))
-        mask_10 = (temp_10 >= TARGET_TEMP) & temp_10.notna()
-        depth_300[mask_10] = 10.0
+        # Check each depth from deepest to shallowest
+        # Apply distance threshold
+        for depth_km in [10.0, 8.5, 7.5]:
+            temp_col = f'smu_temp_{depth_km}km'
+            dist_col = f'smu_dist_{depth_km}km'
 
-        # Check 8.5 km (overwrite if reached earlier)
-        temp_85 = df.get('smu_temp_8.5km', pd.Series(np.nan, index=df.index))
-        mask_85 = (temp_85 >= TARGET_TEMP) & temp_85.notna()
-        depth_300[mask_85] = 8.5
+            if temp_col not in df.columns:
+                continue
 
-        # Check 7.5 km (overwrite if reached earliest)
-        temp_75 = df.get('smu_temp_7.5km', pd.Series(np.nan, index=df.index))
-        mask_75 = (temp_75 >= TARGET_TEMP) & temp_75.notna()
-        depth_300[mask_75] = 7.5
+            temp = df[temp_col]
+            dist = df[dist_col]
 
-        return depth_300
+            # Valid match: temperature >= target AND distance within threshold
+            mask = (temp >= TARGET_TEMP) & temp.notna() & (dist <= MAX_SMU_MATCH_DISTANCE_KM)
 
-    no_reach['depth_300_km'] = categorize_smu_depth_vectorized(no_reach)
-    no_reach['source'] = 'SMU digitized'
+            depth_300[mask] = depth_km
+            source_type[mask] = 'smu_upper_bound'
+            match_distance[mask] = dist[mask]
+
+        return depth_300, source_type, match_distance
+
+    depth_300, source_type, match_distance = categorize_smu_depth_vectorized(no_reach)
+
+    no_reach['depth_300_km'] = depth_300
+    no_reach['source'] = 'smu'
+    no_reach['source_type'] = source_type
+    no_reach['smu_match_distance_km'] = match_distance
 
     # Update main grid efficiently
     log("  Updating main grid...")
     stanford_grid.loc[no_reach.index, 'depth_300_km'] = no_reach['depth_300_km']
     stanford_grid.loc[no_reach.index, 'source'] = no_reach['source']
+    stanford_grid.loc[no_reach.index, 'source_type'] = no_reach['source_type']
+    stanford_grid.loc[no_reach.index, 'smu_match_distance_km'] = no_reach['smu_match_distance_km']
 
     # Report results
     n_smu_reached = no_reach['depth_300_km'].notna().sum()
+    n_smu_filtered = ((no_reach['smu_temp_10.0km'] >= TARGET_TEMP) &
+                      (no_reach['smu_dist_10.0km'] > MAX_SMU_MATCH_DISTANCE_KM)).sum()
+
     log(f"\n  SMU results:")
-    log(f"    Reached 300°C by 10 km: {n_smu_reached:,}")
+    log(f"    Reached 300°C by 10 km (within {MAX_SMU_MATCH_DISTANCE_KM} km): {n_smu_reached:,}")
+    log(f"    Filtered out (distance > {MAX_SMU_MATCH_DISTANCE_KM} km): {n_smu_filtered:,}")
     log(f"    Still not reached by 10 km: {len(no_reach) - n_smu_reached:,}")
 
     return stanford_grid
+
+def cross_validate_stanford_smu_overlap(stanford_data, smu_data):
+    """
+    Cross-validate Stanford and SMU predictions in overlap region.
+    Stanford predicts to 7 km, SMU starts at 7.5 km.
+
+    Compare Stanford 7km temperatures with SMU 7.5km temperatures.
+    """
+    log("\n" + "="*80)
+    log("CROSS-VALIDATION: Stanford vs SMU in overlap region")
+    log("="*80)
+
+    if 7.0 not in stanford_data or 7.5 not in smu_data:
+        log("  Skipped: Missing depth layers for cross-validation")
+        return None
+
+    stanford_7km = stanford_data[7.0]
+    smu_75km = smu_data[7.5]
+
+    log(f"  Stanford 7 km: {len(stanford_7km):,} points")
+    log(f"  SMU 7.5 km: {len(smu_75km):,} points")
+
+    # Match Stanford points to nearest SMU points
+    log("  Matching Stanford to SMU...")
+
+    # Apply geographic correction
+    smu_lat = smu_75km['lat'].values
+    smu_lon = smu_75km['lon'].values
+    smu_lat_rad = np.radians(smu_lat)
+    smu_lon_scaled = smu_lon * np.cos(smu_lat_rad)
+    smu_coords = np.column_stack([smu_lat, smu_lon_scaled])
+
+    stanford_lat = stanford_7km['lat'].values
+    stanford_lon = stanford_7km['lon'].values
+    stanford_lat_rad = np.radians(stanford_lat)
+    stanford_lon_scaled = stanford_lon * np.cos(stanford_lat_rad)
+    stanford_coords = np.column_stack([stanford_lat, stanford_lon_scaled])
+
+    tree = cKDTree(smu_coords)
+    distances_deg, indices = tree.query(stanford_coords, k=1)
+
+    # Get matched temperatures
+    stanford_temps = stanford_7km['temperature'].values
+    smu_temps = smu_75km['temperature'].values[indices]
+
+    # Calculate match distances in km
+    matched_smu_lat = smu_lat[indices]
+    matched_smu_lon = smu_lon[indices]
+    distances_km = haversine_distance(
+        stanford_lat, stanford_lon,
+        matched_smu_lat, matched_smu_lon
+    )
+
+    # Filter to reasonable matches
+    valid_mask = distances_km <= MAX_SMU_MATCH_DISTANCE_KM
+    n_valid = valid_mask.sum()
+
+    log(f"  Valid matches (≤{MAX_SMU_MATCH_DISTANCE_KM} km): {n_valid:,}/{len(stanford_7km):,}")
+
+    if n_valid < 100:
+        log("  Too few valid matches for meaningful cross-validation")
+        return None
+
+    stanford_temps_valid = stanford_temps[valid_mask]
+    smu_temps_valid = smu_temps[valid_mask]
+
+    # Calculate statistics
+    correlation = np.corrcoef(stanford_temps_valid, smu_temps_valid)[0, 1]
+    bias = np.mean(stanford_temps_valid - smu_temps_valid)
+    rmse = np.sqrt(np.mean((stanford_temps_valid - smu_temps_valid)**2))
+    mae = np.mean(np.abs(stanford_temps_valid - smu_temps_valid))
+
+    log(f"\n  Cross-validation statistics:")
+    log(f"    Correlation: {correlation:.3f}")
+    log(f"    Bias (Stanford - SMU): {bias:.1f}°C")
+    log(f"    RMSE: {rmse:.1f}°C")
+    log(f"    MAE: {mae:.1f}°C")
+
+    # Create scatter plot
+    fig, ax = plt.subplots(figsize=(10, 10))
+
+    # Subsample for plotting if too many points
+    if n_valid > 10000:
+        sample_idx = np.random.choice(n_valid, 10000, replace=False)
+        plot_stanford = stanford_temps_valid[sample_idx]
+        plot_smu = smu_temps_valid[sample_idx]
+        log(f"  (Plotting random sample of 10,000 points)")
+    else:
+        plot_stanford = stanford_temps_valid
+        plot_smu = smu_temps_valid
+
+    ax.scatter(plot_stanford, plot_smu, alpha=0.3, s=10, color='steelblue', edgecolors='none')
+
+    # Add 1:1 line
+    min_temp = min(plot_stanford.min(), plot_smu.min())
+    max_temp = max(plot_stanford.max(), plot_smu.max())
+    ax.plot([min_temp, max_temp], [min_temp, max_temp], 'r--', linewidth=2, label='1:1 line')
+
+    ax.set_xlabel('Stanford 7 km Temperature (°C)\n(Continuous Model)', fontsize=12, fontweight='bold')
+    ax.set_ylabel('SMU 7.5 km Temperature (°C)\n(Digitized from Color Maps)', fontsize=12, fontweight='bold')
+    ax.set_title(f'Cross-Validation: Stanford vs SMU in Overlap Region\n'
+                f'Correlation: {correlation:.3f}, RMSE: {rmse:.1f}°C, n={n_valid:,}',
+                fontsize=14, fontweight='bold')
+    ax.grid(True, alpha=0.3)
+    ax.legend(fontsize=11, loc='upper left')
+
+    # Add annotation explaining SMU quantization
+    textstr = ('Note: SMU data shows horizontal bands\n'
+               'because it was digitized from color-\n'
+               'coded temperature maps with discrete\n'
+               'bins (~25°C intervals), not continuous\n'
+               'measurements. Stanford data is from\n'
+               'a continuous thermal model.')
+    ax.text(0.98, 0.02, textstr, transform=ax.transAxes,
+           fontsize=9, verticalalignment='bottom', horizontalalignment='right',
+           bbox=dict(boxstyle='round', facecolor='wheat', alpha=0.8))
+
+    plt.tight_layout()
+    out_file = PLOT_DIR / "cross_validation_stanford_smu.png"
+    plt.savefig(out_file, dpi=150, bbox_inches='tight')
+    plt.close()
+    log(f"  Saved: {out_file}")
+
+    return {
+        'correlation': correlation,
+        'bias': bias,
+        'rmse': rmse,
+        'mae': mae,
+        'n_valid': n_valid
+    }
 
 def assign_depth_bins(df):
     """Assign depth to appropriate bin category."""
@@ -372,114 +698,36 @@ def calculate_area_statistics(df):
 
     return pd.DataFrame(results)
 
-def create_depth_map(df, stats_df, output_file):
-    """Create CONUS map showing depth-to-300°C categories."""
-    log(f"\nCreating depth-to-300°C map...")
+def print_quality_metrics(df):
+    """Print data quality and source metrics."""
+    log("\n" + "="*80)
+    log("DATA QUALITY METRICS")
+    log("="*80)
 
-    # Define colors for each bin (sequential from shallow to deep)
-    bin_colors = {
-        "≤4 km": '#8B0000',    # Dark red (shallowest - most accessible)
-        "4-5 km": '#DC143C',   # Crimson
-        "5-6 km": '#FF6347',   # Tomato
-        "6-7 km": '#FF8C00',   # Dark orange
-        "7-8 km": '#FFA500',   # Orange
-        "8-10 km": '#FFD700',  # Gold
-        ">10 km": '#D3D3D3'    # Light gray (deepest - least accessible)
-    }
+    # Source breakdown
+    log("\n1. Data Source:")
+    source_counts = df['source'].value_counts()
+    for source, count in source_counts.items():
+        log(f"   {source}: {count:,} ({count/len(df)*100:.1f}%)")
 
-    bin_order = ["≤4 km", "4-5 km", "5-6 km", "6-7 km", "7-8 km", "8-10 km", ">10 km"]
+    # Source type breakdown
+    log("\n2. Source Type:")
+    source_type_counts = df['source_type'].value_counts()
+    for stype, count in source_type_counts.items():
+        log(f"   {stype}: {count:,} ({count/len(df)*100:.1f}%)")
 
-    # Create figure
-    fig, ax = plt.subplots(figsize=(16, 10))
-
-    # Plot each bin
-    for bin_name in bin_order:
-        bin_df = df[df['depth_bin'] == bin_name]
-        if len(bin_df) > 0:
-            ax.scatter(bin_df['lon'], bin_df['lat'],
-                      c=bin_colors[bin_name],
-                      s=3, label=bin_name, alpha=0.8)
-
-    # Add state boundaries (simple approximation using grid)
-    # For a better version, we'd use cartopy or geopandas with actual state shapefiles
-    ax.set_xlabel('Longitude', fontsize=13, fontweight='bold')
-    ax.set_ylabel('Latitude', fontsize=13, fontweight='bold')
-    ax.set_title('Estimated Depth to Reach 300°C\nContinental United States',
-                fontsize=16, fontweight='bold', pad=20)
-
-    ax.set_aspect('equal')
-    ax.grid(True, alpha=0.3, linestyle='--')
-    ax.set_xlim(-126, -65)
-    ax.set_ylim(24, 50)
-
-    # Add legend with area percentages
-    legend_labels = []
-    for bin_name in bin_order:
-        pct = stats_df[stats_df['bin'] == bin_name]['percent'].values[0]
-        legend_labels.append(f"{bin_name:8s} ({pct:.1f}%)")
-
-    ax.legend(legend_labels, loc='lower right', fontsize=11,
-             title='Depth Category', title_fontsize=12, framealpha=0.95)
-
-    # Add text annotation
-    accessible_4km = stats_df[stats_df['bin'] == "≤4 km"]['percent'].values[0]
-    accessible_7km = stats_df[stats_df['bin'].isin(["≤4 km", "4-5 km", "5-6 km", "6-7 km"])]['percent'].sum()
-
-    textstr = f'Most accessible regions:\n• ≤4 km: {accessible_4km:.1f}% of CONUS\n• ≤7 km: {accessible_7km:.1f}% of CONUS'
-    ax.text(0.02, 0.98, textstr, transform=ax.transAxes,
-           fontsize=10, verticalalignment='top',
-           bbox=dict(boxstyle='round', facecolor='wheat', alpha=0.8))
-
-    plt.tight_layout()
-    plt.savefig(output_file, dpi=200, bbox_inches='tight')
-    log(f"  Saved: {output_file}")
-    plt.close()
-
-def create_area_chart(stats_df, output_file):
-    """Create bar chart showing area distribution by depth bin."""
-    log(f"\nCreating area distribution chart...")
-
-    bin_order = ["≤4 km", "4-5 km", "5-6 km", "6-7 km", "7-8 km", "8-10 km", ">10 km"]
-
-    # Reorder dataframe
-    stats_df['bin'] = pd.Categorical(stats_df['bin'], categories=bin_order, ordered=True)
-    stats_df = stats_df.sort_values('bin')
-
-    # Colors matching the map
-    colors = ['#8B0000', '#DC143C', '#FF6347', '#FF8C00', '#FFA500', '#FFD700', '#D3D3D3']
-
-    fig, ax = plt.subplots(figsize=(12, 7))
-
-    bars = ax.bar(range(len(stats_df)), stats_df['percent'], color=colors, edgecolor='black', linewidth=1.5)
-
-    ax.set_xticks(range(len(stats_df)))
-    ax.set_xticklabels(stats_df['bin'], fontsize=12, fontweight='bold')
-    ax.set_ylabel('Percentage of CONUS Area (%)', fontsize=13, fontweight='bold')
-    ax.set_title('Distribution of CONUS Area by Depth Required to Reach 300°C',
-                fontsize=14, fontweight='bold', pad=15)
-
-    ax.grid(True, alpha=0.3, axis='y')
-    ax.set_axisbelow(True)
-
-    # Add percentage labels on bars
-    for i, (bar, pct) in enumerate(zip(bars, stats_df['percent'])):
-        height = bar.get_height()
-        ax.text(bar.get_x() + bar.get_width()/2., height + 0.5,
-               f'{pct:.1f}%',
-               ha='center', va='bottom', fontsize=11, fontweight='bold')
-
-    # Add cumulative percentage line
-    ax2 = ax.twinx()
-    ax2.plot(range(len(stats_df)), stats_df['cumulative_percent'],
-            'ko-', linewidth=2, markersize=8, label='Cumulative')
-    ax2.set_ylabel('Cumulative Percentage (%)', fontsize=13, fontweight='bold')
-    ax2.set_ylim(0, 105)
-    ax2.legend(loc='upper left', fontsize=11)
-
-    plt.tight_layout()
-    plt.savefig(output_file, dpi=150, bbox_inches='tight')
-    log(f"  Saved: {output_file}")
-    plt.close()
+    # SMU match distances
+    smu_mask = df['source'] == 'smu'
+    if smu_mask.sum() > 0:
+        smu_distances = df.loc[smu_mask, 'smu_match_distance_km'].dropna()
+        if len(smu_distances) > 0:
+            log("\n3. SMU Match Quality:")
+            log(f"   Matches: {len(smu_distances):,}")
+            log(f"   Min distance: {smu_distances.min():.1f} km")
+            log(f"   Median distance: {smu_distances.median():.1f} km")
+            log(f"   Max distance: {smu_distances.max():.1f} km")
+            log(f"   Within 10 km: {(smu_distances <= 10).sum():,} ({(smu_distances <= 10).sum()/len(smu_distances)*100:.1f}%)")
+            log(f"   Within 25 km: {(smu_distances <= 25).sum():,} ({(smu_distances <= 25).sum()/len(smu_distances)*100:.1f}%)")
 
 def print_cumulative_statistics(stats_df):
     """Print cumulative accessibility statistics."""
@@ -510,42 +758,51 @@ def print_cumulative_statistics(stats_df):
 def main():
     start_time = time.time()
     log("="*80)
-    log("CALCULATING DEPTH TO 300°C ACROSS CONUS")
+    log("CALCULATING DEPTH TO 300°C ACROSS CONUS - VERSION 2")
     log("="*80)
 
     # 1. Load data
     stanford_data = load_stanford_data()
     smu_data = load_smu_data()
 
-    # 2. Calculate depth to 300°C using Stanford data
+    # 2. Cross-validate in overlap region
+    cross_val_results = cross_validate_stanford_smu_overlap(stanford_data, smu_data)
+
+    # 3. Calculate depth to 300°C using Stanford data (with grid validation)
     grid = calculate_stanford_depth_to_300c(stanford_data)
 
-    # 3. Fill in deeper locations using SMU data
+    # 4. Fill in deeper locations using SMU data (with geographic correction)
     grid = match_smu_to_stanford_grid(grid, smu_data)
 
-    # 4. Assign depth bins
+    # 5. Assign depth bins
     grid = assign_depth_bins(grid)
 
-    # 5. Calculate area-weighted statistics
+    # 6. Calculate area-weighted statistics
     stats_df = calculate_area_statistics(grid)
 
-    # 6. Create visualizations
-    map_file = PLOT_DIR / "depth_to_300c_map.png"
-    create_depth_map(grid, stats_df, map_file)
+    # 7. Print quality metrics
+    print_quality_metrics(grid)
 
-    chart_file = PLOT_DIR / "depth_to_300c_distribution.png"
-    create_area_chart(stats_df, chart_file)
-
-    # 7. Print cumulative statistics
+    # 8. Print cumulative statistics
     print_cumulative_statistics(stats_df)
 
-    # 8. Save final grid
+    # 9. Save final grid
     log("\nSaving output files...")
-    output_file = OUTPUT_DIR / "conus_depth_to_300c.csv"
-    grid_to_save = grid[['lat', 'lon', 'depth_300_km', 'depth_bin', 'source']].copy()
+    output_file = OUTPUT_DIR / "conus_depth_to_300c_v2.csv"
+
+    # Select columns for output
+    output_cols = ['lat', 'lon', 'depth_300_km', 'depth_bin',
+                   'source', 'source_type', 'smu_match_distance_km']
+
+    # Add interp_status for stanford points
+    if 'interp_status' in grid.columns:
+        grid_to_save = grid[output_cols + ['interp_status']].copy()
+    else:
+        grid_to_save = grid[output_cols].copy()
+
     grid_to_save.to_csv(output_file, index=False)
 
-    parquet_file = OUTPUT_DIR / "conus_depth_to_300c.parquet"
+    parquet_file = OUTPUT_DIR / "conus_depth_to_300c_v2.parquet"
     grid_to_save.to_parquet(parquet_file, index=False)
 
     log("\n" + "="*80)
@@ -553,8 +810,7 @@ def main():
     log("="*80)
     log(f"  Grid data (CSV):     {output_file}")
     log(f"  Grid data (Parquet): {parquet_file}")
-    log(f"  Map:                 {map_file}")
-    log(f"  Chart:               {chart_file}")
+    log(f"  Cross-validation:    {PLOT_DIR / 'cross_validation_stanford_smu.png'}")
 
     total_time = time.time() - start_time
     log(f"\nTotal processing time: {total_time/60:.1f} minutes")
@@ -562,37 +818,6 @@ def main():
     log("\n" + "="*80)
     log("ANALYSIS COMPLETE")
     log("="*80)
-
-    # Summary interpretation
-    log("\nKEY FINDINGS:")
-    log("-" * 80)
-
-    very_shallow = stats_df[stats_df['bin'] == "≤4 km"]['percent'].values[0]
-    shallow = stats_df[stats_df['bin'].isin(["≤4 km", "4-5 km"])]['percent'].sum()
-    moderate = stats_df[stats_df['bin'].isin(["≤4 km", "4-5 km", "5-6 km", "6-7 km"])]['percent'].sum()
-    deep = stats_df[stats_df['bin'].isin(["7-8 km", "8-10 km"])]['percent'].sum()
-    very_deep = stats_df[stats_df['bin'] == ">10 km"]['percent'].values[0]
-
-    log(f"\n1. IMMEDIATE ACCESSIBILITY (≤4 km):")
-    log(f"   {very_shallow:.1f}% of CONUS can access 300°C at relatively shallow depths")
-    log(f"   These are primarily high-heat-flow regions in the western US")
-
-    log(f"\n2. NEAR-TERM POTENTIAL (4-7 km):")
-    log(f"   Additional {moderate - very_shallow:.1f}% becomes accessible with deeper drilling")
-    log(f"   Total accessible within 7 km: {moderate:.1f}%")
-
-    log(f"\n3. ADVANCED DRILLING REQUIRED (7-10 km):")
-    log(f"   {deep:.1f}% of CONUS requires depths between 7-10 km")
-    log(f"   This represents the frontier of current drilling technology")
-
-    log(f"\n4. CURRENTLY IMPRACTICAL (>10 km):")
-    log(f"   {very_deep:.1f}% of CONUS requires depths exceeding 10 km")
-    log(f"   These are primarily stable cratonic regions in eastern/central US")
-
-    log(f"\n5. INCREMENTAL ACCESSIBILITY:")
-    log(f"   • Doubling depth capability from 5 km to 10 km")
-    log(f"     increases accessible area from {stats_df[stats_df['bin'].isin(['≤4 km', '4-5 km'])]['percent'].sum():.1f}% to {100-very_deep:.1f}%")
-    log(f"   • Each additional km of drilling depth adds significant new territory")
 
 if __name__ == "__main__":
     main()

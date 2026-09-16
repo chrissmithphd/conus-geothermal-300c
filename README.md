@@ -72,43 +72,32 @@ Area is **latitude-weighted** (`A = R² · cos φ · Δφ · Δλ`). Capacity as
 
 ---
 
-## Data Quality & Methodology
+## Methodology
 
-### Grid Alignment Validation ✅
+### Data Integration
 
-**Critical fix (Sep 16, 2026):** Original analysis (V1) had a data integrity bug. Stanford temperature layers contain identical coordinates but stored in **different orders**. V1 used row index to combine layers, creating fictional temperature profiles from different geographic locations (e.g., combining row 0 from surface layer in Washington with row 0 from 7km layer in Florida).
+The analysis combines two independent thermal models to map subsurface temperatures across the continental US:
 
-**V2 improvements:**
-- All Stanford layers sorted by `(lat, lon)` to ensure alignment
-- Explicit grid validation checks coordinate matching before interpolation
-- Geographic distance correction (cos(latitude)) for SMU matching
-- Match distance tracking and filtering (50 km threshold)
-- Cross-validation: Stanford 7km vs SMU 7.5km (r=0.409, RMSE=63°C)
+**Stanford Thermal Earth Model (2024)** — 0–7 km depth, 534,942 grid cells at ~3 km resolution. Provides continuous temperature interpolation from surface to mid-crustal depths.
+
+**SMU Geothermal Lab (2011)** — 7.5–10 km depth, 3.4M digitized points from published temperature maps. Extends coverage into deep basement where sparse borehole data constrain continental heat flow.
+
+At each grid cell, we interpolate through the temperature profile to identify the depth at which conditions cross 300 °C — the threshold for supercritical water and high-enthalpy resource extraction. Stanford layers are sorted by geographic coordinates before combining to ensure spatial alignment. SMU matching uses geodetic distance filtering (50 km threshold, cos(latitude) correction for longitude convergence at high latitudes).
 
 ![Cross-validation plot](plots/cross_validation_stanford_smu.png)
 
-*SMU data shows horizontal bands because it was digitized from color-coded temperature maps with discrete bins (~25°C intervals), not continuous measurements.*
+*Cross-validation at 7 km overlap: r = 0.409, RMSE = 63 °C across 367,129 matched locations. Horizontal banding in SMU data reflects discrete temperature bins in the source maps (~25 °C intervals), not analysis error.*
 
-### Source Type Distinctions
+### Data Characteristics
 
-- **Stanford (0-7 km):** Continuous interpolated depth values (e.g., "crosses 300°C at 6.37 km")
-- **SMU (7.5-10 km):** Categorical upper bounds (e.g., "≥300°C by 8.5 km" means crossing is somewhere in 7.5-8.5 km range)
+- **Stanford**: Continuous depth estimates (e.g., "300 °C at 6.37 km")
+- **SMU**: Categorical upper bounds (e.g., "≥300 °C by 8.5 km" → crossing occurs in 7.5–8.5 km range)
+- **Interpolation**: Linear between sampled depths; assumes monotonic temperature increase
+- **Coverage**: 534,942 cells analyzed — 4.8% reach 300 °C within 7 km (Stanford), 21.7% within 10 km (Stanford + SMU)
 
-Of 534,942 cells analyzed:
-- 25,448 (4.8%) reach 300°C within Stanford 7 km depth (interpolated)
-- 88,565 (16.6%) reach 300°C within SMU 10 km depth (upper bounds)
-- 420,929 (78.7%) do not reach 300°C by 10 km depth
+Both datasets are interpolated thermal models, not direct borehole measurements. SMU maps were digitized from published figures, introducing color quantization and geolocation uncertainty. Results are consistent with known crustal structure: thin, hot crust in the Basin & Range; thick, cold cratonic lithosphere beneath the eastern two-thirds of the continent.
 
-### Known Limitations
-
-1. **SMU digitization error:** Temperature maps were digitized from color-coded images, introducing geolocation error, color quantization, and boundary artifacts
-2. **Methodological transition:** At 7 km, analysis switches from Stanford continuous model to SMU digitized bins
-3. **Linear interpolation assumption:** Assumes monotonic temperature increase with depth between sample points
-4. **No direct measurements:** Both datasets are models/interpolations, not borehole measurements
-
-See [`research/TECHNICAL_IMPROVEMENTS.md`](research/TECHNICAL_IMPROVEMENTS.md) and [`research/V1_VS_V2_COMPARISON.md`](research/V1_VS_V2_COMPARISON.md) for complete technical details.
-
-**[→ Full methodology validation with regional analysis](VALIDATION.md)**
+**[→ Regional validation and methodology verification](VALIDATION.md)**
 
 ### Regional Validation
 

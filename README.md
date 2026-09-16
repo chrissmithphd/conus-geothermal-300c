@@ -358,12 +358,11 @@ downloaded into `data/raw/boundaries/`.
 ├── README.md
 ├── index.html                          # interactive map landing page
 ├── download_stanford.py                # Stanford ArcGIS → GeoJSON
-├── digitize_smu_maps.py                # SMU PNG digitisation prototype
-├── digitize_all_smu_maps.py            # all 7 SMU depths
-├── explore_stanford_data.py            # exploratory stats + plots
-├── calculate_depth_to_300c.py          # main analysis
-├── create_final_maps_v4.py             # publication maps (TIGER outlines)
-├── create_final_map.py                 # interactive Plotly map
+├── digitize_all_smu_maps.py            # SMU PNG → 3.4M gridded points (all 7 depths)
+├── explore_stanford_data.py            # exploratory data analysis
+├── calculate_depth_to_300c.py          # main depth-to-300C analysis
+├── create_final_map.py                 # interactive + static maps
+├── create_montana_validation.py        # regional validation plots
 ├── data/
 │   ├── raw/{stanford,smu,boundaries}/  # untouched source data + manifests
 │   └── processed/                      # digitised SMU + final depth grid

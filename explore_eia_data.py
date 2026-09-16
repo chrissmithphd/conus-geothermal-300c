@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
 """
-Explore EIA Form 860 data structure to understand the columns and sheets.
+Explore EIA Form 860 data structure - corrected version with proper header handling.
 """
 
 import pandas as pd
-import sys
 
 # File paths
 plant_file = "data/raw/coal_plants/2___Plant_Y2025.xlsx"
@@ -14,35 +13,46 @@ print("=" * 80)
 print("EXPLORING PLANT DATA")
 print("=" * 80)
 
-# Check what sheets are in the plant file
-plant_sheets = pd.ExcelFile(plant_file).sheet_names
-print(f"\nSheets in Plant file: {plant_sheets}")
-
-# Load plant data (usually in first sheet)
-plant_df = pd.read_excel(plant_file, sheet_name=plant_sheets[0], nrows=5)
+# Load plant data with header in row 1
+plant_df = pd.read_excel(plant_file, sheet_name='Plant', header=1, nrows=10)
 print(f"\nPlant data columns ({len(plant_df.columns)} total):")
 for i, col in enumerate(plant_df.columns):
     print(f"  {i+1:3d}. {col}")
 
-print(f"\nFirst few rows of plant data:")
-print(plant_df.head(2))
+print(f"\nFirst row of plant data:")
+print(plant_df.iloc[0])
+
+# Look for coal-related columns
+print(f"\n\nSample plant names and locations:")
+if 'Plant Name' in plant_df.columns:
+    for idx in range(min(5, len(plant_df))):
+        print(f"  {plant_df.iloc[idx]['Plant Name']} - {plant_df.iloc[idx].get('State', 'N/A')}")
 
 print("\n" + "=" * 80)
-print("EXPLORING GENERATOR DATA")
+print("EXPLORING GENERATOR DATA - OPERABLE")
 print("=" * 80)
 
-# Check what sheets are in the generator file
-gen_sheets = pd.ExcelFile(generator_file).sheet_names
-print(f"\nSheets in Generator file: {gen_sheets}")
+# Load operable generator data with header in row 1
+gen_df = pd.read_excel(generator_file, sheet_name='Operable', header=1, nrows=20)
+print(f"\nOperable generator columns ({len(gen_df.columns)} total):")
+for i, col in enumerate(gen_df.columns):
+    print(f"  {i+1:3d}. {col}")
 
-# Load generator data (check each sheet)
-for sheet in gen_sheets:
-    print(f"\n--- Sheet: {sheet} ---")
-    gen_df = pd.read_excel(generator_file, sheet_name=sheet, nrows=5)
-    print(f"Columns ({len(gen_df.columns)} total):")
-    for i, col in enumerate(gen_df.columns[:20]):  # First 20 columns
-        print(f"  {i+1:3d}. {col}")
-    if len(gen_df.columns) > 20:
-        print(f"  ... and {len(gen_df.columns) - 20} more columns")
-    print(f"\nFirst row:")
-    print(gen_df.iloc[0])
+# Check for coal plants
+if 'Technology' in gen_df.columns or 'Energy Source 1' in gen_df.columns:
+    print(f"\nSample technologies/energy sources:")
+    tech_col = 'Technology' if 'Technology' in gen_df.columns else 'Energy Source 1'
+    print(gen_df[tech_col].value_counts().head(10))
+
+print("\n" + "=" * 80)
+print("EXPLORING GENERATOR DATA - RETIRED")
+print("=" * 80)
+
+# Load retired generator data
+retired_df = pd.read_excel(generator_file, sheet_name='Retired and Canceled', header=1, nrows=20)
+print(f"\nRetired generator columns ({len(retired_df.columns)} total):")
+for i, col in enumerate(retired_df.columns):
+    print(f"  {i+1:3d}. {col}")
+
+print(f"\nFirst row of retired data:")
+print(retired_df.iloc[0])

@@ -76,8 +76,8 @@ for bin_name in reversed(bin_order):
                   label=f"{bin_name}: {pct:.2f}%",
                   zorder=100-bin_order.index(bin_name))
 
-# Add state boundaries (dark edges for visibility against gray background)
-states.boundary.plot(ax=ax, linewidth=0.8, edgecolor='black', alpha=0.4, zorder=50)
+# Add state boundaries (draw AFTER scatter plots so they appear on top)
+states.boundary.plot(ax=ax, linewidth=1.0, edgecolor='black', alpha=0.6, zorder=150)
 
 ax.set_xlabel('Longitude', fontsize=16, fontweight='bold')
 ax.set_ylabel('Latitude', fontsize=16, fontweight='bold')

@@ -102,8 +102,11 @@ legend.get_title().set_fontweight('bold')
 legend.set_zorder(300)  # Draw legend on top of everything
 
 plt.tight_layout()
+# Save as both filenames (README uses points.png)
 plt.savefig('plots/depth_to_300c_all_categories.png', dpi=300, bbox_inches='tight', facecolor='white')
+plt.savefig('plots/depth_to_300c_points.png', dpi=300, bbox_inches='tight', facecolor='white')
 print("\n✅ Saved: plots/depth_to_300c_all_categories.png")
+print("✅ Saved: plots/depth_to_300c_points.png")
 plt.close()
 
 # INTERACTIVE ZOOMABLE MAP with plotly

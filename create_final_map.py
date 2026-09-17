@@ -112,11 +112,9 @@ print("\nCreating interactive Leaflet map...")
 import folium
 from folium.plugins import MarkerCluster
 
-# Sample data for performance (every 10th point for ≤10km, every 50th for >10km)
-df_plot = pd.concat([
-    df[df['depth_bin'] != '>10 km'].iloc[::10],  # More detail for shallow
-    df[df['depth_bin'] == '>10 km'].iloc[::50]   # Less detail for deep (gray background)
-])
+# Sample data for performance - consistent sampling for all depths
+# Use every 8th point to get ~67k points (good performance, no disappearing dots)
+df_plot = df.iloc[::8].copy()
 
 print(f"Plotting {len(df_plot):,} points (sampled from {len(df):,} total)")
 
@@ -125,23 +123,16 @@ m = folium.Map(
     location=[39.8, -98.5],
     zoom_start=5,
     tiles='OpenStreetMap',
-    control_scale=True
+    control_scale=True,
+    prefer_canvas=True  # Better performance for many markers
 )
 
-# Add data points with clustering for performance
-marker_cluster = MarkerCluster(
-    name='Geothermal Depth Data',
-    overlay=True,
-    control=True,
-    show=True
-).add_to(m)
-
-# Add points
+# Add points directly without clustering (clustering colors don't match our scheme)
 print("Adding data points...")
 for idx, row in df_plot.iterrows():
     folium.CircleMarker(
         location=[row['lat'], row['lon']],
-        radius=3 if row['depth_bin'] != '>10 km' else 1,
+        radius=2.5 if row['depth_bin'] != '>10 km' else 1.5,
         popup=folium.Popup(
             f"<b>Depth to 300°C:</b> {row['depth_bin']}<br>"
             f"<b>Location:</b> {row['lat']:.2f}°N, {abs(row['lon']):.2f}°W<br>"
@@ -152,9 +143,9 @@ for idx, row in df_plot.iterrows():
         color=colors_all[row['depth_bin']],
         fill=True,
         fillColor=colors_all[row['depth_bin']],
-        fillOpacity=0.7 if row['depth_bin'] != '>10 km' else 0.3,
-        weight=1
-    ).add_to(marker_cluster)
+        fillOpacity=0.8 if row['depth_bin'] != '>10 km' else 0.4,
+        weight=0.5
+    ).add_to(m)
 
 # Add major city markers
 cities = {

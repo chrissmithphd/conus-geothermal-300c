@@ -61,11 +61,11 @@ Oregon/Washington Cascade axis and coastal Northern California.
 | 6–7 km | 304,350 | 4.19 | 2,130 | 1.7 |
 | 7–8 km | 184,173 | 2.54 | 1,289 | 1.0 |
 | 8–10 km | 1,049,286 | 14.45 | 7,345 | 5.7 |
-| **>10 km** | **5,688,980** | **78.32** | **39,823** | **30.9** |
+| **>10 km** | **5,688,980** | **78.32** | **—** | **—** |
 | **≤10 km** | **1,574,690** | **21.68** | **11,023** | **8.6** |
-| *Total* | *7,263,669* | *100.00* | *50,846* | *39.5* |
+| *Total* | *7,263,669* | *100.00* | *11,023** | *8.6** |
 
-Area is **latitude-weighted** (`A = R² · cos φ · Δφ · Δλ`). These values show the scale implied by assumed 35 MW/km² power density (superhot geothermal, 300-400°C) and 20% development; they are not resource or generation forecasts. IDDP-2 demonstrated 45 MW/well at 427°C. US total capacity: **1,287 GW** (coal: 180 GW). See [`research/ENERGY_GENERATION_RESEARCH.md`](research/ENERGY_GENERATION_RESEARCH.md) for details.
+Area is **latitude-weighted** (`A = R² · cos φ · Δφ · Δλ`). Capacity values shown only for ≤10 km bins where the analysis identifies 300°C within the modeled range. The >10 km category has no capacity estimate because the actual depth to 300°C is unknown for those cells. Values show the scale implied by assumed 35 MW/km² power density (superhot geothermal, 300-400°C) and 20% development; they are not resource or generation forecasts. IDDP-2 demonstrated 45 MW/well at 427°C. US total capacity: **1,287 GW** (coal: 180 GW). See [`research/ENERGY_GENERATION_RESEARCH.md`](research/ENERGY_GENERATION_RESEARCH.md) for details.
 
 ---
 
@@ -79,7 +79,7 @@ The analysis combines two independent thermal models to map subsurface temperatu
 
 **SMU Geothermal Lab (2011)** — 7.5–10 km depth, 3.4M digitized points from published temperature maps. Extends coverage into deep basement where sparse borehole data constrain continental heat flow.
 
-At each grid cell, we interpolate through the temperature profile to identify the depth at which conditions cross 300 °C — the threshold for supercritical water and high-enthalpy resource extraction. Stanford layers are sorted by geographic coordinates before combining to ensure spatial alignment. SMU matching uses geodetic distance filtering (50 km threshold, cos(latitude) correction for longitude convergence at high latitudes).
+At each grid cell, we interpolate through the temperature profile to identify the depth at which conditions cross 300 °C — the threshold used here for superhot geothermal screening. Stanford layers are sorted by geographic coordinates before combining to ensure spatial alignment. SMU matching uses geodetic distance filtering (50 km threshold, cos(latitude) correction for longitude convergence at high latitudes).
 
 ![Cross-validation plot](plots/cross_validation_stanford_smu.png)
 
@@ -90,7 +90,7 @@ At each grid cell, we interpolate through the temperature profile to identify th
 - **Stanford**: Continuous depth estimates (e.g., "300 °C at 6.37 km")
 - **SMU**: Categorical upper bounds (e.g., "≥300 °C by 8.5 km" → crossing occurs in 7.5–8.5 km range)
 - **Interpolation**: Linear between sampled depths; assumes monotonic temperature increase
-- **Coverage**: 534,942 cells analyzed — 4.8% reach 300 °C within 7 km (Stanford), 21.7% within 10 km (Stanford + SMU)
+- **Coverage**: 534,942 cells analyzed — 5.1% reach 300 °C within 7 km (Stanford), 21.7% within 10 km (Stanford + SMU)
 
 Both datasets are interpolated thermal models, not direct borehole measurements. SMU maps were digitized from published figures, introducing color quantization and geolocation uncertainty. Results are consistent with known crustal structure: thin, hot crust in the Basin & Range; thick, cold cratonic lithosphere beneath the eastern two-thirds of the continent.
 
@@ -248,9 +248,14 @@ Stanford GeoJSON (0–7 km)          SMU PNG maps (3.5–10 km)
 modelled temperatures and linearly interpolate to find where the profile crosses 300 °C.
 
 ```python
-if temperatures.max() < 300:
-    return np.nan                      # not reached inside 0–7 km
-return float(interp1d(temperatures, depths)(300))
+# Find first adjacent depth pair that brackets 300°C
+for i in range(len(temperatures) - 1):
+    if temperatures[i] <= 300 < temperatures[i+1]:
+        # Linear interpolation between these two points
+        t_low, t_high = temperatures[i], temperatures[i+1]
+        d_low, d_high = depths[i], depths[i+1]
+        return d_low + (300 - t_low) / (t_high - t_low) * (d_high - d_low)
+return np.nan  # 300°C not reached within 0-7 km
 ```
 
 Worked example — 250 °C at 6 km, 320 °C at 7 km:
@@ -312,7 +317,7 @@ downloaded into `data/raw/boundaries/`.
 | **SMU vintage is 2011** | 13 years older than Stanford; less well data behind it |
 | **Linear T(z) between layers** | Real profiles curve; expect ~10–20 % depth error where the gradient changes with depth |
 | **~4 km cells** | Sub-grid thermal anomalies are smoothed away |
-| **Single 300 °C threshold** | True supercritical conditions depend on pressure, so the target °C should really vary with depth |
+| **Single 300 °C threshold** | Superhot/supercritical conditions depend on pressure; water becomes supercritical at ~374°C. The 300°C threshold used here is a screening value |
 | **No extrapolation performed** | By design. Cells beyond 10 km are reported as `> 10 km`, never as an invented number. |
 
 ---

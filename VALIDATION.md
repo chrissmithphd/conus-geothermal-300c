@@ -18,11 +18,11 @@ Our analysis combines two independent datasets:
 
 **Key observations (47,259 grid cells):**
 
-| Region | Expected Depth | Observed Depth | Validation |
+| Region | Known Geology | Modeled Depth | Consistency |
 |--------|---------------|----------------|------------|
-| **Yellowstone/Snake River Plain** | 6-8 km (active hotspot) | 5-7 km (green/yellow) | ✅ **MATCH** |
-| **Western MT mountains** | 6-9 km (Basin & Range) | 6-9 km (yellow/red) | ✅ **MATCH** |
-| **Eastern MT plains** | >10 km (stable craton) | >10 km (gray) | ✅ **MATCH** |
+| **Yellowstone/Snake River Plain** | Active hotspot | 5-7 km (green/yellow) | Consistent |
+| **Western MT mountains** | Basin & Range extension | 6-9 km (yellow/red) | Consistent |
+| **Eastern MT plains** | Stable craton | >10 km (gray) | Consistent |
 
 **Geographic pattern:** Clear east-west divide at ~110°W longitude matches the tectonic boundary between:
 - **West**: Extensional Basin & Range province (thin crust, high heat flow)
@@ -40,43 +40,36 @@ Our analysis combines two independent datasets:
 
 **Detailed analysis (2,115 grid cells):**
 
-| Zone | Depth Category | Cell Count | % of Region | Geological Match |
+| Zone | Depth Category | Cell Count | % of Region | Consistency with Known Geology |
 |------|---------------|------------|-------------|------------------|
-| **Caldera center** | 5-6 km (green) | 62 | 2.9% | ✅ Active magma chamber at ~5-6 km |
-| **Caldera interior** | 6-7 km (yellow) | 647 | 30.6% | ✅ Recent volcanic activity |
-| **Caldera periphery** | 8-10 km (red) | 1,391 | 65.8% | ✅ Cooling volcanic system |
-| **Outside caldera** | >10 km (gray) | 14 | 0.7% | ✅ Regional background |
+| **Caldera center** | 5-6 km (green) | 62 | 2.9% | Shallow depths in active volcanic center |
+| **Caldera interior** | 6-7 km (yellow) | 647 | 30.6% | Moderate depths near recent volcanism |
+| **Caldera periphery** | 8-10 km (red) | 1,391 | 65.8% | Deeper at volcanic system margins |
+| **Outside caldera** | >10 km (gray) | 14 | 0.7% | Returns to regional background |
 
-**Why this validates our approach:**
+**Regional sanity check:**
 
-1. **Spatial pattern matches known geology**: Green (5-6 km) cells concentrate in the caldera center where magma is shallowest, transitioning to yellow (6-7 km) and red (8-10 km) moving outward. This pattern is qualitatively consistent with the known Yellowstone geothermal system, including:
-   - Magma chamber roof at ~5-8 km depth
-   - Active hydrothermal system extending to ~10 km
-   - Normal crustal temperatures beyond caldera boundary
+1. **Spatial pattern consistent with known geology**: Green (5-6 km) cells concentrate in the caldera center, transitioning to yellow (6-7 km) and red (8-10 km) moving outward. This pattern is qualitatively consistent with Yellowstone being an active volcanic/geothermal system, where elevated temperatures are expected at shallower depths near the caldera center.
 
-2. **Grid resolution is appropriate**: ~3 km cell spacing clearly captures the caldera structure (~50 km diameter). Individual cells are visible, showing we're not over-smoothing local variations.
+2. **Grid resolution captures structure**: ~3 km cell spacing shows the caldera structure (~50 km diameter) without obvious over-smoothing.
 
-3. **Known landmarks align**: Old Faithful, Mammoth, and West Yellowstone all fall within yellow (6-7 km) zones, consistent with surface geothermal manifestations indicating shallow heat sources.
+3. **Landmarks check out**: Old Faithful, Mammoth, and West Yellowstone fall within yellow (6-7 km) zones, consistent with surface geothermal activity.
 
-4. **Independent validation**: Yellowstone is the most studied geothermal system in North America. Our results match:
-   - **USGS seismic imaging**: Magma at 5-8 km ✓
-   - **Deep drilling data**: High temperatures at shallow depths ✓
-   - **Heat flow measurements**: 2-4× background in caldera ✓
+This is a useful regional sanity check showing the modeled pattern is qualitatively consistent with a well-known geothermal region.
 
-## What Would Invalidate Our Results
+## Consistency checks
 
-If our approach were wrong, we would see:
+If the methodology had major issues, we might expect:
+- Random spatial patterns with no correlation to known geology
+- Yellowstone showing deep (>10 km) requirements despite being a known active geothermal system
+- No east-west divide in Montana despite the major tectonic boundary
+- Smooth gradients everywhere, masking local thermal anomalies
 
-❌ **Random spatial patterns** - No correlation with geology  
-❌ **Yellowstone showing >10 km depths** - Contradicts all direct measurements  
-❌ **No east-west divide in Montana** - Ignores major tectonic boundary  
-❌ **Smooth gradients with no local variation** - Over-interpolation masking real features  
-
-**Instead we see:**
-✅ Clear tectonic boundaries  
-✅ Known geothermal systems (Yellowstone) show shallow depths  
-✅ Cratonic regions (eastern MT) show deep requirements  
-✅ Local variations preserved at ~3 km resolution  
+Instead, the results show:
+- Clear regional patterns aligned with major tectonic provinces
+- Known geothermal systems (Yellowstone) showing shallower modeled depths
+- Cratonic regions (eastern Montana) showing deeper requirements
+- Local variations preserved at the ~3 km grid resolution  
 
 ## Cross-Validation: Stanford vs SMU
 
@@ -87,7 +80,7 @@ If our approach were wrong, we would see:
 - **RMSE**: 63.1°C, with Stanford averaging 39.3°C warmer than the digitized SMU estimates
 - **Sample size**: 367,129 matched locations (within 50 km)
 
-**Horizontal bands in SMU data** are expected - SMU maps were digitized from color-coded images with discrete ~25°C temperature bins, not continuous measurements. This is a data source limitation, not an analysis error.
+**Horizontal bands in SMU data** arise from digitizing discrete ~25°C color classes in the source maps, not continuous measurements.
 
 The systematic offset likely reflects differences in:
 1. Stanford: continuous physics-based model (smooth interpolation)

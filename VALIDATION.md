@@ -1,6 +1,6 @@
 # Data and Approach Validation
 
-This document demonstrates that our depth-to-300°C analysis methodology produces geologically valid results that match known geothermal systems and tectonic provinces.
+This document checks whether the results are broadly consistent with known geothermal regions and tectonic patterns.
 
 ## Methodology Overview
 
@@ -49,7 +49,7 @@ Our analysis combines two independent datasets:
 
 **Why this validates our approach:**
 
-1. **Spatial pattern matches known geology**: Green (5-6 km) cells concentrate in the caldera center where magma is shallowest, transitioning to yellow (6-7 km) and red (8-10 km) moving outward. This precisely matches seismic and drilling data showing:
+1. **Spatial pattern matches known geology**: Green (5-6 km) cells concentrate in the caldera center where magma is shallowest, transitioning to yellow (6-7 km) and red (8-10 km) moving outward. This pattern is qualitatively consistent with the known Yellowstone geothermal system, including:
    - Magma chamber roof at ~5-8 km depth
    - Active hydrothermal system extending to ~10 km
    - Normal crustal temperatures beyond caldera boundary
@@ -83,18 +83,18 @@ If our approach were wrong, we would see:
 ![Cross-validation](plots/cross_validation_stanford_smu.png)
 
 **At 7 km overlap region:**
-- **Correlation**: 0.409 (moderate, expected given different methods)
-- **RMSE**: 63.1°C (reasonable for comparing model vs digitized maps)
+- **Correlation**: 0.409
+- **RMSE**: 63.1°C, with Stanford averaging 39.3°C warmer than the digitized SMU estimates
 - **Sample size**: 367,129 matched locations (within 50 km)
 
 **Horizontal bands in SMU data** are expected - SMU maps were digitized from color-coded images with discrete ~25°C temperature bins, not continuous measurements. This is a data source limitation, not an analysis error.
 
-**Bias**: Stanford predicts +39.3°C warmer than SMU on average. This is likely because:
-1. Stanford is a continuous physics-based model (smooth)
-2. SMU is digitized from published maps (quantized)
+The systematic offset likely reflects differences in:
+1. Stanford: continuous physics-based model (smooth interpolation)
+2. SMU: digitized from published maps (quantized, categorical bins)
 3. Different underlying measurement datasets and interpolation methods
 
-Despite differences, the spatial patterns agree: both show western US hotter than eastern US at the same depths.
+Despite the offset, both datasets show the same broad spatial pattern: western US hotter than eastern US at equivalent depths.
 
 ## Grid Alignment Validation
 
@@ -118,16 +118,16 @@ Grid Alignment Validation:
 
 ## Conclusion
 
-Our depth-to-300°C analysis is **valid** because:
+These checks increase confidence that the workflow captures the major regional patterns, while substantial uncertainty remains at individual locations:
 
-1. ✅ **Regional patterns match known tectonics**: West (thin crust) shallow, East (thick crust) deep
-2. ✅ **Known geothermal systems validate**: Yellowstone shows expected 5-7 km depths
-3. ✅ **Grid resolution is appropriate**: ~3 km cells capture local variations without over-smoothing
-4. ✅ **Independent datasets agree**: Stanford and SMU show consistent spatial patterns
-5. ✅ **Data integrity confirmed**: Grid alignment validated, no more fictional temperature profiles
-6. ✅ **Geographic reference points align**: Labeled cities fall in expected depth categories
+1. **Regional patterns broadly consistent**: Western Basin & Range shows shallow depths, eastern craton shows deep requirements
+2. **Known systems align qualitatively**: Yellowstone shows 5-7 km depths, consistent with known active geothermal system
+3. **Grid resolution captures structure**: ~3 km cells show local variations without obvious over-smoothing
+4. **Two independent datasets converge**: Stanford and SMU show similar spatial patterns despite methodological differences
+5. **Data integrity checks pass**: Grid alignment validated, coordinate matching confirmed across depth layers
+6. **Reference points check out**: Major cities fall in geologically plausible depth categories
 
-The V2 analysis fixes the critical grid alignment bug and adds comprehensive validation throughout. Results are now scientifically defensible and suitable for publication.
+The analysis identifies geographic patterns worth investigating further. Local predictions remain subject to model uncertainty, sparse subsurface data, and unmodeled geological complexity.
 
 ---
 

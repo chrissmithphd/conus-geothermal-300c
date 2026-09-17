@@ -2,7 +2,7 @@
 
 # 🌋 Depth to 300 °C
 
-### Mapping supercritical geothermal accessibility across the conterminous United States
+### Exploring where 300°C geothermal resources may be accessible across CONUS
 
 [![Model cells](https://img.shields.io/badge/model_cells-534%2C942-2E7BC4)](#the-grid)
 [![Stanford](https://img.shields.io/badge/Stanford-0–7_km-8C1515)](https://data.openei.org/submissions/7669)
@@ -10,8 +10,7 @@
 [![License](https://img.shields.io/badge/code-MIT-green)](#license)
 
 **How deep must you drill to hit 300 °C?**
-Across 78.3% of the lower 48, the answer is *deeper than 10 km* — beyond anything
-the geothermal industry has ever drilled. Still, 21.7% (1.6 million km²) reaches 300 °C within 10 km.
+Our combined models suggest roughly 22% of CONUS (approximately 1.6 million km²) may reach 300 °C within 10 km, while the remaining 78% would require drilling deeper than 10 km — beyond current geothermal industry capabilities.
 
 </div>
 
@@ -32,13 +31,11 @@ TIGER 2023 boundaries. Grey regions require >10 km drilling depth.*
 
 ---
 
-## Where the accessible resource actually is
+## Where the models suggest accessible resources may be
 
-Every accessible cell sits west of roughly **−100° longitude**. The dividing line is
-tectonic, not arbitrary: it separates the actively extending, thin-crust West from the cold,
-thick, stable craton under the eastern two-thirds of the country.
+Nearly all shallow-depth cells (<10 km) appear west of roughly **−100° longitude**. The broad east-west pattern is consistent with known tectonic differences: the actively extending, thin-crust West versus the cold, thick, stable craton beneath the eastern two-thirds of the country.
 
-| Province | States | Typical depth to 300 °C |
+| Province | States | Modeled depth to 300 °C |
 |---|---|---|
 | **Basin & Range** | NV, UT, S. ID | 6–8 km — largest contiguous target |
 | **Cascade arc** | OR, WA, N. CA | 6–7 km, locally 5–6 km |
@@ -52,7 +49,7 @@ Oregon/Washington Cascade axis and coastal Northern California.
 
 ---
 
-## Resource metrics by depth
+## Illustrative generation scenario by depth
 
 ![Geothermal metrics by depth](plots/geothermal_metrics_by_depth.png)
 
@@ -68,7 +65,7 @@ Oregon/Washington Cascade axis and coastal Northern California.
 | **≤10 km** | **1,574,690** | **21.68** | **11,023** | **8.6** |
 | *Total* | *7,263,669* | *100.00* | *50,846* | *39.5* |
 
-Area is **latitude-weighted** (`A = R² · cos φ · Δφ · Δλ`). Capacity assumes 35 MW/km² power density (superhot geothermal, 300-400°C), 20% development. IDDP-2 demonstrated 45 MW/well at 427°C. US total capacity: **1,287 GW** (coal: 180 GW). See [`research/ENERGY_GENERATION_RESEARCH.md`](research/ENERGY_GENERATION_RESEARCH.md) for details.
+Area is **latitude-weighted** (`A = R² · cos φ · Δφ · Δλ`). These values show the scale implied by assumed 35 MW/km² power density (superhot geothermal, 300-400°C) and 20% development; they are not resource or generation forecasts. IDDP-2 demonstrated 45 MW/well at 427°C. US total capacity: **1,287 GW** (coal: 180 GW). See [`research/ENERGY_GENERATION_RESEARCH.md`](research/ENERGY_GENERATION_RESEARCH.md) for details.
 
 ---
 
@@ -111,7 +108,7 @@ Montana/Yellowstone region demonstrating methodology validity:
 
 ---
 
-## Coal Plant Conversion Analysis
+## Coal infrastructure and modeled geothermal potential
 
 ![Coal plants and geothermal overlay](plots/coal_plants_geothermal_overlay.png)
 
@@ -124,7 +121,7 @@ Montana/Yellowstone region demonstrating methodology validity:
 - 22 of those in western US
 - 317 plants (93%) at >10 km depth
 
-### Top Conversion Candidates
+### Coal sites worth further screening
 
 | Rank | Plant | State | Capacity | Status | Depth to 300°C |
 |------|-------|-------|----------|--------|----------------|
@@ -138,14 +135,16 @@ Montana/Yellowstone region demonstrating methodology validity:
 
 ![Western coal plants zoom](plots/coal_plants_western_zoom.png)
 
-*Western states showing 23 plants at ≤10 km depth.*
+*Western states showing locations where existing coal infrastructure overlaps modeled geothermal potential.*
+
+These sites represent interesting coincidences worth investigating further, not conversion feasibility assessments. Factors not considered here include reservoir permeability, water availability, formation chemistry, local geology, grid interconnection constraints, and retrofit economics.
 
 ### Geographic Distribution
 
-**Western US:** 22 of 50 plants (44%) at ≤10 km depth  
-**Eastern US:** 1 of 290 plants (<1%) at ≤10 km depth
+**Western US:** 22 of 50 plants (44%) at ≤10 km modeled depth  
+**Eastern US:** 1 of 290 plants (<1%) at ≤10 km modeled depth
 
-**States (100% of plants at ≤10 km):** Utah (7/7), Nevada (3/3), Washington (1/1), Oregon (1/1)
+**States (all plants at ≤10 km):** Utah (7/7), Nevada (3/3), Washington (1/1), Oregon (1/1)
 
 **Data:** EIA Form 860 (2025) + Stanford Thermal Earth Model (2024). See [`research/COAL_GEOTHERMAL_ANALYSIS.md`](research/COAL_GEOTHERMAL_ANALYSIS.md) for detailed analysis.
 

@@ -1,14 +1,11 @@
 #!/usr/bin/env python3
 """
-Create PROPER depth-to-300C map with ALL categories, no collapsing.
-Uses the ACTUAL calculated data without modification.
+Create depth-to-300C map with ALL categories and interactive Leaflet map.
 """
 import numpy as np
 import pandas as pd
 import geopandas as gpd
 import matplotlib.pyplot as plt
-import plotly.express as px
-import plotly.graph_objects as go
 
 # Load ORIGINAL data
 df = pd.read_csv("data/processed/conus_depth_to_300c.csv")
@@ -109,88 +106,153 @@ print("\n✅ Saved: plots/depth_to_300c_all_categories.png")
 print("✅ Saved: plots/depth_to_300c_points.png")
 plt.close()
 
-# INTERACTIVE ZOOMABLE MAP with plotly
-print("\nCreating interactive zoomable map...")
+# INTERACTIVE LEAFLET MAP
+print("\nCreating interactive Leaflet map...")
 
-# Add hover text
-df['hover_text'] = df.apply(
-    lambda row: f"Lat: {row['lat']:.2f}<br>Lon: {row['lon']:.2f}<br>Depth: {row['depth_bin']}<br>Source: {row['source']}",
-    axis=1
+import folium
+from folium.plugins import MarkerCluster
+
+# Sample data for performance (every 10th point for ≤10km, every 50th for >10km)
+df_plot = pd.concat([
+    df[df['depth_bin'] != '>10 km'].iloc[::10],  # More detail for shallow
+    df[df['depth_bin'] == '>10 km'].iloc[::50]   # Less detail for deep (gray background)
+])
+
+print(f"Plotting {len(df_plot):,} points (sampled from {len(df):,} total)")
+
+# Create map centered on CONUS
+m = folium.Map(
+    location=[39.8, -98.5],
+    zoom_start=5,
+    tiles='OpenStreetMap',
+    control_scale=True
 )
 
-# Create plotly figure
-fig = go.Figure()
+# Add data points with clustering for performance
+marker_cluster = MarkerCluster(
+    name='Geothermal Depth Data',
+    overlay=True,
+    control=True,
+    show=True
+).add_to(m)
 
-# Add traces for each category in reverse order
-for bin_name in reversed(bin_order):
-    bin_df = df[df['depth_bin'] == bin_name]
-    if len(bin_df) > 0:
-        count = len(bin_df)
-        pct = (count / len(df)) * 100
+# Add points
+print("Adding data points...")
+for idx, row in df_plot.iterrows():
+    folium.CircleMarker(
+        location=[row['lat'], row['lon']],
+        radius=3 if row['depth_bin'] != '>10 km' else 1,
+        popup=folium.Popup(
+            f"<b>Depth to 300°C:</b> {row['depth_bin']}<br>"
+            f"<b>Location:</b> {row['lat']:.2f}°N, {abs(row['lon']):.2f}°W<br>"
+            f"<b>Source:</b> {row['source']}",
+            max_width=250
+        ),
+        tooltip=f"{row['depth_bin']}",
+        color=colors_all[row['depth_bin']],
+        fill=True,
+        fillColor=colors_all[row['depth_bin']],
+        fillOpacity=0.7 if row['depth_bin'] != '>10 km' else 0.3,
+        weight=1
+    ).add_to(marker_cluster)
 
-        # Marker size
-        if bin_name in ["≤4 km", "4-5 km"]:
-            size = 8
-        elif bin_name == "5-6 km":
-            size = 6
-        elif bin_name == "6-7 km":
-            size = 5
-        elif bin_name in ["7-8 km", "8-10 km"]:
-            size = 4
-        else:
-            size = 3
+# Add major city markers
+cities = {
+    'Denver, CO': (39.74, -104.99),
+    'Salt Lake City, UT': (40.76, -111.89),
+    'Las Vegas, NV': (36.17, -115.14),
+    'Phoenix, AZ': (33.45, -112.07),
+    'Los Angeles, CA': (34.05, -118.24),
+    'San Francisco, CA': (37.77, -122.42),
+    'Portland, OR': (45.52, -122.68),
+    'Seattle, WA': (47.61, -122.33),
+    'Boise, ID': (43.62, -116.21),
+    'Albuquerque, NM': (35.08, -106.65),
+    'Yellowstone, WY': (44.43, -110.59),
+    'New York, NY': (40.71, -74.01),
+    'Chicago, IL': (41.88, -87.63),
+    'Houston, TX': (29.76, -95.37)
+}
 
-        fig.add_trace(go.Scattergl(
-            x=bin_df['lon'],
-            y=bin_df['lat'],
-            mode='markers',
-            name=f"{bin_name}: {pct:.2f}%",
-            marker=dict(
-                color=colors_all[bin_name],
-                size=size,
-                opacity=0.6 if bin_name == ">10 km" else 0.9,
-                line=dict(width=0)
-            ),
-            text=bin_df['hover_text'],
-            hovertemplate='%{text}<extra></extra>'
-        ))
+print("Adding city markers...")
+for city, (lat, lon) in cities.items():
+    # Find nearest grid cell
+    distances = np.sqrt((df['lat'] - lat)**2 + (df['lon'] - lon)**2)
+    nearest_idx = distances.idxmin()
+    nearest = df.loc[nearest_idx]
 
-fig.update_layout(
-    title={
-        'text': 'Interactive: Depth to 300°C Across CONUS<br><sub>Zoom, pan, and hover for details</sub>',
-        'x': 0.5,
-        'xanchor': 'center',
-        'font': {'size': 20}
-    },
-    xaxis_title='Longitude',
-    yaxis_title='Latitude',
-    width=1400,
-    height=800,
-    hovermode='closest',
-    showlegend=True,
-    legend=dict(
-        title='Depth Category',
-        yanchor="bottom",
-        y=0.01,
-        xanchor="right",
-        x=0.99
-    )
-)
+    folium.Marker(
+        location=[lat, lon],
+        popup=folium.Popup(
+            f"<h4>{city}</h4>"
+            f"<b>Modeled depth to 300°C:</b> {nearest['depth_bin']}<br>"
+            f"<b>Grid cell distance:</b> {distances.min()*111:.1f} km<br>"
+            f"<i>Note: Nearest ~3km grid cell</i>",
+            max_width=300
+        ),
+        tooltip=city,
+        icon=folium.Icon(color='red', icon='info-sign')
+    ).add_to(m)
 
-fig.update_xaxes(range=[-126, -65])
-fig.update_yaxes(range=[24, 50.5], scaleanchor="x", scaleratio=1)
+# Add legend
+legend_html = '''
+<div style="position: fixed;
+     bottom: 50px; right: 50px; width: 200px; height: auto;
+     background-color: white; border:2px solid grey; z-index:9999;
+     font-size:14px; padding: 10px; border-radius: 5px;
+     box-shadow: 0 0 15px rgba(0,0,0,0.2);">
+<h4 style="margin-top:0;">Depth to 300°C</h4>
+<div style="margin: 5px 0;">
+    <span style="display:inline-block; width:20px; height:20px;
+          background:#08306B; border:1px solid black;"></span> ≤4 km
+</div>
+<div style="margin: 5px 0;">
+    <span style="display:inline-block; width:20px; height:20px;
+          background:#2171B5; border:1px solid black;"></span> 4-5 km
+</div>
+<div style="margin: 5px 0;">
+    <span style="display:inline-block; width:20px; height:20px;
+          background:#00B050; border:1px solid black;"></span> 5-6 km
+</div>
+<div style="margin: 5px 0;">
+    <span style="display:inline-block; width:20px; height:20px;
+          background:#FFE100; border:1px solid black;"></span> 6-7 km
+</div>
+<div style="margin: 5px 0;">
+    <span style="display:inline-block; width:20px; height:20px;
+          background:#FF8C00; border:1px solid black;"></span> 7-8 km
+</div>
+<div style="margin: 5px 0;">
+    <span style="display:inline-block; width:20px; height:20px;
+          background:#E31A1C; border:1px solid black;"></span> 8-10 km
+</div>
+<div style="margin: 5px 0;">
+    <span style="display:inline-block; width:20px; height:20px;
+          background:#D9D9D9; border:1px solid black;"></span> >10 km
+</div>
+<p style="font-size:11px; margin-top:10px; color:#666;">
+Click markers for details.<br>
+Zoom to explore regions.
+</p>
+</div>
+'''
+m.get_root().html.add_child(folium.Element(legend_html))
 
-# Save interactive HTML
-fig.write_html('plots/depth_to_300c_interactive.html')
-print("✅ Saved: plots/depth_to_300c_interactive.html")
+# Add layer control
+folium.LayerControl().add_to(m)
 
-# Also save as static image from plotly
-fig.write_image('plots/depth_to_300c_plotly.png', width=1400, height=800, scale=2)
-print("✅ Saved: plots/depth_to_300c_plotly.png")
+# Save
+print("Saving interactive map...")
+m.save('index.html')
+print("✅ Saved: index.html")
+
+import os
+size_mb = os.path.getsize('index.html') / (1024*1024)
+print(f"File size: {size_mb:.1f} MB")
 
 print("\n" + "="*80)
 print("ALL MAPS CREATED SUCCESSFULLY")
 print("="*80)
 print("\n1. Static map (all categories): plots/depth_to_300c_all_categories.png")
-print("2. Interactive HTML (zoomable): plots/depth_to_300c_interactive.html")
-print("3. Plotly static export:        plots/depth_to_300c_plotly.png")
+print("2. Static map (points version): plots/depth_to_300c_points.png")
+print("3. Interactive Leaflet map:     index.html")

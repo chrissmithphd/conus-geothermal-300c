@@ -10,7 +10,7 @@
 [![License](https://img.shields.io/badge/code-MIT-green)](#license)
 
 **How deep must you drill to hit 300 °C?**
-Our combined models suggest roughly 22% of CONUS (approximately 1.6 million km²) may reach 300 °C within 10 km, while the remaining 78% would require drilling deeper than 10 km — beyond current geothermal industry capabilities.
+Our combined models suggest roughly 26% of CONUS (approximately 1.9 million km²) may reach 300 °C within 10 km, while the remaining 74% would require drilling deeper than 10 km — beyond current geothermal industry capabilities.
 
 </div>
 
@@ -44,8 +44,8 @@ Nearly all shallow-depth cells (<10 km) appear west of roughly **−100° longit
 | **Rio Grande Rift** | NM, W. TX | 7–10 km |
 | **Great Plains → Atlantic** | ~40 states | **> 10 km** |
 
-The handful of shallowest cells (**4–5 km**, three cells total) fall along the
-Oregon/Washington Cascade axis and coastal Northern California.
+The shallowest cells (**4–5 km**, 64 cells) sit west of ~−106° longitude,
+concentrated along the Oregon/Washington Cascade axis and Northern California.
 
 ---
 
@@ -56,14 +56,14 @@ Oregon/Washington Cascade axis and coastal Northern California.
 | Depth | Area (km²) | % CONUS | Capacity (GW) | × US Total |
 |---|---:|---:|---:|---:|
 | ≤4 km | 0 | 0.00 | 0 | 0.0 |
-| 4–5 km | 867 | 0.01 | 6.1 | 0.0 |
+| 4–5 km | 867 | 0.01 | 5.2 | 0.0 |
 | 5–6 km | 36,014 | 0.50 | 252 | 0.2 |
 | 6–7 km | 304,350 | 4.19 | 2,130 | 1.7 |
-| 7–8 km | 184,173 | 2.54 | 1,289 | 1.0 |
-| 8–10 km | 1,049,286 | 14.45 | 7,345 | 5.7 |
-| **>10 km** | **5,688,980** | **78.32** | **—** | **—** |
-| **≤10 km** | **1,574,690** | **21.68** | **11,023** | **8.6** |
-| *Total* | *7,263,669* | *100.00* | *11,023** | *8.6** |
+| 7–8 km | 197,784 | 2.72 | 1,384 | 1.1 |
+| 8–10 km | 1,371,312 | 18.88 | 9,599 | 7.5 |
+| **>10 km** | **5,353,343** | **73.70** | **—** | **—** |
+| **≤10 km** | **1,910,326** | **26.30** | **13,371** | **10.4** |
+| *Total* | *7,263,669* | *100.00* | *13,371** | *10.4** |
 
 Area is **latitude-weighted** (`A = R² · cos φ · Δφ · Δλ`). Capacity values shown only for ≤10 km bins where the analysis identifies 300°C within the modeled range. The >10 km category has no capacity estimate because the actual depth to 300°C is unknown for those cells. Values show the scale implied by assumed 35 MW/km² power density (superhot geothermal, 300-400°C) and 20% development; they are not resource or generation forecasts. IDDP-2 demonstrated 45 MW/well at 427°C. US total capacity: **1,287 GW** (coal: 180 GW). See [`research/ENERGY_GENERATION_RESEARCH.md`](research/ENERGY_GENERATION_RESEARCH.md) for details.
 
@@ -77,20 +77,20 @@ The analysis combines two independent thermal models to map subsurface temperatu
 
 **Stanford Thermal Earth Model (2024)** — 0–7 km depth, 534,942 grid cells at ~3 km resolution. Provides continuous temperature interpolation from surface to mid-crustal depths.
 
-**SMU Geothermal Lab (2011)** — 7.5–10 km depth, 3.4M digitized points from published temperature maps. Extends coverage into deep basement where sparse borehole data constrain continental heat flow.
+**SMU Geothermal Lab (2011)** — 7.5–10 km depth, 1.65M digitized points from published temperature maps. Extends coverage into deep basement where sparse borehole data constrain continental heat flow.
 
 At each grid cell, we interpolate through the temperature profile to identify the depth at which conditions cross 300 °C — the threshold used here for superhot geothermal screening. Stanford layers are sorted by geographic coordinates before combining to ensure spatial alignment. SMU matching uses geodetic distance filtering (50 km threshold, cos(latitude) correction for longitude convergence at high latitudes).
 
 ![Cross-validation plot](plots/cross_validation_stanford_smu.png)
 
-*Cross-validation at 7 km overlap: r = 0.409, RMSE = 63 °C across 367,129 matched locations. Horizontal banding in SMU data reflects discrete temperature bins in the source maps (~25 °C intervals), not analysis error.*
+*Cross-validation at 7 km overlap: r = 0.690, RMSE = 53 °C across 532,455 matched locations (Stanford runs ~39 °C warmer than the digitized SMU estimates). Horizontal banding in SMU data reflects discrete temperature bins in the source maps (~25 °C intervals), not analysis error.*
 
 ### Data Characteristics
 
 - **Stanford**: Continuous depth estimates (e.g., "300 °C at 6.37 km")
 - **SMU**: Categorical upper bounds (e.g., "≥300 °C by 8.5 km" → crossing occurs in 7.5–8.5 km range)
 - **Interpolation**: Linear between sampled depths; assumes monotonic temperature increase
-- **Coverage**: 534,942 cells analyzed — 5.1% reach 300 °C within 7 km (Stanford), 21.7% within 10 km (Stanford + SMU)
+- **Coverage**: 534,942 cells analyzed — 4.8% reach 300 °C within 7 km (Stanford), 26.5% within 10 km (Stanford + SMU)
 
 Both datasets are interpolated thermal models, not direct borehole measurements. SMU maps were digitized from published figures, introducing color quantization and geolocation uncertainty. Results are consistent with known crustal structure: thin, hot crust in the Basin & Range; thick, cold cratonic lithosphere beneath the eastern two-thirds of the continent.
 
@@ -116,22 +116,27 @@ Montana/Yellowstone region demonstrating methodology validity:
 
 ### Summary
 
-**340 US coal plants analyzed:**
-- 23 plants (7%) at ≤10 km depth
-- 22 of those in western US
-- 317 plants (93%) at >10 km depth
+**335 in-coverage US coal plants analyzed** (5 Alaska plants excluded — they lie outside the CONUS grid domain):
+- 25 plants (7%) at ≤10 km depth — only **one** shallower than 8 km
+- 20 of those in western US
+- 310 plants (93%) at >10 km depth
+
+The corrected georeferencing pushed the fleet-adjacent resource deeper than the earlier (mis-registered) analysis implied: apart from a single 62 MW cogeneration plant at 6–7 km, every coal plant sitting on ≤10 km of depth-to-300 °C is in the **8–10 km frontier band**, where 300 °C is only reached at the deepest SMU layer.
 
 ### Coal sites worth further screening
 
-| Rank | Plant | State | Capacity | Status | Depth to 300°C |
-|------|-------|-------|----------|--------|----------------|
-| 1 | Centralia | WA | 1,460 MW | Operating | 6.2 km |
-| 2 | Huntington | UT | 1,016 MW | Operating | 6.7 km |
-| 3 | Dave Johnston | WY | 817 MW | Operating | 7.0 km |
-| 4 | Boardman | OR | 642 MW | Retired | 7.0 km |
-| 5 | Craig | CO | 1,428 MW | Operating | 7.5 km |
-| 6 | Navajo | AZ | 2,409 MW | Retired | 8.5 km |
-| 7 | San Juan | NM | 1,848 MW | Retired | 10.0 km |
+Depth shown is the SMU layer where 300 °C is first met (8.5 or 10 km for the frontier band).
+
+| Plant | State | Capacity | Status | Depth to 300 °C |
+|-------|-------|----------|--------|-----------------|
+| Argus Cogen | CA | 62 MW | Operating | 6.8 km |
+| Martin Lake | TX | 2,380 MW | Operating | 10.0 km |
+| Springerville | AZ | 1,766 MW | Operating | 8.5 km |
+| Intermountain Power | UT | 1,640 MW | Retired 2025 | 8.5 km |
+| Comanche | CO | 1,635 MW | Operating | 10.0 km |
+| Craig | CO | 1,428 MW | Operating | 10.0 km |
+| Huntington | UT | 1,016 MW | Operating | 10.0 km |
+| Boardman | OR | 642 MW | Retired 2020 | 10.0 km |
 
 ![Western coal plants zoom](plots/coal_plants_western_zoom.png)
 
@@ -141,12 +146,12 @@ These sites represent interesting coincidences worth investigating further, not 
 
 ### Geographic Distribution
 
-**Western US:** 22 of 50 plants (44%) at ≤10 km modeled depth  
-**Eastern US:** 1 of 290 plants (<1%) at ≤10 km modeled depth
+**Western US:** 20 of 50 plants (40%) at ≤10 km modeled depth  
+**Rest of US:** 5 of 285 plants (~2%) at ≤10 km — all Texas/Louisiana Gulf plants in the 8–10 km band
 
-**States (all plants at ≤10 km):** Utah (7/7), Nevada (3/3), Washington (1/1), Oregon (1/1)
+**States (all plants at ≤10 km):** Nevada (3/3), California (1/1), Oregon (1/1). Colorado 8/11, Arizona 3/5, Utah 3/7.
 
-**Data:** EIA Form 860 (2025) + Stanford Thermal Earth Model (2024). See [`research/COAL_GEOTHERMAL_ANALYSIS.md`](research/COAL_GEOTHERMAL_ANALYSIS.md) for detailed analysis.
+**Data:** EIA Form 860 (2025) + Stanford Thermal Earth Model (2024) + SMU (2011). See [`research/COAL_GEOTHERMAL_ANALYSIS.md`](research/COAL_GEOTHERMAL_ANALYSIS.md) for detailed analysis.
 
 ---
 
@@ -197,23 +202,22 @@ result georeferenced to the CONUS extent.
 
 | | |
 |---|---|
-| Depth levels | 3.5, 4.5, 5.5, 6.5, **7.5, 8.5, 10** km |
-| Points recovered | 3,447,978 (~400–550 k per level) |
-| Temperature resolution | **±12.5 °C** (25 °C legend classes, midpoint assigned) |
-| Classification rate | ~41–47 % of pixels (remainder is ocean, borders, legend, text) |
-| Positional accuracy | ~±5–10 km (no georeferencing metadata in the source images) |
+| Depth levels | **7.5, 8.5, 10** km |
+| Points recovered | 1,648,523 (~547–551 k per level) |
+| Temperature resolution | **±12.5 °C** (25 °C legend classes; upper bin edge assigned) |
+| Classification rate | ~44 % of pixels (remainder is ocean, borders, legend, text) |
+| Positional accuracy | ~3 km median / ~9 km 90th pct (Lambert affine fitted by ICP against drawn state borders) |
 
 <details>
-<summary><b>Digitisation validation</b> — original vs. reconstructed (click to expand)</summary>
+<summary><b>Digitisation validation</b> — reconstructed fields at all three depths (click to expand)</summary>
 
 <br>
 
-![SMU digitisation check](plots/smu_digitized_6.5km_comparison.png)
-
-Left: published SMU 6.5 km map. Centre: extracted map area. Right: reconstructed temperature
-field. Every major thermal province is reproduced.
-
 ![All SMU depths](plots/smu_digitized_all_depths.png)
+
+Reconstructed temperature fields at 7.5, 8.5 and 10 km after georeferencing. Every major
+thermal province is reproduced, and hot zones now fall on land rather than offshore — the
+earlier plate-carrée assumption mis-registered by ~28 km median and pushed them into the ocean.
 
 </details>
 
@@ -261,12 +265,12 @@ return np.nan  # 300°C not reached within 0-7 km
 Worked example — 250 °C at 6 km, 320 °C at 7 km:
 `6 + (300 − 250)/(320 − 250) × 1 =` **6.71 km**
 
-Result: **27,488 cells (5.1 %)** cross 300 °C within 7 km.
+Result: **25,448 cells (4.8 %)** cross 300 °C within 7 km.
 
-**2 · Extend with SMU past 7 km.** For the 507,454 cells that don't cross inside Stanford's
+**2 · Extend with SMU past 7 km.** For the 509,494 cells that don't cross inside Stanford's
 range, look up the digitised SMU temperature at 7.5, 8.5 and 10 km by nearest neighbour and
-assign the first bin where 300 °C is met. This recovers **63,933** more cells. The remaining
-**443,521** are classified `> 10 km`.
+assign the first bin where 300 °C is met. This recovers **116,499** more cells. The remaining
+**392,995** are classified `> 10 km`.
 
 **3 · Bin, weight, report.** Assign the seven project bins, weight each cell by its true
 latitude-corrected surface area, and tabulate.
@@ -295,12 +299,20 @@ rows carry only a bin. Filter on it before doing anything quantitative with `dep
 python -m venv .venv && source .venv/bin/activate
 pip install numpy pandas matplotlib scipy pillow pyarrow geopandas plotly
 
-python download_stanford.py        # ~1 GB from ArcGIS FeatureServer
-python digitize_all_smu_maps.py    # PNG maps → 3.4 M gridded points
-python calculate_depth_to_300c.py  # interpolate + bin + area-weight
-python create_final_maps_v4.py     # publication maps with TIGER state outlines
-python create_final_map.py         # interactive zoomable HTML
+python download_stanford.py             # ~1 GB from ArcGIS FeatureServer
+python digitize_all_smu_maps.py         # PNG maps → 1.65 M georeferenced points (self-contained)
+python calculate_depth_to_300c.py       # interpolate + bin + area-weight; writes stats CSVs
+
+# figures + interactive map (read the CSVs above; no numbers are hardcoded)
+python create_heatmap.py                # depth_to_300c_heatmap.png
+python create_final_map.py              # points map + interactive Leaflet index.html
+python create_montana_validation.py     # regional validation plots
+python analyze_coal_geothermal_overlay.py && python create_coal_overlay_map.py
+python calculate_energy_potential.py && python create_energy_visualizations.py && python create_combined_metrics_plot.py
 ```
+
+`digitize_all_smu_maps.py` is self-contained: the fitted Lambert affines are embedded, so a
+single run produces correctly georeferenced output — no separate registration step.
 
 State outlines come from the US Census cartographic boundary file `cb_2023_us_state_20m`,
 downloaded into `data/raw/boundaries/`.
@@ -325,8 +337,8 @@ downloaded into `data/raw/boundaries/`.
 ## What's next
 
 **Completed Analysis:**
-- ✅ Coal plant overlay (23 of 340 plants at favorable depths, see above)
-- ✅ Energy generation potential (3,000-10,000+ GW depending on drilling depth)
+- ✅ Coal plant overlay (25 of 335 in-coverage plants at ≤10 km depth, see above)
+- ✅ Energy generation potential (~13,000 GW illustrative across ≤10 km bins, typical development)
 
 **Future Enhancements:**
 
@@ -344,7 +356,7 @@ downloaded into `data/raw/boundaries/`.
 ├── README.md
 ├── index.html                          # interactive map landing page
 ├── download_stanford.py                # Stanford ArcGIS → GeoJSON
-├── digitize_all_smu_maps.py            # SMU PNG → 3.4M gridded points (all 7 depths)
+├── digitize_all_smu_maps.py            # SMU PNG → 1.65M georeferenced points (7.5/8.5/10 km)
 ├── explore_stanford_data.py            # exploratory data analysis
 ├── calculate_depth_to_300c.py          # main depth-to-300C analysis
 ├── create_final_map.py                 # interactive + static maps
@@ -394,6 +406,6 @@ Analysis conducted with [Claude Code](https://claude.ai/code) (Sonnet 4.5) by An
 
 **Christopher Smith** · [@chrissmithphd](https://github.com/chrissmithphd)
 
-*Last updated 2026-09-15*
+*Last updated 2026-09-23*
 
 </div>

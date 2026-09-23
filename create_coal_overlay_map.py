@@ -211,12 +211,18 @@ def create_coal_overlay_map(geo, coal, states):
     leg3.get_title().set_fontweight("bold")
     ax.add_artist(leg2)  # Keep second legend
 
-    # Caption
+    # Caption — derived from the matched data so it never goes stale.
+    western_states = ["WY", "NM", "UT", "NV", "AZ", "CO", "ID", "MT", "CA", "OR", "WA"]
+    n_total = len(coal)
+    accessible = coal[coal["depth_bin"] != ">10 km"]
+    n_acc = len(accessible)
+    n_acc_west = len(accessible[accessible["state"].isin(western_states)])
+    n_deep = (coal["depth_bin"] == ">10 km").sum()
     fig.text(0.5, 0.02,
-             "23 of 340 coal plants (7%) sit on proven-to-frontier drilling depths (≤10 km). "
-             "22 of those are in the western US. Best candidates: Centralia WA (1,460 MW, 6.2 km), "
-             "Huntington UT (1,016 MW, 6.7 km), Boardman OR (642 MW retired, 7.0 km). "
-             "317 plants require ultra-deep drilling (>10 km). Data: Stanford Thermal Earth Model (2024) + EIA Form 860 (2025)",
+             f"{n_acc} of {n_total} in-coverage coal plants ({100*n_acc/n_total:.0f}%) sit on "
+             f"proven-to-frontier drilling depths (≤10 km); {n_acc_west} of those are in the western US. "
+             f"{n_deep} plants require ultra-deep drilling (>10 km). "
+             "Data: Stanford Thermal Earth Model (2024) + SMU (2011) + EIA Form 860 (2025)",
              ha="center", fontsize=10.5, style="italic", color="#555", wrap=True)
 
     # Save
@@ -337,10 +343,17 @@ def create_western_zoom_map(geo, coal, states):
                     framealpha=0.95, edgecolor="black")
     leg.get_title().set_fontweight("bold")
 
+    # Caption — derived from the matched data so it never goes stale.
+    western_states = ["WY", "NM", "UT", "NV", "AZ", "CO", "ID", "MT", "CA", "OR", "WA"]
+    acc_west = coal[(coal["depth_bin"] != ">10 km") & (coal["state"].isin(western_states))]
+    top_names = ", ".join(
+        f"{r['plant_name']} {r['state']}"
+        for _, r in acc_west.nlargest(5, "capacity_mw").iterrows()
+    )
+    n_east_deep = ((coal["depth_bin"] == ">10 km") & (~coal["state"].isin(western_states))).sum()
     fig.text(0.5, 0.02,
-             "Western coal plants at proven-frontier depths: Centralia WA, Huntington UT, Dave Johnston WY, "
-             "Boardman OR (retired), Craig CO, Hayden CO. Major retired plants: Navajo AZ (2,409 MW), San Juan NM (1,848 MW). "
-             "Eastern US has 290 plants requiring ultra-deep drilling (>10 km).",
+             f"Largest western coal plants at ≤10 km depth: {top_names}. "
+             f"Eastern US has {n_east_deep} plants requiring ultra-deep drilling (>10 km).",
              ha="center", fontsize=10, style="italic", color="#555")
 
     outfile = PLOT_DIR / "coal_plants_western_zoom.png"

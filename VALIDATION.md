@@ -6,7 +6,7 @@ This document checks whether the results are broadly consistent with known geoth
 
 Our analysis combines two independent datasets:
 - **Stanford Thermal Earth Model (2024)**: 0-7 km depth, 534,942 grid cells, continuous thermal model
-- **SMU Geothermal Lab Maps (2011)**: 7.5-10 km depth, 3.4M digitized points, temperature-at-depth measurements
+- **SMU Geothermal Lab Maps (2011)**: 7.5-10 km depth, 1.65M digitized points, temperature-at-depth measurements
 
 **Critical fix (V2)**: We discovered Stanford JSON files store identical coordinates in different orders. V2 sorts all layers by `(lat, lon)` before combining, with explicit validation that coordinates match across depths.
 
@@ -21,7 +21,7 @@ Our analysis combines two independent datasets:
 | Region | Known Geology | Modeled Depth | Consistency |
 |--------|---------------|----------------|------------|
 | **Yellowstone/Snake River Plain** | Active hotspot | 5-7 km (green/yellow) | Consistent |
-| **Western MT mountains** | Basin & Range extension | 6-9 km (yellow/red) | Consistent |
+| **Western MT mountains** | Basin & Range extension | 6-10 km (yellow/red) | Consistent |
 | **Eastern MT plains** | Stable craton | >10 km (gray) | Consistent |
 
 **Geographic pattern:** Clear east-west divide at ~110°W longitude matches the tectonic boundary between:
@@ -30,7 +30,7 @@ Our analysis combines two independent datasets:
 
 **Cities as reference points:**
 - **Yellowstone** (~110.5°W, 44.6°N): Surrounded by yellow/green (6-7 km) ✓
-- **Butte/Bozeman** (western MT): Yellow/red (6-8 km) ✓
+- **Butte/Bozeman** (western MT): Red (8-10 km) ✓
 - **Billings/Great Falls** (eastern MT): Gray (>10 km) ✓
 - **Missoula** (far western MT): Red (8-10 km) ✓
 
@@ -44,8 +44,9 @@ Our analysis combines two independent datasets:
 |------|---------------|------------|-------------|------------------|
 | **Caldera center** | 5-6 km (green) | 62 | 2.9% | Shallow depths in active volcanic center |
 | **Caldera interior** | 6-7 km (yellow) | 647 | 30.6% | Moderate depths near recent volcanism |
-| **Caldera periphery** | 8-10 km (red) | 1,391 | 65.8% | Deeper at volcanic system margins |
-| **Outside caldera** | >10 km (gray) | 14 | 0.7% | Returns to regional background |
+| **Inner periphery** | 7-8 km (orange) | 175 | 8.3% | Transitional depths |
+| **Caldera periphery** | 8-10 km (red) | 460 | 21.7% | Deeper at volcanic system margins |
+| **Outside caldera** | >10 km (gray) | 770 | 36.4% | Returns to regional background |
 
 **Regional sanity check:**
 
@@ -75,10 +76,15 @@ Instead, the results show:
 
 ![Cross-validation](plots/cross_validation_stanford_smu.png)
 
-**At 7 km overlap region:**
-- **Correlation**: 0.409
-- **RMSE**: 63.1°C, with Stanford averaging 39.3°C warmer than the digitized SMU estimates
-- **Sample size**: 367,129 matched locations (within 50 km)
+**At 7 km overlap region** (after the SMU Lambert re-georeferencing):
+- **Correlation**: 0.690
+- **RMSE**: 53.3°C, with Stanford averaging 38.7°C warmer than the digitized SMU estimates
+- **Sample size**: 532,455 matched locations (within 50 km)
+
+Correlation rose from 0.409 to 0.690 once the SMU maps were re-registered with the fitted
+Lambert affine (the earlier plate-carrée assumption mis-registered by ~28 km median). The fix
+also expanded the valid overlap from 367,129 to 532,455 matched cells — SMU 7.5 km now covers
+the full CONUS rather than a mis-projected strip.
 
 **Horizontal bands in SMU data** arise from digitizing discrete ~25°C color classes in the source maps, not continuous measurements.
 

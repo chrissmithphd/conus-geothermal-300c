@@ -777,8 +777,12 @@ def main():
     # 5. Assign depth bins
     grid = assign_depth_bins(grid)
 
-    # 6. Calculate area-weighted statistics
+    # 6. Calculate area-weighted statistics (single source of truth for per-bin
+    #    area/percent; downstream figure scripts read this instead of hardcoding).
     stats_df = calculate_area_statistics(grid)
+    stats_file = OUTPUT_DIR / "depth_bin_area_stats.csv"
+    stats_df.to_csv(stats_file, index=False)
+    log(f"  Per-bin area stats: {stats_file}")
 
     # 7. Print quality metrics
     print_quality_metrics(grid)
@@ -788,7 +792,7 @@ def main():
 
     # 9. Save final grid
     log("\nSaving output files...")
-    output_file = OUTPUT_DIR / "conus_depth_to_300c_v2.csv"
+    output_file = OUTPUT_DIR / "conus_depth_to_300c.csv"
 
     # Select columns for output
     output_cols = ['lat', 'lon', 'depth_300_km', 'depth_bin',
@@ -802,7 +806,7 @@ def main():
 
     grid_to_save.to_csv(output_file, index=False)
 
-    parquet_file = OUTPUT_DIR / "conus_depth_to_300c_v2.parquet"
+    parquet_file = OUTPUT_DIR / "conus_depth_to_300c.parquet"
     grid_to_save.to_parquet(parquet_file, index=False)
 
     log("\n" + "="*80)

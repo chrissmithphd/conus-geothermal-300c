@@ -1,17 +1,30 @@
 #!/usr/bin/env python3
 """
-Digitize all SMU temperature-at-depth maps.
+Digitize the SMU 2011 temperature-at-depth maps (7.5, 8.5, 10 km).
+
+Georeferencing: the SMU maps are drawn in a Lambert Conformal Conic projection
+(ESRI:102004). Each map's pixel<->projected-coordinate relationship is a pure affine,
+fitted per layer by aligning the maps' drawn state borders to US Census state
+boundaries via iterative-closest-point (see smu_registration/ for the fit + diagnostic
+report). Registration accuracy is ~3 km median / ~9 km 90th percentile, cross-validated.
+
+This REPLACES an earlier plate-carree (linear lat/lon) assumption that mis-registered
+by ~28 km median and pushed hot zones offshore. The affine coefficients below are the
+frozen output of that fit and make this script self-contained: run it once and get
+correctly georeferenced data. No separate regeneration step.
+
+Only the 7.5/8.5/10 km maps are processed. The 3.5-6.5 km maps use a different image
+layout (1381 vs 1665 px wide) and are not covered by these affines; the downstream
+analysis (calculate_depth_to_300c.py) uses only 7.5/8.5/10 km, filling from the
+authoritative Stanford model at shallower depths.
 """
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+import pyproj
 from PIL import Image
 from pathlib import Path
 from scipy.spatial.distance import cdist
-
-# Import functions from the prototype script
-import sys
-sys.path.insert(0, str(Path(__file__).parent))
 
 # Output directories
 OUTPUT_DIR = Path("data/processed/smu_digitized")
@@ -19,6 +32,27 @@ OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
 PLOT_DIR = Path("plots")
 PLOT_DIR.mkdir(exist_ok=True)
+
+# --- Georeferencing constants (frozen ICP-affine fit; see smu_registration/) ---
+# Projection the SMU maps are drawn in:
+SMU_CRS = "ESRI:102004"  # USA Contiguous Lambert Conformal Conic
+# Forward affine per layer maps Lambert (X,Y) metres -> full-image pixel (px, py):
+#   px = ax[0]*X + ax[1]*Y + ax[2]
+#   py = ay[0]*X + ay[1]*Y + ay[2]
+# We invert it to go pixel -> Lambert, then reproject Lambert -> WGS84.
+LAMBERT_AFFINES = {
+    7.5: {"ax": [2.74791908e-04, 2.41211792e-06, 8.20347718e+02],
+          "ay": [1.22852193e-06, -2.81582807e-04, 5.81215644e+02]},
+    8.5: {"ax": [2.74760464e-04, 2.36986206e-06, 8.20308385e+02],
+          "ay": [1.22872771e-06, -2.81566251e-04, 5.81225875e+02]},
+    10.0: {"ax": [2.74834460e-04, 2.46452084e-06, 8.20366216e+02],
+           "ay": [1.22750341e-06, -2.81562016e-04, 5.81188281e+02]},
+}
+# SMU logo occupies this full-image pixel box; exclude it so it is not digitized:
+LOGO_BOX = {"x0": 230, "x1": 450, "y0": 895}  # x in [x0,x1), y >= y0
+
+_TO_WGS84 = pyproj.Transformer.from_crs(SMU_CRS, "EPSG:4326", always_xy=True)
+
 
 def build_temperature_legend():
     """Build color-to-temperature mapping from the SMU legend."""
@@ -53,7 +87,7 @@ def build_temperature_legend():
     }
 
 def extract_map_bounds(img_array):
-    """Estimate the map area boundaries."""
+    """Estimate the map area boundaries (also drops the legend colorbar at right)."""
     height, width = img_array.shape[:2]
     bounds = {
         'top': 80,
@@ -84,65 +118,50 @@ def classify_pixels(map_pixels, legend, max_distance=60):
 
     return temp_map, valid_mask.reshape(height, width)
 
-def georeference_map(temp_map):
-    """Assign lat/lon coordinates to each pixel."""
-    height, width = temp_map.shape
+def georeference_pixels(full_px, full_py, depth_km):
+    """Convert full-image pixel coordinates to (lat, lon) via the per-layer Lambert
+    affine, then reproject to WGS84.
 
-    lat_min, lat_max = 24.5, 49.4
-    lon_min, lon_max = -125.0, -66.0
+    full_px, full_py are pixel coordinates in the ORIGINAL image (not the crop): the
+    caller must add the crop offset (bounds['left'], bounds['top']) before calling.
+    """
+    aff = LAMBERT_AFFINES[depth_km]
+    ax, ay = aff['ax'], aff['ay']
+    # Forward affine: pixel = A @ [X, Y] + offset. Invert to recover Lambert X, Y.
+    A = np.array([[ax[0], ax[1]], [ay[0], ay[1]]])
+    offset = np.array([ax[2], ay[2]])
+    XY = (np.column_stack([full_px, full_py]) - offset) @ np.linalg.inv(A).T
+    lon, lat = _TO_WGS84.transform(XY[:, 0], XY[:, 1])
+    return lat, lon
 
-    lats = np.linspace(lat_max, lat_min, height)
-    lons = np.linspace(lon_min, lon_max, width)
-
-    lon_grid, lat_grid = np.meshgrid(lons, lats)
-
-    return lat_grid, lon_grid
-
-def create_gridded_dataset(temp_map, lat_grid, lon_grid, depth_km, valid_mask):
-    """Create a DataFrame with lat, lon, temperature."""
-    lats_flat = lat_grid.flatten()
-    lons_flat = lon_grid.flatten()
-    temps_flat = temp_map.flatten()
-    valid_flat = valid_mask.flatten()
-
-    df = pd.DataFrame({
-        'lat': lats_flat[valid_flat],
-        'lon': lons_flat[valid_flat],
-        'depth_km': depth_km,
-        'temperature_c': temps_flat[valid_flat]
-    })
-
-    def temp_to_class(temp):
-        if temp < 50:
-            return "25-50°C"
-        elif temp < 75:
-            return "50-75°C"
-        elif temp < 100:
-            return "75-100°C"
-        elif temp < 125:
-            return "100-125°C"
-        elif temp < 150:
-            return "125-150°C"
-        elif temp < 175:
-            return "150-175°C"
-        elif temp < 200:
-            return "175-200°C"
-        elif temp < 225:
-            return "200-225°C"
-        elif temp < 250:
-            return "225-250°C"
-        elif temp < 275:
-            return "250-275°C"
-        elif temp < 300:
-            return "275-300°C"
-        elif temp < 325:
-            return "300-325°C"
-        else:
-            return "325-350°C"
-
-    df['temperature_class'] = df['temperature_c'].apply(temp_to_class)
-
-    return df
+def temp_to_class(temp):
+    """Map a temperature value to its SMU class label (upper-bin convention)."""
+    if temp < 50:
+        return "25-50°C"
+    elif temp < 75:
+        return "50-75°C"
+    elif temp < 100:
+        return "75-100°C"
+    elif temp < 125:
+        return "100-125°C"
+    elif temp < 150:
+        return "125-150°C"
+    elif temp < 175:
+        return "150-175°C"
+    elif temp < 200:
+        return "175-200°C"
+    elif temp < 225:
+        return "200-225°C"
+    elif temp < 250:
+        return "225-250°C"
+    elif temp < 275:
+        return "250-275°C"
+    elif temp < 300:
+        return "275-300°C"
+    elif temp < 325:
+        return "300-325°C"
+    else:
+        return "325-350°C"
 
 def digitize_smu_map(image_path, depth_km, legend):
     """Complete digitization pipeline for one SMU map."""
@@ -159,32 +178,47 @@ def digitize_smu_map(image_path, depth_km, legend):
     # Classify pixels
     temp_map, valid_mask = classify_pixels(map_pixels, legend)
 
-    # Georeference
-    lat_grid, lon_grid = georeference_map(temp_map)
+    # Full-image pixel coordinates for every crop pixel
+    ch, cw = valid_mask.shape
+    rr, cc = np.mgrid[0:ch, 0:cw]
+    full_px = cc.ravel() + bounds['left']
+    full_py = rr.ravel() + bounds['top']
 
-    # Create dataset
-    df = create_gridded_dataset(temp_map, lat_grid, lon_grid, depth_km, valid_mask)
+    # Drop the SMU logo pixels (they can color-match the legend and are not data)
+    logo = ((full_px >= LOGO_BOX['x0']) & (full_px < LOGO_BOX['x1'])
+            & (full_py >= LOGO_BOX['y0']))
+    keep = valid_mask.ravel() & (~logo)
 
-    n_valid = valid_mask.sum()
-    n_total = valid_mask.size
-    pct = (n_valid / n_total) * 100
+    full_px = full_px[keep].astype(float)
+    full_py = full_py[keep].astype(float)
+    temps = temp_map.ravel()[keep]
 
-    print(f"  Classified: {n_valid:,}/{n_total:,} pixels ({pct:.1f}%)")
+    # Georeference via the corrected Lambert affine
+    lat, lon = georeference_pixels(full_px, full_py, depth_km)
+
+    df = pd.DataFrame({
+        'lat': lat,
+        'lon': lon,
+        'depth_km': depth_km,
+        'temperature_c': temps,
+    })
+    df['temperature_class'] = df['temperature_c'].apply(temp_to_class)
+
+    n_valid = len(df)
+    pct = (n_valid / valid_mask.size) * 100
+    print(f"  Classified: {n_valid:,}/{valid_mask.size:,} pixels ({pct:.1f}%)")
     print(f"  Temperature range: {df['temperature_c'].min():.1f}°C to {df['temperature_c'].max():.1f}°C")
+    print(f"  Lat {df['lat'].min():.2f}..{df['lat'].max():.2f}  Lon {df['lon'].min():.2f}..{df['lon'].max():.2f}")
 
     return df
 
 def main():
     print("="*80)
-    print("DIGITIZING ALL SMU TEMPERATURE-AT-DEPTH MAPS")
+    print("DIGITIZING SMU TEMPERATURE-AT-DEPTH MAPS (Lambert-corrected)")
     print("="*80)
 
-    # Define all SMU maps
+    # Deep SMU maps covered by the fitted affines (1665-wide layout).
     smu_maps = [
-        ("data/raw/smu/images/smu_2011_3point5km_temperature.png", 3.5),
-        ("data/raw/smu/images/smu_2011_4point5km_temperature.png", 4.5),
-        ("data/raw/smu/images/smu_2011_5point5km_temperature.png", 5.5),
-        ("data/raw/smu/images/smu_2011_6point5km_temperature.png", 6.5),
         ("data/raw/smu/images/smu_2011_7point5km_temperature.png", 7.5),
         ("data/raw/smu/images/smu_2011_8point5km_temperature.png", 8.5),
         ("data/raw/smu/images/smu_2011_10km_temperature.png", 10.0),

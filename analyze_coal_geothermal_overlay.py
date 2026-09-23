@@ -10,6 +10,12 @@ import pandas as pd
 from scipy.spatial import cKDTree
 from pathlib import Path
 
+# The depth grid is spaced ~3-4 km. Any plant whose nearest grid cell is farther
+# than this is outside the modeled CONUS domain (e.g. Alaska, Hawaii) and must be
+# excluded — otherwise it gets matched to a random edge cell hundreds of km away
+# and contaminates the depth categories and candidate ranking.
+MAX_COVERAGE_DISTANCE_KM = 50
+
 # ============================================================================
 # Load Data
 # ============================================================================
@@ -70,7 +76,20 @@ def match_plants_to_grid(plants, grid):
     plants["depth_bin"] = grid.loc[indices, "depth_bin"].values
     plants["depth_300_km"] = grid.loc[indices, "depth_300_km"].values
 
-    print(f"  Matched all plants (mean distance: {distances_km.mean():.1f} km)")
+    # Drop plants outside the modeled CONUS domain (nearest cell too far away).
+    n_before = len(plants)
+    out_of_coverage = plants["grid_distance_km"] > MAX_COVERAGE_DISTANCE_KM
+    if out_of_coverage.any():
+        dropped = plants[out_of_coverage]
+        print(f"  Excluded {out_of_coverage.sum()} plants outside CONUS grid coverage "
+              f"(>{MAX_COVERAGE_DISTANCE_KM} km from nearest cell):")
+        for _, row in dropped.iterrows():
+            print(f"    {row['plant_name']:35s} {row['state']:2s}  "
+                  f"{row['grid_distance_km']:6,.0f} km")
+    plants = plants[~out_of_coverage].reset_index(drop=True)
+
+    print(f"  Matched {len(plants)}/{n_before} plants (mean distance: "
+          f"{plants['grid_distance_km'].mean():.1f} km)")
     return plants
 
 # ============================================================================

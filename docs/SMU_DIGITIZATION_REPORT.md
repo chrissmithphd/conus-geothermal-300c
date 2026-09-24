@@ -81,7 +81,7 @@ Converted low-resolution PNG map images to approximate numerical grids using:
 
 3. **Maximum temperatures** reach 325°C at 7.5–8.5 km and 350°C at 10 km
    - Limited by current depth (10 km max)
-   - Hottest regions reaching supercritical conditions
+   - Hottest digitized regions approach 350°C — still below the ~374°C supercritical threshold for water
 
 ---
 

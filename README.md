@@ -10,7 +10,7 @@
 [![License](https://img.shields.io/badge/code-MIT-green)](#license)
 
 **How deep must you drill to hit 300 °C?**
-Our combined models suggest roughly 26% of CONUS (approximately 1.9 million km²) may reach 300 °C within 10 km, while the remaining 74% would require drilling deeper than 10 km — beyond current geothermal industry capabilities.
+In the Stanford thermal model, roughly **5% of CONUS reaches 300 °C within 7 km** — the best-constrained part of this estimate. Extending the modeled drilling envelope to **10 km** with the digitized SMU maps raises the estimated accessible area to **roughly 26%** (~1.9 million km²); the remaining ~74% would require drilling deeper than 10 km. These are **modeled, exploratory figures — a screening estimate, not a measured resource assessment.**
 
 </div>
 
@@ -33,7 +33,7 @@ TIGER 2023 boundaries. Grey regions require >10 km drilling depth.*
 
 ## Where the models suggest accessible resources may be
 
-Nearly every shallow cell (≤10 km) falls west of roughly **−100° longitude** — the divide between the actively extending, thin-crust West and the cold, thick, stable craton beneath the eastern two-thirds of the country. But "the West" is not one uniform target. The **25,448 cells that reach 300 °C within 6 km** — the depth range today's drilling can actually hit — cluster in a handful of distinct volcanic and rift settings, *not* a single contiguous province. Grouping those cells by the state they fall in:
+The modeled ≤10 km resource is overwhelmingly concentrated west of roughly **−100° longitude** — the divide between the actively extending, thin-crust West and the cold, thick, stable craton beneath the eastern two-thirds of the country. But "the West" is not one uniform target. The **25,448 cells that reach 300 °C within 6 km** — within the range of existing deep-drilling experience — cluster in a handful of distinct volcanic and rift settings, *not* a single contiguous province. Grouping those cells by the state they fall in:
 
 | Setting | Where the shallow cells actually are | Cells ≤6 km |
 |---|---|---:|
@@ -85,28 +85,28 @@ At each grid cell, we interpolate through the temperature profile to identify th
 
 ![Cross-validation plot](plots/cross_validation_stanford_smu.png)
 
-*Cross-validation at 7 km overlap: r = 0.690, RMSE = 53 °C across 532,455 matched locations (Stanford runs ~39 °C warmer than the digitized SMU estimates). Horizontal banding in SMU data reflects discrete temperature bins in the source maps (~25 °C intervals), not analysis error.*
+*Cross-validation at 7 km overlap: r = 0.690, RMSE = 53 °C across 532,455 matched locations (Stanford runs ~39 °C warmer than the digitized SMU estimates). Horizontal banding in SMU data reflects the discrete temperature bins in the source maps (~25 °C intervals).*
 
 ### Data Characteristics
 
 - **Stanford**: Continuous depth estimates (e.g., "300 °C at 6.37 km")
 - **SMU**: Categorical upper bounds (e.g., "≥300 °C by 8.5 km" → crossing occurs in 7.5–8.5 km range)
 - **Interpolation**: Linear between sampled depths; assumes monotonic temperature increase
-- **Coverage**: 534,942 cells analyzed — 4.8% reach 300 °C within 7 km (Stanford), 26.5% within 10 km (Stanford + SMU)
+- **Coverage** (of 534,942 cells analyzed) — *within 7 km:* 4.8% of cells / 4.7% of CONUS area (Stanford); *within 10 km:* 26.5% of cells / 26.3% of CONUS area (Stanford + SMU). Area-weighted percentages are lower because they down-weight the smaller ground footprint of high-latitude cells; the area figures are the ones used in the headline and generation table
 
 Both datasets are interpolated thermal models, not direct borehole measurements. SMU maps were digitized from published figures, introducing color quantization and geolocation uncertainty. Results are consistent with known crustal structure: thin, hot crust in the Basin & Range; thick, cold cratonic lithosphere beneath the eastern two-thirds of the continent.
 
-**[→ Regional validation and methodology verification](VALIDATION.md)**
+**[→ Regional sanity checks and methodology notes](VALIDATION.md)**
 
-### Regional Validation
+### Regional sanity check
 
-Montana/Yellowstone region demonstrating methodology validity:
+Montana/Yellowstone regional sanity check:
 
 ![Montana regional validation](plots/montana_validation.png)
 
 *Montana region: Eastern plains (>10 km, gray) vs western mountains/Yellowstone (6-8 km, yellow/red). Clear tectonic boundary visible at ~110°W longitude.*
 
-**[→ See complete validation analysis with Yellowstone close-up and methodology verification](VALIDATION.md)**
+**[→ See the full regional sanity checks, including a Yellowstone close-up](VALIDATION.md)**
 
 ---
 
@@ -217,9 +217,18 @@ result georeferenced to the CONUS extent.
 
 ![All SMU depths](plots/smu_digitized_all_depths.png)
 
-Reconstructed temperature fields at 7.5, 8.5 and 10 km after georeferencing. Every major
-thermal province is reproduced, and hot zones now fall on land rather than offshore — the
-earlier plate-carrée assumption mis-registered by ~28 km median and pushed them into the ocean.
+Reconstructed temperature fields at 7.5, 8.5 and 10 km after georeferencing. Major thermal
+patterns visible in the source figures are retained after georeferencing, and hot zones now
+fall on land rather than offshore — the earlier plate-carrée assumption mis-registered by
+~28 km median and pushed them into the ocean.
+
+![SMU registration diagnostic](plots/smu_registration_diagnostic.png)
+
+*Registration diagnostic: the digitized SMU 10 km field reprojected to WGS 84 with US Census
+state boundaries overlaid. The drawn thermal field and true state outlines align after the
+Lambert Conformal Conic (ESRI:102004) ICP fit; measured residual is ~3 km median / ~9 km at
+the 90th percentile, versus ~28 km under the old plate-carrée assumption. The fit is fully
+reproducible from [`register_smu_maps.py`](register_smu_maps.py).*
 
 </details>
 
@@ -318,6 +327,16 @@ single run produces correctly georeferenced output — no separate registration 
 
 State outlines come from the US Census cartographic boundary file `cb_2023_us_state_20m`,
 downloaded into `data/raw/boundaries/`.
+
+---
+
+## Data integrity checks
+
+Two spatial-integrity problems surfaced during development; the current pipeline guards against both.
+
+**Stanford layer alignment.** The Stanford depth layers are not guaranteed to share row ordering, so combining them by row position could splice together temperatures from different locations — a fictional vertical profile. The pipeline now sorts and matches each layer by geographic coordinate and verifies alignment (coordinates agree to < 1e-6°) before constructing any profile.
+
+**SMU geographic registration.** The initial digitization treated the rendered SMU map too much like a rectangular lat/lon image. Because the source figure is drawn in a conic projection, that assumption displaced the field by ~28 km median (worst toward the north, pushing hot zones offshore). The corrected, projection-aware registration — a Lambert Conformal Conic (ESRI:102004) affine fitted by ICP against the maps' drawn state borders — reduces the residual to ~3 km median / ~9 km at the 90th percentile. It is reproducible via [`register_smu_maps.py`](register_smu_maps.py); see the [registration report](docs/SMU_REGISTRATION_REPORT.md) and the diagnostic figure above.
 
 ---
 

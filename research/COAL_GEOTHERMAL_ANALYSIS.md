@@ -1,26 +1,30 @@
 # Coal Power Plant & Geothermal Resource Overlay Analysis
 
 **Analysis Date:** September 15, 2026  
-**Data Sources:** EIA Form 860 (2025) + Stanford Thermal Earth Model (2024)
+**Data Sources:** EIA Form 860 (2025) + Stanford Thermal Earth Model (2024) + SMU Geothermal Lab (2011)
 
 ---
 
 ## Executive Summary
 
-Of **340 US coal power plants** (213 operating, 127 retired since 2015):
-- **Only 23 plants (7%)** sit on accessible geothermal resources (≤10 km depth)
-- **22 of those 23** are in the western US
-- **1 out of 290** eastern coal plants has accessible geothermal
+Of **335 in-coverage US coal power plants** (208 operating, 127 retired since 2015; 5 Alaska plants excluded as they lie outside the CONUS grid domain, >50 km from the nearest cell):
+- **Only 25 plants (7%)** sit at ≤10 km depth to 300 °C — and only **one** is shallower than 8 km
+- **20 of those 25** are in the western US
+- The other **5** are in the East Texas Basin / NW Louisiana, all pinned to exactly **10.0 km** — the bottom edge of the frontier band, not a shallow resource
+
+*(Depths at ≤10 km come from the SMU layers, re-registered with a fitted Lambert Conformal Conic affine (~3 km median accuracy). This corrected the earlier plate-carrée assumption that mis-registered SMU by ~28 km median and made several plants look far shallower than they are.)*
 
 ### Top Coal-to-Geothermal Conversion Candidates
 
+Ranked by depth to 300 °C. Only Argus Cogen is shallower than 8 km; the next-shallowest sit at the 8.5 km SMU layer, and every remaining ≤10 km plant is pinned to exactly 10.0 km.
+
 | Rank | Plant | State | Capacity | Status | Depth to 300°C |
 |------|-------|-------|----------|--------|----------------|
-| 1 | **Centralia** | WA | 1,460 MW | Operating | 6.2 km |
-| 2 | **Huntington** | UT | 1,016 MW | Operating | 6.7 km |
-| 3 | **Dave Johnston** | WY | 817 MW | Operating | 7.0 km |
-| 4 | **Boardman** | OR | 642 MW | **Retired** | 7.0 km |
-| 5 | **Craig** | CO | 1,428 MW | Operating | 7.5 km |
+| 1 | **Argus Cogen** | CA | 62 MW | Operating | 6.8 km |
+| 2 | **Springerville** | AZ | 1,766 MW | Operating | 8.5 km |
+| 3 | **Intermountain Power** | UT | 1,640 MW | **Retired 2025** | 8.5 km |
+| 4 | **North Valmy** | NV | 290 MW | Operating | 8.5 km |
+| 5 | **Kennecott** | UT | 182 MW | **Retired** | 8.5 km |
 
 ---
 
@@ -30,74 +34,76 @@ Of **340 US coal power plants** (213 operating, 127 retired since 2015):
 
 | Depth Category | Plants | Total Capacity | Operating | Retired |
 |----------------|--------|----------------|-----------|---------|
-| **6-7 km** (proven drilling) | 5 | 4,228 MW | 4 (3,586 MW) | 1 (642 MW) |
-| **7-8 km** (advanced) | 2 | 1,893 MW | 2 (1,893 MW) | 0 |
-| **8-10 km** (frontier) | 16 | 11,574 MW | 8 (3,768 MW) | 8 (7,805 MW) |
-| **>10 km** (not accessible) | 317 | 249,195 MW | 199 (186,717 MW) | 118 (62,478 MW) |
+| **6-7 km** (proven drilling) | 1 | 62 MW | 1 (62 MW) | 0 |
+| **7-8 km** (advanced) | 0 | 0 MW | 0 | 0 |
+| **8-10 km** (frontier) | 24 | 17,699 MW | 13 (12,750 MW) | 11 (4,949 MW) |
+| **>10 km** (not accessible) | 310 | 248,926 MW | 194 (182,949 MW) | 116 (65,976 MW) |
 
 ### Western vs Eastern US
 
-| Region | Total Plants | Accessible (≤10 km) | % Accessible | Total Capacity |
+| Region | Total Plants | ≤10 km | % ≤10 km | Total Capacity |
 |--------|--------------|---------------------|--------------|----------------|
-| **Western US** | 50 | 22 | **44%** | 31,584 MW |
-| **Eastern US** | 290 | 1 | **<1%** | 235,306 MW |
+| **Western US** | 50 | 20 | **40%** | 31,584 MW |
+| **Rest of US** | 285 | 5 | **~2%** | 235,103 MW |
 
-### States with 100% Accessible Coal Plants
+The 5 non-western plants at ≤10 km are **not** a shallow Gulf resource: four are East Texas Basin / NW Louisiana (Martin Lake, Welsh, Pirkey, Dolet Hills) plus the Gulf-coastal-plain Coleto Creek, and **all five sit at exactly 10.0 km** — the bottom edge of the 8–10 km frontier band.
 
-- **Utah:** 7/7 plants (5,056 MW)
-- **Nevada:** 3/3 plants (827 MW)  
+### States with 100% of Coal Plants at ≤10 km
+
+- **Nevada:** 3/3 plants (827 MW)
+- **California:** 1/1 plant (62 MW)
 - **Oregon:** 1/1 plant (642 MW, retired)
-- **Washington:** 1/1 plant (1,460 MW)
+
+(Washington's single plant, Centralia, now sits at >10 km after the Lambert re-georeferencing; Utah drops to 3/7.)
 
 ---
 
 ## Key Findings
 
 ### 1. Geographic Concentration
-All accessible geothermal resources for coal conversion are **west of -100° longitude**, following the tectonic boundary between the Basin & Range / Cordilleran provinces and the stable North American craton.
+The 20 western plants at ≤10 km all lie **west of -100° longitude**, following the tectonic boundary between the Basin & Range / Cordilleran provinces and the stable North American craton. The only exceptions are the 5 East Texas Basin / NW Louisiana plants — east of -100° — and they are **not** a shallow resource: every one sits at exactly 10.0 km.
 
 ### 2. Best Candidates by Category
 
 **Proven Drilling Depth (6-7 km):**
-- **Centralia, WA** - 1,460 MW operating, largest accessible plant
-- **Huntington, UT** - 1,016 MW operating
-- **Dave Johnston, WY** - 817 MW operating
-- **Boardman, OR** - 642 MW retired (immediate retrofit opportunity)
+- **Argus Cogen, CA** - 62 MW operating, the *only* coal plant shallower than 8 km
 
-**Frontier Drilling Depth (8-10 km):**
-- **Navajo, AZ** - 2,409 MW retired (largest retired plant with accessible geothermal)
-- **San Juan, NM** - 1,848 MW retired
-- **Intermountain, UT** - 1,640 MW retired
+**Frontier Drilling Depth (8-10 km, all at the 8.5 or 10.0 km SMU layers):**
+- **Martin Lake, TX** - 2,380 MW operating (largest plant at ≤10 km, at 10.0 km)
+- **Springerville, AZ** - 1,766 MW operating (8.5 km)
+- **Intermountain Power, UT** - 1,640 MW retired 2025 (8.5 km, largest retired plant at ≤10 km)
 
 ### 3. Retrofit vs Replacement Opportunities
 
-**Operating Plants (≤7 km depth):**
-- 4 plants, 3,586 MW total
+**Operating Plants (≤10 km depth):**
+- 14 plants, 12,812 MW total (only Argus Cogen is shallower than 8 km)
 - Existing infrastructure: transmission, cooling, workforce
 - Could be **incrementally converted** to hybrid or full geothermal
 
 **Retired Plants (≤10 km depth):**
-- 9 plants, 8,447 MW former capacity
+- 11 plants, 4,949 MW former capacity
 - Infrastructure may still be usable (transmission lines, land rights)
 - **Immediate development opportunity** without displacing active generation
 
-### 4. Eastern US Outlook
-The eastern coal fleet (290 plants, 235 GW) has **effectively zero accessible geothermal potential** with current or near-term drilling technology. Only 1 plant out of 290 sits on ≤10 km resources.
+### 4. Rest-of-US Outlook
+The non-western coal fleet (285 plants, 235 GW) has **effectively zero shallow geothermal potential** with current or near-term drilling technology. Only 5 of 285 sit at ≤10 km — the East Texas / NW Louisiana cluster — and all five are pinned to exactly 10.0 km, the deepest bin modeled.
 
 ---
 
 ## State-by-State Western Summary
 
-| State | Total Plants | Accessible | % Accessible | Total Capacity | Accessible Capacity |
+| State | Total Plants | ≤10 km | % ≤10 km | Total Capacity | ≤10 km Capacity |
 |-------|--------------|------------|--------------|----------------|---------------------|
-| **UT** | 7 | 7 | 100% | 5,056 MW | 5,056 MW |
+| **CO** | 11 | 8 | 73% | 5,186 MW | 4,226 MW |
 | **NV** | 3 | 3 | 100% | 827 MW | 827 MW |
+| **AZ** | 5 | 3 | 60% | 6,330 MW | 2,792 MW |
+| **UT** | 7 | 3 | 43% | 5,056 MW | 2,838 MW |
+| **CA** | 1 | 1 | 100% | 62 MW | 62 MW |
+| **NM** | 3 | 1 | 33% | 3,741 MW | 257 MW |
 | **OR** | 1 | 1 | 100% | 642 MW | 642 MW |
-| **WA** | 1 | 1 | 100% | 1,460 MW | 1,460 MW |
-| **WY** | 12 | 3 | 25% | 5,530 MW | 1,381 MW |
-| **CO** | 11 | 4 | 36% | 5,186 MW | 1,893 MW |
-| **NM** | 3 | 1 | 33% | 3,741 MW | 1,848 MW |
-| **AZ** | 5 | 2 | 40% | 6,330 MW | 3,538 MW |
+| **WA** | 1 | 0 | 0% | 1,460 MW | 0 MW |
+| **WY** | 12 | 0 | 0% | 5,530 MW | 0 MW |
+| **MT** | 6 | 0 | 0% | 2,750 MW | 0 MW |
 
 ---
 
@@ -128,7 +134,7 @@ The eastern coal fleet (290 plants, 235 GW) has **effectively zero accessible ge
 ### Challenges
 
 1. **Drilling Depth**
-   - Most accessible sites still require 6-10 km drilling
+   - Nearly all ≤10 km sites sit in the 8-10 km frontier band; only Argus Cogen is shallower than 8 km
    - Current geothermal industry standard: 3-5 km
    - Requires oil & gas drilling expertise and equipment
 
@@ -151,26 +157,26 @@ The eastern coal fleet (290 plants, 235 GW) has **effectively zero accessible ge
 
 ## Capacity Replacement Potential
 
-### Accessible Coal Capacity by Depth
+### Coal Capacity by Depth (≤10 km)
 
-| Depth Category | Accessible Coal Capacity |
+| Depth Category | Coal Capacity at ≤ this depth |
 |----------------|--------------------------|
-| ≤7 km (proven) | 5,479 MW |
-| ≤8 km (advanced) | 7,372 MW |
-| ≤10 km (frontier) | 16,695 MW |
+| ≤7 km (proven) | 62 MW (Argus Cogen only) |
+| ≤8 km (advanced) | 62 MW (nothing sits in the 7–8 km band) |
+| ≤10 km (frontier) | 17,761 MW |
 
 ### Geothermal Replacement Scenarios
 
 Assuming **1:1 capacity replacement** (conservative; supercritical could be 5-10× more efficient per well):
 
-**Scenario 1: Replace Accessible Operating Plants**
-- 14 operating plants, 9,247 MW
-- Requires: ~925 well pairs (10 MW/pair typical)
-- Estimated cost: $9-18 billion
+**Scenario 1: Replace ≤10 km Operating Plants**
+- 14 operating plants, 12,812 MW
+- Requires: ~1,281 well pairs (10 MW/pair typical)
+- Estimated cost: $13-26 billion
 - Preserves existing transmission and workforce
 
 **Scenario 2: Redevelop Retired Plant Sites**
-- 9 retired plants (≤10 km), 8,447 MW former capacity
+- 11 retired plants (≤10 km), 4,949 MW former capacity
 - Immediate opportunity without displacing active generation
 - Transmission infrastructure may need refurbishment
 
@@ -187,9 +193,9 @@ Assuming **1:1 capacity replacement** (conservative; supercritical could be 5-10
 
 | Priority | Depth Target | Accessible Plants | Accessible Capacity | Technology Status |
 |----------|--------------|-------------------|---------------------|-------------------|
-| **Tier 1** | ≤7 km | 7 plants | 6,121 MW | **Proven today** |
-| **Tier 2** | ≤8 km | 9 plants | 8,014 MW | Advanced drilling |
-| **Tier 3** | ≤10 km | 23 plants | 16,695 MW | Frontier drilling |
+| **Tier 1** | ≤7 km | 1 plant | 62 MW | **Proven today** |
+| **Tier 2** | ≤8 km | 1 plant | 62 MW | Advanced drilling |
+| **Tier 3** | ≤10 km | 25 plants | 17,761 MW | Frontier drilling |
 
 ### R&D Priorities to Maximize Conversion Potential
 
@@ -220,9 +226,9 @@ Assuming **1:1 capacity replacement** (conservative; supercritical could be 5-10
 ### Immediate Actions (0-2 years)
 
 1. **Detailed Site Assessments**
-   - Centralia, WA (largest accessible operating plant)
-   - Boardman, OR (retired, immediate opportunity)
-   - Huntington, UT (100% accessible state portfolio)
+   - Argus Cogen, CA (the only plant shallower than 8 km, at 6.8 km)
+   - Springerville, AZ (largest operating plant at the 8.5 km layer)
+   - Boardman, OR (retired, at 10.0 km)
 
 2. **Policy Support**
    - Federal tax credits for coal-to-geothermal conversion
@@ -254,8 +260,8 @@ Assuming **1:1 capacity replacement** (conservative; supercritical could be 5-10
 ### Long-Term (5-20 years)
 
 1. **Fleet Conversion**
-   - Systematic conversion of accessible coal plants
-   - 15,000+ MW replacement potential
+   - Systematic conversion of ≤10 km coal plants
+   - ~17,800 MW replacement potential
    - Phased approach tied to coal retirements
 
 2. **Regional Energy Transition**
@@ -273,14 +279,14 @@ Assuming **1:1 capacity replacement** (conservative; supercritical could be 5-10
 ## Data Files
 
 **Analysis Outputs:**
-- `data/processed/coal_plants_with_geothermal.csv` - All 340 plants matched to geothermal depth
+- `data/processed/coal_plants_with_geothermal.csv` - All 335 in-coverage plants matched to geothermal depth
 - `data/processed/coal_geothermal_top_candidates.csv` - Top 50 conversion candidates
 - `plots/coal_plants_geothermal_overlay.png` - CONUS map with all plants
 - `plots/coal_plants_western_zoom.png` - Western states detail map
 
 **Source Data:**
 - `data/raw/coal_plants/eia_coal_plants.csv` - EIA Form 860 (2025)
-- `data/processed/conus_depth_to_300c.csv` - Stanford geothermal depth grid (2024)
+- `data/processed/conus_depth_to_300c.csv` - combined depth-to-300 °C grid (Stanford 2024 ≤7 km + SMU 2011 Lambert-registered 7.5-10 km)
 
 ---
 

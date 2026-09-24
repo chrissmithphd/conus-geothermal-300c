@@ -1,13 +1,13 @@
 # SMU Temperature Map Digitization Report
 
-**Date:** 2026-09-14  
-**Status:** ✅ COMPLETE - All 7 depth maps successfully digitized
+**Date:** 2026-09-14 · **Georeferencing revised:** 2026-09-23  
+**Status:** ✅ COMPLETE - Deep-layer maps (7.5, 8.5, 10 km) digitized and Lambert-georeferenced
 
 ---
 
 ## Executive Summary
 
-Successfully digitized all 7 SMU Geothermal Laboratory temperature-at-depth PNG images into machine-readable numerical gridded data, extracting **3,447,978 data points** across depths from 3.5 km to 10 km.
+Successfully digitized the three deep SMU Geothermal Laboratory temperature-at-depth PNG maps (7.5, 8.5, 10 km) into machine-readable numerical gridded data, extracting **1,648,523 data points** (~547–551 k per layer). Only the deep layers are digitized: the authoritative Stanford Thermal Earth Model covers 0–7 km, and the shallower SMU maps (3.5–6.5 km) use a different image layout that the fitted georeferencing affines do not cover.
 
 ---
 
@@ -18,13 +18,19 @@ Converted low-resolution PNG map images to approximate numerical grids using:
 
 1. **Color-to-temperature mapping** - Built legend with 13 color classes (25-350°C)
 2. **Pixel classification** - Matched each map pixel to closest temperature class
-3. **Geographic referencing** - Mapped pixel coordinates to lat/lon using CONUS bounds
+3. **Geographic referencing** - Fitted a per-layer Lambert Conformal Conic (ESRI:102004) affine, aligned by ICP against the maps' drawn state borders, then reprojected to WGS84
 4. **Quality filtering** - Excluded non-map pixels (borders, legends, oceans, text)
+
+> **Georeferencing note (superseded method):** an earlier version of this pipeline mapped
+> pixels to lat/lon by linearly stretching to the CONUS bounding box (a plate-carrée
+> assumption). That mis-registered the maps by ~28 km median and pushed hot zones offshore
+> into the ocean. It has been replaced by the per-layer Lambert affine described above.
 
 ### Validation
 - **Original vs. digitized comparison** shows excellent pattern reproduction
 - **Major temperature regions** accurately captured
 - **Hot spots** (Basin & Range, Cascades, Yellowstone) correctly identified
+- **Hot zones now fall on land** after the Lambert re-georeferencing, rather than offshore as under the earlier plate-carrée assumption
 
 ---
 
@@ -34,17 +40,13 @@ Converted low-resolution PNG map images to approximate numerical grids using:
 
 | Depth | Total Pixels | Classified | Success Rate |
 |-------|--------------|------------|--------------|
-| 3.5 km | 989,860 | 403,100 | **40.7%** |
-| 4.5 km | 989,860 | 458,168 | **46.3%** |
-| 5.5 km | 989,860 | 465,857 | **47.1%** |
-| 6.5 km | 989,860 | 469,120 | **47.4%** |
-| 7.5 km | 1,234,100 | 548,299 | **44.4%** |
-| 8.5 km | 1,234,100 | 551,557 | **44.7%** |
-| 10.0 km | 1,234,100 | 551,877 | **44.7%** |
+| 7.5 km | 1,234,100 | 547,229 | **44.3%** |
+| 8.5 km | 1,234,100 | 550,487 | **44.6%** |
+| 10.0 km | 1,234,100 | 550,807 | **44.6%** |
 
-**Overall:** 3.4M points classified from ~7M total pixels (~47% success rate)
+**Overall:** 1,648,523 points classified from ~3.70M total map pixels (~44.5% success rate)
 
-### Why ~50% Classification Rate?
+### Why ~44% Classification Rate?
 
 **Unclassified pixels include:**
 - Ocean/water bodies (no land temperatures)
@@ -61,25 +63,23 @@ Converted low-resolution PNG map images to approximate numerical grids using:
 
 | Depth | Min | Median | Mean | Max | Points |
 |-------|-----|--------|------|-----|--------|
-| **3.5 km** | 37.5°C | 87.5°C | 101.2°C | 287.5°C | 403,100 |
-| **4.5 km** | 37.5°C | 112.5°C | 114.1°C | 312.5°C | 458,168 |
-| **5.5 km** | 37.5°C | 112.5°C | 129.9°C | 312.5°C | 465,857 |
-| **6.5 km** | 37.5°C | 112.5°C | 144.1°C | 312.5°C | 469,120 |
-| **7.5 km** | 37.5°C | 137.5°C | 161.7°C | 312.5°C | 548,299 |
-| **8.5 km** | 37.5°C | 162.5°C | 181.0°C | 312.5°C | 551,557 |
-| **10.0 km** | 37.5°C | 187.5°C | 207.7°C | **337.5°C** | 551,877 |
+| **7.5 km** | 50°C | 150°C | 174.0°C | 325°C | 547,229 |
+| **8.5 km** | 50°C | 175°C | 193.4°C | 325°C | 550,487 |
+| **10.0 km** | 50°C | 200°C | 220.1°C | **350°C** | 550,807 |
+
+*Temperatures are the upper-bin edge of each 25°C class, so they read warm by up to 12.5°C.*
 
 ### Key Observations
 
 1. **Temperature increases with depth** (as expected)
-   - Mean temperature rises from 101°C at 3.5 km to 208°C at 10 km
-   - Roughly **30-35°C/km gradient**
+   - Mean temperature rises from 174°C at 7.5 km to 220°C at 10 km
+   - Consistent with continued deep-crustal warming
 
 2. **Spatial variability increases with depth**
-   - Temperature range at 3.5 km: 250°C span
-   - Temperature range at 10 km: 300°C span
+   - Temperature range at 7.5 km: 275°C span (50–325°C)
+   - Temperature range at 10 km: 300°C span (50–350°C)
 
-3. **Maximum temperatures plateau** around 312-337°C
+3. **Maximum temperatures** reach 325°C at 7.5–8.5 km and 350°C at 10 km
    - Limited by current depth (10 km max)
    - Hottest regions reaching supercritical conditions
 
@@ -89,15 +89,11 @@ Converted low-resolution PNG map images to approximate numerical grids using:
 
 | Depth | Points ≥300°C | Percentage | Assessment |
 |-------|---------------|------------|------------|
-| 3.5 km | 0 | 0.00% | ❌ None |
-| 4.5 km | 3 | 0.00% | ❌ Negligible |
-| 5.5 km | 119 | 0.03% | ❌ Rare |
-| 6.5 km | 194 | 0.04% | ❌ Very rare |
-| 7.5 km | 4,510 | 0.82% | ⚠️ Limited |
-| 8.5 km | 25,880 | 4.69% | ⚠️ Emerging |
-| **10.0 km** | **96,926** | **17.56%** | ✅ Significant |
+| 7.5 km | 24,882 | 4.55% | ⚠️ Limited |
+| 8.5 km | 78,550 | 14.27% | ⚠️ Emerging |
+| **10.0 km** | **143,913** | **26.13%** | ✅ Significant |
 
-**Key Finding:** At 10 km depth, **~18% of CONUS** reaches ≥300°C supercritical conditions.
+**Key Finding:** At 10 km depth, **~26% of digitized CONUS land pixels** reach ≥300°C (using the upper-bin edge). This is a per-pixel land fraction from the SMU maps alone; the project's area-weighted combined (Stanford + SMU) figure is 26.3% of CONUS reaching 300°C within 10 km.
 
 ---
 
@@ -147,15 +143,11 @@ From visual inspection of digitized maps:
 
 ```
 data/processed/smu_digitized/
-├── smu_digitized_3.5km.csv         (22 MB)
-├── smu_digitized_4.5km.csv         (26 MB)
-├── smu_digitized_5.5km.csv         (26 MB)
-├── smu_digitized_6.5km.csv         (27 MB)
-├── smu_digitized_7.5km.csv         (31 MB)
-├── smu_digitized_8.5km.csv         (31 MB)
-├── smu_digitized_10.0km.csv        (32 MB)
-├── smu_digitized_all_depths.csv    (192 MB)
-└── smu_digitized_all_depths.parquet (efficient binary format)
+├── smu_digitized_7.5km.csv          (31 MB)
+├── smu_digitized_8.5km.csv          (31 MB)
+├── smu_digitized_10.0km.csv         (31 MB)
+├── smu_digitized_all_depths.csv     (93 MB)
+└── smu_digitized_all_depths.parquet (27 MB, efficient binary format)
 ```
 
 ### Data Structure
@@ -171,7 +163,8 @@ Each file contains:
 
 - **Approximate grid spacing:** ~0.05° (roughly 4-5 km at CONUS latitudes)
 - **Coverage:** Complete CONUS land area
-- **Points per depth:** 400k-550k depending on image resolution
+- **Points per depth:** ~547–551 k (7.5, 8.5, 10 km layers)
+- **Positional accuracy:** ~3 km median / ~9 km 90th percentile (Lambert affine fitted by ICP against drawn state borders)
 
 ---
 
@@ -181,8 +174,7 @@ Each file contains:
 
 ```
 plots/
-├── smu_digitized_6.5km_comparison.png  (prototype validation)
-└── smu_digitized_all_depths.png        (all 7 depths overview)
+└── smu_digitized_all_depths.png        (7.5, 8.5, 10 km overview)
 ```
 
 **Overview plot shows:**
@@ -218,9 +210,9 @@ plots/
    - Newer data (Stanford 2024) available for 0-7 km
 
 5. **Geographic uncertainty**
-   - Georeferencing based on visual CONUS extent
-   - No coordinate system metadata from source images
-   - Approximate ±5-10 km position accuracy
+   - Georeferenced with a per-layer Lambert Conformal Conic (ESRI:102004) affine, fitted by ICP against the maps' drawn state borders
+   - Positional accuracy ~3 km median / ~9 km at the 90th percentile
+   - Supersedes an earlier plate-carrée (linear lat/lon from CONUS extent) assumption that mis-registered by ~28 km median and pushed hot zones offshore
 
 ### Method Limitations
 
@@ -233,10 +225,10 @@ plots/
    - State borders and coastlines may have artifacts
    - Mixed land/ocean pixels excluded
 
-3. **Missing 2 km layer**
-   - Stanford has 0, 1, 2, 3, 4, 5, 6, 7 km
-   - SMU has 3.5, 4.5, 5.5, 6.5, 7.5, 8.5, 10 km
-   - 2 km gap between datasets
+3. **Depth handoff between datasets**
+   - Stanford covers 0–7 km (authoritative, used for all shallow depths)
+   - Digitized SMU picks up at 7.5, 8.5, 10 km
+   - The 0.5 km gap between Stanford's 7 km and SMU's 7.5 km is bridged by interpolation in the downstream analysis
 
 ---
 
@@ -247,20 +239,20 @@ plots/
 | Depth Range | Stanford | SMU Digitized |
 |-------------|----------|---------------|
 | 0-3 km | ✅ Yes (0, 1, 2, 3) | ❌ No |
-| 3-7 km | ✅ Yes (4, 5, 6, 7) | ✅ Yes (3.5, 4.5, 5.5, 6.5, 7.5) |
+| 3-7 km | ✅ Yes (4, 5, 6, 7) | ❌ Not digitized (Stanford is authoritative here) |
 | 7-10 km | ❌ No | ✅ Yes (7.5, 8.5, 10) |
 | >10 km | ❌ No | ❌ No |
 
-**Overlap:** 3.5-7 km (can compare models)
+**Overlap:** ~7 km boundary — Stanford's 7 km vs SMU's 7.5 km layer, used for cross-validation (r = 0.690, RMSE 53.3°C, n = 532,455)
 
 ### Data Quality
 
 | Aspect | Stanford | SMU Digitized |
 |--------|----------|---------------|
 | **Vintage** | 2024 | 2011 |
-| **Resolution** | ~4 km (535k points) | ~4-5 km (400-550k points) |
+| **Resolution** | ~4 km (535k points) | ~4-5 km (~547-551k points/layer) |
 | **Precision** | High (model output) | Low (25°C bins) |
-| **Accuracy** | High (MAE 4.8°C) | Unknown |
+| **Accuracy** | High (MAE 4.8°C) | ±12.5°C temp; ~3 km median positional |
 | **Depth Precision** | Exact (1 km levels) | 0.5-1 km levels |
 | **Format** | Quantitative (exact °C) | Semi-quantitative (binned °C) |
 
@@ -311,10 +303,9 @@ plots/
    - Handle anti-aliasing better
    - Improve edge detection
 
-2. **Enhance georeferencing**
-   - Use visible state boundaries for alignment
-   - Cross-reference with known landmarks
-   - Reduce positional uncertainty
+2. **Enhance georeferencing** ✅ *Done*
+   - Implemented: per-layer Lambert Conformal Conic (ESRI:102004) affine fitted by ICP against the maps' drawn state boundaries
+   - Cut positional error from ~28 km median (old plate-carrée assumption) to ~3 km median / ~9 km 90th percentile
 
 3. **Add uncertainty estimates**
    - Propagate ±12.5°C from 25°C binning
@@ -344,15 +335,16 @@ plots/
 
 ### Success Metrics
 
-✅ **7 of 7 depth maps digitized** (100% completion)  
-✅ **3.4M data points extracted** (comprehensive spatial coverage)  
-✅ **Patterns accurately reproduced** (validated visually)  
+✅ **3 deep-layer maps digitized** (7.5, 8.5, 10 km)  
+✅ **1.65M data points extracted** (comprehensive spatial coverage)  
+✅ **Lambert-georeferenced** (~3 km median positional accuracy)  
+✅ **Patterns accurately reproduced** (validated visually; hot zones fall on land)  
 ✅ **Machine-readable format** (CSV and Parquet)  
 ✅ **Ready for analysis** (can now calculate depth-to-300°C)
 
 ### Key Findings
 
-1. **18% of CONUS reaches ≥300°C by 10 km depth**
+1. **~26% of digitized land pixels reach ≥300°C by 10 km depth**
    - Concentrated in western US
    - Tectonically controlled distribution
 
@@ -360,8 +352,8 @@ plots/
    - Eastern and central US particularly cool
    - Stable cratonic heat flow
 
-3. **Temperature gradient ~30-35°C/km**
-   - Slightly higher than global average
+3. **Mean temperature rises from ~174°C (7.5 km) to ~220°C (10 km)**
+   - Consistent with continued deep-crustal warming
    - Varies significantly by region
 
 4. **Data fills critical gap: 7-10 km depths**
@@ -375,6 +367,6 @@ plots/
 
 ---
 
-**Report Prepared:** 2026-09-14  
+**Report Prepared:** 2026-09-14 · **Georeferencing revised:** 2026-09-23  
 **Data Available:** `/home/cbsmith/git/geo/data/processed/smu_digitized/`  
 **Plots Available:** `/home/cbsmith/git/geo/plots/`

@@ -1,7 +1,15 @@
 # CONUS Geothermal Temperature Data Acquisition Report
 
-**Date:** 2026-09-14  
+**Date:** 2026-09-14 (updated 2026-09-23)  
 **Objective:** Acquire authoritative gridded temperature-depth data for CONUS to calculate depth required to reach 300°C
+
+> **Update (2026-09-23):** Acquisition is complete. All 8 Stanford layers (534,942 cells each)
+> were downloaded and validated. The SMU deep maps, which are not sold as free grids, were
+> instead **digitized** from the public PNGs into 1,648,523 georeferenced points at 7.5, 8.5
+> and 10 km (per-layer Lambert Conformal Conic affine, ~3 km median positional accuracy) and
+> used to extend coverage beyond Stanford's 7 km ceiling. See
+> [`SMU_DIGITIZATION_REPORT.md`](SMU_DIGITIZATION_REPORT.md). The "images only / not suitable"
+> notes below describe the raw acquisition step, not the digitized product ultimately used.
 
 ---
 
@@ -40,12 +48,11 @@ Successfully identified individual FeatureServer endpoints for each depth level:
 **Spatial Resolution:** Approximately 18 km² per grid cell
 
 ### Download Status
-**Status:** IN PROGRESS (background download running)
+**Status:** ✅ COMPLETE (all 8 layers downloaded and validated — 534,942 cells each, zero missing values)
 **Method:** Python script using ArcGIS REST API
-**Progress:** ~43% complete for first layer (0km) as of last check
 **Output Directory:** `data/raw/stanford/`
 **Output Format:** JSON files (one per depth level)
-**Estimated Total Size:** ~500-800 MB for all 8 layers
+**Actual Total Size:** ~1.2 GB for all 8 layers (~132–145 MB each)
 
 ### Data Quality Notes
 - Data generated from physics-informed neural network trained on bottomhole temperature measurements
@@ -89,7 +96,13 @@ Successfully identified individual FeatureServer endpoints for each depth level:
 **Output Directory:** `data/raw/smu/images/`
 **Files:** 7 PNG images (3.5km through 10km)
 **Total Size:** ~4.1 MB
-**Utility:** Reference/comparison only; NOT suitable for quantitative depth-to-300°C calculations
+**Utility:** Reference/comparison only *as raw images*; NOT suitable for quantitative depth-to-300°C calculations in that form
+
+> **Update (2026-09-23):** The 7.5/8.5/10 km PNGs were digitized (color→temperature
+> classification + a per-layer Lambert Conformal Conic (ESRI:102004) affine fitted by ICP
+> against drawn state borders) into 1,648,523 quantitative georeferenced points and used in the
+> final analysis. This corrected an earlier plate-carrée assumption that mis-registered hot
+> zones by ~28 km median and pushed them offshore.
 
 ### Alternative Sources Investigated
 
@@ -210,6 +223,11 @@ Once Stanford data is fully downloaded, perform:
 - 13-year vintage difference vs Stanford
 - Methodological differences between models
 - Requires careful calibration/validation
+
+> **Update (2026-09-23):** A variant of Option B was ultimately pursued — **without purchase**.
+> Rather than buy SMU grids, the public PNG maps were digitized and Lambert-georeferenced,
+> then used only for depths beyond Stanford's 7 km range (never to override Stanford where both
+> exist). Cross-validation at the 7 km overlap: r = 0.690, RMSE = 53.3°C, n = 532,455.
 
 **Option C: Regional Deep Data (FUTURE ENHANCEMENT)**
 - Identify specific high-interest regions

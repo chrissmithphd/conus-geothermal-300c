@@ -130,7 +130,4 @@ The analysis identifies geographic patterns worth investigating further. Local p
 
 ---
 
-**For complete technical details:**
-- [TECHNICAL_IMPROVEMENTS.md](TECHNICAL_IMPROVEMENTS.md) - Full list of improvements
-- [V1_VS_V2_COMPARISON.md](V1_VS_V2_COMPARISON.md) - How results changed
-- [README.md](README.md) - Main analysis and results
+**See also:** [README.md](README.md) — main analysis, methodology, and results.

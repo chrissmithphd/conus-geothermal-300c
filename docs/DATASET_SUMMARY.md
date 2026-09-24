@@ -1,14 +1,16 @@
 # CONUS Geothermal Temperature Dataset Summary
 
 **Project:** Depth-to-300°C Mapping for Continental United States  
-**Date:** 2026-09-14  
-**Status:** Stanford data download IN PROGRESS (1 of 8 layers complete)
+**Date:** 2026-09-14 (updated 2026-09-23)  
+**Status:** COMPLETE — Stanford (0–7 km, all 8 layers) downloaded; SMU deep maps (7.5, 8.5, 10 km) digitized and integrated
 
 ---
 
 ## Executive Summary
 
 Successfully identified and began acquiring authoritative geothermal temperature data for CONUS. The Stanford Thermal Earth Model (2024) provides quantitative gridded temperature predictions from 0-7 km depth and is being downloaded via ArcGIS REST services. SMU Geothermal Laboratory data for deeper depths (7.5-10 km) is NOT available in gridded format without purchase.
+
+> **Update (2026-09-23):** Both datasets are now fully acquired. All 8 Stanford layers were downloaded and validated (534,942 cells each). Although SMU gridded data is not free, the public SMU PNG maps were **digitized** into 1,648,523 georeferenced points at 7.5, 8.5 and 10 km (~547–551 k per layer) — see [`SMU_DIGITIZATION_REPORT.md`](SMU_DIGITIZATION_REPORT.md). These deep SMU layers are used in the final analysis to extend coverage beyond Stanford's 7 km ceiling, so the "reference only / unsuitable" characterizations below reflect the raw PNGs at acquisition time, not the digitized product.
 
 ---
 
@@ -130,7 +132,7 @@ From the published paper:
 
 1. **Depth Limit:** Maximum 7 km depth
    - Cannot directly determine depth-to-300°C if >7 km required
-   - Approximately 85% of CONUS will not reach 300°C by 7 km (estimate)
+   - The final analysis found only 4.8% of CONUS reaches 300°C within 7 km, so ~95% requires deeper (>7 km) data
 
 2. **Temporal:** Static model, no seasonal/temporal variation
 
@@ -148,14 +150,20 @@ From the published paper:
 
 ---
 
-## Dataset 2: SMU Geothermal Laboratory (REFERENCE ONLY)
+## Dataset 2: SMU Geothermal Laboratory (DIGITIZED FROM PUBLISHED MAPS)
 
 ### Overview
 - **Authority:** SMU Geothermal Laboratory
 - **Reference:** Blackwell et al. (2011)
 - **Coverage:** CONUS
-- **Depth Range:** 3.5, 4.5, 5.5, 6.5, 7.5, 8.5, 10 km
+- **Depth Range:** 3.5, 4.5, 5.5, 6.5, 7.5, 8.5, 10 km (only 7.5/8.5/10 km digitized and used)
 - **Vintage:** 2011 (13 years older than Stanford)
+
+> **Update (2026-09-23):** The section below documents the raw-image acquisition. The public
+> PNG maps were subsequently digitized (color→temperature classification + a per-layer Lambert
+> Conformal Conic affine fitted by ICP against the maps' drawn state borders), yielding
+> 1,648,523 quantitative georeferenced points at 7.5/8.5/10 km with ~3 km median positional
+> accuracy. The deep layers **are** used in the final analysis.
 
 ### Data Access Status
 
@@ -229,9 +237,9 @@ Depths where 300°C might be reached:
 - **Recommendation:** Use Lat/Long for analysis, ignore Web Mercator geometry
 
 ### SMU Data  
-- **Unknown:** No coordinate system metadata in image files
-- **Visual Projection:** Appears to be Albers Equal Area or similar
-- **Cannot Reproject:** No GeoTIFF tags or world file
+- **Source images:** No coordinate system metadata embedded (no GeoTIFF tags or world file)
+- **Projection determined:** USA Contiguous Lambert Conformal Conic (ESRI:102004), recovered by fitting a per-layer affine to the maps' drawn state borders via ICP
+- **Reprojected:** Digitized pixels are converted Lambert → WGS84; the earlier plate-carrée (linear lat/lon from CONUS extent) assumption mis-registered by ~28 km median and was superseded
 
 ---
 
@@ -449,7 +457,13 @@ data/raw/
 - ❌ Unknown spatial resolution
 - ❌ No validation metrics published
 
-**Fitness for Purpose:** **UNSUITABLE** for quantitative depth calculations
+**Fitness for Purpose:** **UNSUITABLE** for quantitative depth calculations *as raw images*
+
+> **Update (2026-09-23):** After digitization and Lambert georeferencing, the deep SMU layers
+> became usable for **binned, regional-scale** depth-to-300°C screening beyond Stanford's 7 km
+> limit (±12.5°C temperature resolution, ~3 km median positional accuracy). They remain
+> unsuitable for site-specific, precise depth calculations — see the caveats in
+> [`SMU_DIGITIZATION_REPORT.md`](SMU_DIGITIZATION_REPORT.md).
 
 ---
 

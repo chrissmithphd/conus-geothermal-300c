@@ -44,7 +44,7 @@ The modeled ≤10 km resource is overwhelmingly concentrated west of roughly **�
 | **Central–southern Utah** | Roosevelt Hot Springs / FORGE, Sevier & Black Rock basins — *not* the northern Wasatch | 134 |
 | **Rio Grande rift (New Mexico)** | Valles/Jemez, Socorro, Rio Grande corridor | 45 |
 | **Arizona** | Single cell in the NW Arizona Basin & Range | 1 |
-| **Great Plains → Atlantic** | Stable craton — no shallow cells | **all > 10 km** |
+| **Great Plains → Atlantic** | Stable craton — thick, cold lithosphere (deepest 300 °C is 8–10 km in the East Texas Basin) | **0** |
 
 The shallow resource is **not a single contiguous mega-target**. The interiors of Nevada and Utah are mostly 7–10 km; the genuinely shallow cells sit at the *edges* (northern Nevada, central-southern Utah) and in the volcanic/rift settings above. The **Colorado upper Arkansas corridor between Aspen and Salida** — the northern reach of the Rio Grande rift — is the densest shallow cluster in the interior Rockies, with ≈130 cells ≤6 km.
 

@@ -419,7 +419,7 @@ Geothermal Laboratory and are reproduced here only to validate the digitisation.
 
 Data sources: Stanford Geothermal Program · SMU Geothermal Laboratory · US DOE Geothermal Technologies Office · OpenEI / NREL · US Census Bureau
 
-Analysis conducted with [Claude Code](https://claude.ai/code) (Sonnet 4.5) by Anthropic.
+Analysis and documentation prepared with [Claude Code](https://claude.ai/code) by Anthropic.
 
 ---
 
@@ -427,6 +427,6 @@ Analysis conducted with [Claude Code](https://claude.ai/code) (Sonnet 4.5) by An
 
 **Christopher Smith** · [@chrissmithphd](https://github.com/chrissmithphd)
 
-*Last updated 2026-09-23*
+*Last updated 2026-09-24*
 
 </div>

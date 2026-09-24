@@ -17,6 +17,17 @@ data/processed/*.parquet
 data/processed/smu_digitized/*.csv
 data/processed/smu_digitized/*.parquet
 
+# ...but keep the small audit/summary tables + compact parquet copies so a
+# reader can check the headline numbers and pull the full data without
+# rerunning the pipeline. The giant redundant .csv dumps stay ignored
+# (regenerable via digitize_all_smu_maps.py / calculate_depth_to_300c.py).
+!data/processed/depth_bin_area_stats.csv
+!data/processed/energy_generation_potential.csv
+!data/processed/coal_plants_with_geothermal.csv
+!data/processed/coal_geothermal_top_candidates.csv
+!data/processed/conus_depth_to_300c.parquet
+!data/processed/smu_digitized/smu_digitized_all_depths.parquet
+
 # Keep directory structure but not large files
 !data/raw/stanford/.gitkeep
 !data/raw/smu/.gitkeep

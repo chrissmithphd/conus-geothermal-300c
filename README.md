@@ -33,19 +33,20 @@ TIGER 2023 boundaries. Grey regions require >10 km drilling depth.*
 
 ## Where the models suggest accessible resources may be
 
-The modeled ≤10 km resource is overwhelmingly concentrated west of roughly **−100° longitude** — the divide between the actively extending, thin-crust West and the cold, thick, stable craton beneath the eastern two-thirds of the country. But "the West" is not one uniform target. The **25,448 cells that reach 300 °C within 6 km** — within the range of existing deep-drilling experience — cluster in a handful of distinct volcanic and rift settings, *not* a single contiguous province. Grouping those cells by the state they fall in:
+The modeled ≤10 km resource is overwhelmingly concentrated west of roughly **−100° longitude** — the divide between the actively extending, thin-crust West and the cold, thick, stable craton beneath the eastern two-thirds of the country. But "the West" is not one uniform target. The **2,770 cells that reach 300 °C within 6 km** — within the range of existing deep-drilling experience — cluster in a handful of distinct volcanic and rift settings, *not* a single contiguous province. Grouping those cells by the state they fall in (every state with ≤6 km cells is shown):
 
 | Setting | Where the shallow cells are | Cells ≤6 km |
 |---|---|---:|
-| **Cascades + California rifts** | N. California / Oregon / Washington Cascade axis; Salton Trough, Coso, Long Valley, Geysers (CA) | ~13,000 (CA 8,054 · OR 4,238 · WA 668) |
-| **Yellowstone–Snake River Plain** | Hotspot track arcing NE across southern Idaho toward Yellowstone; Wyoming/Montana margins | ~5,900 (ID 5,058 · WY 690 · MT 188) |
-| **Northern Nevada** | NW/N Nevada near the NE-California & S-Oregon corner (Black Rock, Surprise Valley) — *not* statewide Basin & Range | 2,433 |
-| **Colorado — upper Arkansas / Rio Grande rift** | Aspen–Salida corridor (Sawatch Range, Mount Princeton), San Luis Valley | 1,845 (≈700 in the Aspen–Salida corridor alone) |
-| **Central–southern Utah** | Roosevelt Hot Springs / FORGE, Sevier & Black Rock basins — *not* the northern Wasatch | 926 |
-| **Rio Grande rift (New Mexico)** | Valles/Jemez, Socorro, Rio Grande corridor | 908 |
+| **Cascades + California rifts** | N. California / Oregon / Washington Cascade axis; Salton Trough, Coso, Long Valley, Geysers (CA) | 1,423 (CA 911 · OR 501 · WA 11) |
+| **Yellowstone–Snake River Plain** | Hotspot track arcing NE across southern Idaho toward Yellowstone; Wyoming/Montana margins | 764 (ID 703 · WY 41 · MT 20) |
+| **Colorado — upper Arkansas / Rio Grande rift** | Aspen–Salida corridor (Sawatch Range, Mount Princeton), San Luis Valley | 199 (≈130 in the Aspen–Salida corridor) |
+| **Northern Nevada** | NW/N Nevada near the NE-California & S-Oregon corner (Black Rock, Surprise Valley) — *not* statewide Basin & Range | 151 |
+| **Central–southern Utah** | Roosevelt Hot Springs / FORGE, Sevier & Black Rock basins — *not* the northern Wasatch | 134 |
+| **Rio Grande rift (New Mexico)** | Valles/Jemez, Socorro, Rio Grande corridor | 45 |
+| **Arizona** | Single cell in the NW Arizona Basin & Range | 1 |
 | **Great Plains → Atlantic** | Stable craton — no shallow cells | **all > 10 km** |
 
-The shallow resource is **not a single contiguous mega-target**. The interiors of Nevada and Utah are mostly 7–10 km; the genuinely shallow cells sit at the *edges* (northern Nevada, central-southern Utah) and in the volcanic/rift settings above. The **Colorado upper Arkansas corridor between Aspen and Salida** — the northern reach of the Rio Grande rift — is one of the densest shallow clusters in the Rockies, with ~700 cells ≤6 km (a 6–7 km field with a 5–6 km core).
+The shallow resource is **not a single contiguous mega-target**. The interiors of Nevada and Utah are mostly 7–10 km; the genuinely shallow cells sit at the *edges* (northern Nevada, central-southern Utah) and in the volcanic/rift settings above. The **Colorado upper Arkansas corridor between Aspen and Salida** — the northern reach of the Rio Grande rift — is the densest shallow cluster in the interior Rockies, with ≈130 cells ≤6 km.
 
 The very shallowest cells (**4–5 km**, 64 cells) sit on the Oregon/Washington Cascade axis and in California; the 5–6 km tier broadens to pull in the Snake River Plain and the Colorado corridor.
 

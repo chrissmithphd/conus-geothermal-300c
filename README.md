@@ -33,19 +33,21 @@ TIGER 2023 boundaries. Grey regions require >10 km drilling depth.*
 
 ## Where the models suggest accessible resources may be
 
-Nearly all shallow-depth cells (<10 km) appear west of roughly **−100° longitude**. The broad east-west pattern is consistent with known tectonic differences: the actively extending, thin-crust West versus the cold, thick, stable craton beneath the eastern two-thirds of the country.
+Nearly every shallow cell (≤10 km) falls west of roughly **−100° longitude** — the divide between the actively extending, thin-crust West and the cold, thick, stable craton beneath the eastern two-thirds of the country. But "the West" is not one uniform target. The **25,448 cells that reach 300 °C within 6 km** — the depth range today's drilling can actually hit — cluster in a handful of distinct volcanic and rift settings, *not* a single contiguous province. Grouping those cells by the state they fall in:
 
-| Province | States | Modeled depth to 300 °C |
-|---|---|---|
-| **Basin & Range** | NV, UT, S. ID | 6–8 km — largest contiguous target |
-| **Cascade arc** | OR, WA, N. CA | 6–7 km, locally 5–6 km |
-| **Snake River Plain / Yellowstone** | ID, WY, MT | 6–8 km |
-| **Salton Trough / Imperial Valley** | S. CA | 6–7 km |
-| **Rio Grande Rift** | NM, W. TX | 7–10 km |
-| **Great Plains → Atlantic** | ~40 states | **> 10 km** |
+| Setting | Where the shallow cells actually are | Cells ≤6 km |
+|---|---|---:|
+| **Cascades + California rifts** | N. California / Oregon / Washington Cascade axis; Salton Trough, Coso, Long Valley, Geysers (CA) | ~13,000 (CA 8,054 · OR 4,238 · WA 668) |
+| **Yellowstone–Snake River Plain** | Hotspot track arcing NE across southern Idaho toward Yellowstone; Wyoming/Montana margins | ~5,900 (ID 5,058 · WY 690 · MT 188) |
+| **Northern Nevada** | NW/N Nevada near the NE-California & S-Oregon corner (Black Rock, Surprise Valley) — *not* statewide Basin & Range | 2,433 |
+| **Colorado — upper Arkansas / Rio Grande rift** | Aspen–Salida corridor (Sawatch Range, Mount Princeton), San Luis Valley | 1,845 (≈700 in the Aspen–Salida corridor alone) |
+| **Central–southern Utah** | Roosevelt Hot Springs / FORGE, Sevier & Black Rock basins — *not* the northern Wasatch | 926 |
+| **Rio Grande rift (New Mexico)** | Valles/Jemez, Socorro, Rio Grande corridor | 908 |
+| **Great Plains → Atlantic** | Stable craton — no shallow cells | **all > 10 km** |
 
-The shallowest cells (**4–5 km**, 64 cells) sit west of ~−106° longitude,
-concentrated along the Oregon/Washington Cascade axis and Northern California.
+Two corrections to any tidy "Basin & Range" story: there is **no single contiguous mega-target**. The interiors of Nevada and Utah are mostly 7–10 km; the genuinely shallow cells sit at the *edges* (northern Nevada, central-southern Utah) and in the volcanic/rift settings above. And the **Colorado upper Arkansas corridor between Aspen and Salida** is one of the densest shallow clusters in the Rockies — the northern reach of the Rio Grande rift, ~700 cells ≤6 km (a 6–7 km field with a 5–6 km core) — yet it went unmentioned entirely in earlier drafts.
+
+The very shallowest cells (**4–5 km**, 64 cells) sit on the Oregon/Washington Cascade axis and in California; the 5–6 km tier broadens to pull in the Snake River Plain and the Colorado corridor.
 
 ---
 
@@ -147,9 +149,9 @@ These sites represent interesting coincidences worth investigating further, not 
 ### Geographic Distribution
 
 **Western US:** 20 of 50 plants (40%) at ≤10 km modeled depth  
-**Rest of US:** 5 of 285 plants (~2%) at ≤10 km — all Texas/Louisiana Gulf plants in the 8–10 km band
+**Rest of US:** 5 of 285 plants (~2%) at ≤10 km — four in the East Texas Basin / NW Louisiana (Martin Lake, Welsh, Pirkey, Dolet Hills) plus the Gulf-coastal-plain Coleto Creek. **All five are pinned to exactly 10.0 km — the bottom edge of the 8–10 km frontier band, not a shallow resource.** On the map they read as isolated red dots in an otherwise gray (>10 km) East Texas surround; nothing in Texas is genuinely shallow.
 
-**States (all plants at ≤10 km):** Nevada (3/3), California (1/1), Oregon (1/1). Colorado 8/11, Arizona 3/5, Utah 3/7.
+**States (all plants at ≤10 km):** Nevada (3/3), California (1/1), Oregon (1/1). Colorado 8/11, Arizona 3/5, Utah 3/7, Texas 4/18, Louisiana 1/4.
 
 **Data:** EIA Form 860 (2025) + Stanford Thermal Earth Model (2024) + SMU (2011). See [`research/COAL_GEOTHERMAL_ANALYSIS.md`](research/COAL_GEOTHERMAL_ANALYSIS.md) for detailed analysis.
 
@@ -331,22 +333,6 @@ downloaded into `data/raw/boundaries/`.
 | **~4 km cells** | Sub-grid thermal anomalies are smoothed away |
 | **Single 300 °C threshold** | Superhot/supercritical conditions depend on pressure; water becomes supercritical at ~374°C. The 300°C threshold used here is a screening value |
 | **No extrapolation performed** | By design. Cells beyond 10 km are reported as `> 10 km`, never as an invented number. |
-
----
-
-## What's next
-
-**Completed Analysis:**
-- ✅ Coal plant overlay (25 of 335 in-coverage plants at ≤10 km depth, see above)
-- ✅ Energy generation potential (~13,000 GW illustrative across ≤10 km bins, typical development)
-
-**Future Enhancements:**
-
-1. **Transmission Analysis** - Distance from geothermal resources to demand centers, HVDC requirements
-2. **Economic Modeling** - LCOE estimates for different depth/temperature scenarios with drilling cost sensitivity
-3. **Environmental Overlay** - Protected lands, water availability, seismic risk zones
-4. **Drilling Technology Roadmap** - R&D requirements to commercialize ultra-deep drilling (>10 km)
-5. **Regional Energy Transition Plans** - State-by-state pathways for geothermal development
 
 ---
 

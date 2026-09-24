@@ -35,7 +35,7 @@ TIGER 2023 boundaries. Grey regions require >10 km drilling depth.*
 
 The modeled ≤10 km resource is overwhelmingly concentrated west of roughly **−100° longitude** — the divide between the actively extending, thin-crust West and the cold, thick, stable craton beneath the eastern two-thirds of the country. But "the West" is not one uniform target. The **25,448 cells that reach 300 °C within 6 km** — within the range of existing deep-drilling experience — cluster in a handful of distinct volcanic and rift settings, *not* a single contiguous province. Grouping those cells by the state they fall in:
 
-| Setting | Where the shallow cells actually are | Cells ≤6 km |
+| Setting | Where the shallow cells are | Cells ≤6 km |
 |---|---|---:|
 | **Cascades + California rifts** | N. California / Oregon / Washington Cascade axis; Salton Trough, Coso, Long Valley, Geysers (CA) | ~13,000 (CA 8,054 · OR 4,238 · WA 668) |
 | **Yellowstone–Snake River Plain** | Hotspot track arcing NE across southern Idaho toward Yellowstone; Wyoming/Montana margins | ~5,900 (ID 5,058 · WY 690 · MT 188) |
@@ -45,7 +45,7 @@ The modeled ≤10 km resource is overwhelmingly concentrated west of roughly **�
 | **Rio Grande rift (New Mexico)** | Valles/Jemez, Socorro, Rio Grande corridor | 908 |
 | **Great Plains → Atlantic** | Stable craton — no shallow cells | **all > 10 km** |
 
-Two corrections to any tidy "Basin & Range" story: there is **no single contiguous mega-target**. The interiors of Nevada and Utah are mostly 7–10 km; the genuinely shallow cells sit at the *edges* (northern Nevada, central-southern Utah) and in the volcanic/rift settings above. And the **Colorado upper Arkansas corridor between Aspen and Salida** is one of the densest shallow clusters in the Rockies — the northern reach of the Rio Grande rift, ~700 cells ≤6 km (a 6–7 km field with a 5–6 km core) — yet it went unmentioned entirely in earlier drafts.
+The shallow resource is **not a single contiguous mega-target**. The interiors of Nevada and Utah are mostly 7–10 km; the genuinely shallow cells sit at the *edges* (northern Nevada, central-southern Utah) and in the volcanic/rift settings above. The **Colorado upper Arkansas corridor between Aspen and Salida** — the northern reach of the Rio Grande rift — is one of the densest shallow clusters in the Rockies, with ~700 cells ≤6 km (a 6–7 km field with a 5–6 km core).
 
 The very shallowest cells (**4–5 km**, 64 cells) sit on the Oregon/Washington Cascade axis and in California; the 5–6 km tier broadens to pull in the Snake River Plain and the Colorado corridor.
 
@@ -123,22 +123,39 @@ Montana/Yellowstone regional sanity check:
 - 20 of those in western US
 - 310 plants (93%) at >10 km depth
 
-The corrected georeferencing pushed the fleet-adjacent resource deeper than the earlier (mis-registered) analysis implied: apart from a single 62 MW cogeneration plant at 6–7 km, every coal plant sitting on ≤10 km of depth-to-300 °C is in the **8–10 km frontier band**, where 300 °C is only reached at the deepest SMU layer.
+Apart from a single 62 MW cogeneration plant at 6–7 km, every coal plant sitting on ≤10 km of depth-to-300 °C is in the **8–10 km frontier band**, where 300 °C is only reached at the deepest SMU layer.
 
 ### Coal sites worth further screening
 
-Depth shown is the SMU layer where 300 °C is first met (8.5 or 10 km for the frontier band).
+All 25 in-coverage coal plants sitting on ≤10 km of depth-to-300 °C, shallowest first then by capacity. Depth shown is the SMU layer where 300 °C is first met.
 
 | Plant | State | Capacity | Status | Depth to 300 °C |
 |-------|-------|----------|--------|-----------------|
 | Argus Cogen | CA | 62 MW | Operating | 6.8 km |
-| Martin Lake | TX | 2,380 MW | Operating | 10.0 km |
 | Springerville | AZ | 1,766 MW | Operating | 8.5 km |
 | Intermountain Power | UT | 1,640 MW | Retired 2025 | 8.5 km |
+| North Valmy | NV | 290 MW | Operating | 8.5 km |
+| Kennecott Power Plant | UT | 182 MW | Retired 2019 | 8.5 km |
+| Martin Lake | TX | 2,380 MW | Operating | 10.0 km |
+| Welsh | TX | 1,674 MW | Operating | 10.0 km |
 | Comanche | CO | 1,635 MW | Operating | 10.0 km |
 | Craig | CO | 1,428 MW | Operating | 10.0 km |
 | Huntington | UT | 1,016 MW | Operating | 10.0 km |
+| Coronado | AZ | 822 MW | Operating | 10.0 km |
+| Pirkey | TX | 721 MW | Retired 2023 | 10.0 km |
+| Dolet Hills | LA | 721 MW | Retired 2021 | 10.0 km |
 | Boardman | OR | 642 MW | Retired 2020 | 10.0 km |
+| Coleto Creek | TX | 622 MW | Operating | 10.0 km |
+| Hayden | CO | 465 MW | Operating | 10.0 km |
+| Reid Gardner | NV | 295 MW | Retired 2017 | 10.0 km |
+| Escalante | NM | 257 MW | Retired 2020 | 10.0 km |
+| TS Power Plant | NV | 242 MW | Operating | 10.0 km |
+| Ray D Nixon | CO | 207 MW | Operating | 10.0 km |
+| Apache Station | AZ | 204 MW | Operating | 10.0 km |
+| Valmont | CO | 192 MW | Retired 2017 | 10.0 km |
+| Cherokee | CO | 170 MW | Retired 2015 | 10.0 km |
+| South Plant | CO | 125 MW | Retired 2022 | 10.0 km |
+| Trinidad | CO | 4 MW | Retired 2017 | 10.0 km |
 
 ![Western coal plants zoom](plots/coal_plants_western_zoom.png)
 
@@ -217,18 +234,17 @@ result georeferenced to the CONUS extent.
 
 ![All SMU depths](plots/smu_digitized_all_depths.png)
 
-Reconstructed temperature fields at 7.5, 8.5 and 10 km after georeferencing. Major thermal
-patterns visible in the source figures are retained after georeferencing, and hot zones now
-fall on land rather than offshore — the earlier plate-carrée assumption mis-registered by
-~28 km median and pushed them into the ocean.
+Reconstructed temperature fields at 7.5, 8.5 and 10 km. Major thermal patterns visible in
+the source figures are retained after georeferencing, and hot zones fall on land, consistent
+with the drawn state boundaries.
 
 ![SMU registration diagnostic](plots/smu_registration_diagnostic.png)
 
 *Registration diagnostic: the digitized SMU 10 km field reprojected to WGS 84 with US Census
 state boundaries overlaid. The drawn thermal field and true state outlines align after the
 Lambert Conformal Conic (ESRI:102004) ICP fit; measured residual is ~3 km median / ~9 km at
-the 90th percentile, versus ~28 km under the old plate-carrée assumption. The fit is fully
-reproducible from [`register_smu_maps.py`](register_smu_maps.py).*
+the 90th percentile. The fit is fully reproducible from
+[`register_smu_maps.py`](register_smu_maps.py).*
 
 </details>
 
@@ -330,13 +346,13 @@ downloaded into `data/raw/boundaries/`.
 
 ---
 
-## Data integrity checks
+## Data integrity
 
-Two spatial-integrity problems surfaced during development; the current pipeline guards against both.
+Two spatial safeguards are built into the pipeline.
 
-**Stanford layer alignment.** The Stanford depth layers are not guaranteed to share row ordering, so combining them by row position could splice together temperatures from different locations — a fictional vertical profile. The pipeline now sorts and matches each layer by geographic coordinate and verifies alignment (coordinates agree to < 1e-6°) before constructing any profile.
+**Layer alignment.** The Stanford depth layers do not share a guaranteed row ordering, so each layer is matched by geographic coordinate and verified aligned (coordinates agree to < 1e-6°) before any vertical profile is constructed — temperatures are never spliced across locations.
 
-**SMU geographic registration.** The initial digitization treated the rendered SMU map too much like a rectangular lat/lon image. Because the source figure is drawn in a conic projection, that assumption displaced the field by ~28 km median (worst toward the north, pushing hot zones offshore). The corrected, projection-aware registration — a Lambert Conformal Conic (ESRI:102004) affine fitted by ICP against the maps' drawn state borders — reduces the residual to ~3 km median / ~9 km at the 90th percentile. It is reproducible via [`register_smu_maps.py`](register_smu_maps.py); see the [registration report](docs/SMU_REGISTRATION_REPORT.md) and the diagnostic figure above.
+**Projection-aware registration.** The SMU maps are drawn in a conic projection, so they are georeferenced with a Lambert Conformal Conic (ESRI:102004) affine fitted by ICP against the maps' drawn state borders, giving ~3 km median / ~9 km 90th-percentile positional accuracy. The fit is reproducible via [`register_smu_maps.py`](register_smu_maps.py); see the [registration report](docs/SMU_REGISTRATION_REPORT.md) and the diagnostic figure above.
 
 ---
 

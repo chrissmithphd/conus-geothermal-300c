@@ -1,0 +1,8 @@
+location,type,states,rep_lat,rep_lon,modeled_depth_300c,depth_kind,shallowest_km,cells_reached_le10km,cells_le7km,cells_le6km,consistency,interpretation
+Cascades (OR/WA/N.CA axis),geothermal region,OR·WA·CA,41.961,-121.504,6.6 km,"Stanford (continuous, ≤7 km cells)",4.66,14045,5101,595,large coherent region,Volcanic arc; shallowest cells in the analysis sit on the Cascade crest.
+Salton Trough / Imperial Valley,geothermal region,CA,33.203,-115.749,6.7 km,"Stanford (continuous, ≤7 km cells)",6.12,734,470,0,large coherent region,Active spreading center; among the hottest-shallow settings in CONUS.
+Snake River Plain / Yellowstone,geothermal region,ID·WY·MT,43.449,-112.558,6.5 km,"Stanford (continuous, ≤7 km cells)",4.95,10408,5212,738,large coherent region,Hotspot track; shallow cells arc NE toward the Yellowstone caldera.
+Northern Nevada (NW corner),geothermal region,NV,41.457,-118.582,6.7 km,"Stanford (continuous, ≤7 km cells)",4.42,3304,1048,100,large coherent region,"Edge-of-Basin&Range extension, not statewide; Black Rock / Surprise Valley."
+Roosevelt Hot Springs / Utah FORGE,geothermal site,UT,38.42,-112.827,6.2 km,"Stanford (continuous, ≤7 km cells)",4.11,168,139,54,large coherent region,"DOE EGS field site; small, well-characterized shallow anomaly."
+Aspen-Salida / Upper Arkansas,geothermal region,CO,38.877,-106.264,6.4 km,"Stanford (continuous, ≤7 km cells)",5.28,504,351,87,large coherent region,Northern reach of the Rio Grande rift; densest shallow cluster in interior Rockies.
+Rio Grande Rift (New Mexico),geothermal region,NM,34.028,-106.938,6.6 km,"Stanford (continuous, ≤7 km cells)",4.36,2757,579,44,large coherent region,"Extensional rift; Valles/Jemez, Socorro, Rio Grande corridor."

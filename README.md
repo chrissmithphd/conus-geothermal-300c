@@ -33,22 +33,36 @@ TIGER 2023 boundaries. Grey regions require >10 km drilling depth.*
 
 ## Where the models suggest accessible resources may be
 
-The modeled ≤10 km resource is overwhelmingly concentrated west of roughly **−100° longitude** — the divide between the actively extending, thin-crust West and the cold, thick, stable craton beneath the eastern two-thirds of the country. But "the West" is not one uniform target. The **2,770 cells that reach 300 °C within 6 km** — within the range of existing deep-drilling experience — cluster in a handful of distinct volcanic and rift settings, *not* a single contiguous province. Grouping those cells by the state they fall in (every state with ≤6 km cells is shown):
+The modeled ≤10 km resource is overwhelmingly west of roughly **−100° longitude** — the divide
+between the actively extending, thin-crust West and the cold, thick, stable craton beneath the
+eastern two-thirds of the country. Even there it is not one contiguous target: the **2,770 cells
+reaching 300 °C within 6 km** cluster in a handful of distinct volcanic and rift settings. The
+table below grounds each in coordinates and modeled depth, read straight off the grid
+([`data/processed/geographic_reference.csv`](data/processed/geographic_reference.csv)); the
+region names and interpretations are labels laid over those cells, not derived from them.
 
-| Setting | Where the shallow cells are | Cells ≤6 km |
-|---|---|---:|
-| **Cascades + California rifts** | N. California / Oregon / Washington Cascade axis; Salton Trough, Coso, Long Valley, Geysers (CA) | 1,423 (CA 911 · OR 501 · WA 11) |
-| **Yellowstone–Snake River Plain** | Hotspot track arcing NE across southern Idaho toward Yellowstone; Wyoming/Montana margins | 764 (ID 703 · WY 41 · MT 20) |
-| **Colorado — upper Arkansas / Rio Grande rift** | Aspen–Salida corridor (Sawatch Range, Mount Princeton), San Luis Valley | 199 (≈130 in the Aspen–Salida corridor) |
-| **Northern Nevada** | NW/N Nevada near the NE-California & S-Oregon corner (Black Rock, Surprise Valley) — *not* statewide Basin & Range | 151 |
-| **Central–southern Utah** | Roosevelt Hot Springs / FORGE, Sevier & Black Rock basins — *not* the northern Wasatch | 134 |
-| **Rio Grande rift (New Mexico)** | Valles/Jemez, Socorro, Rio Grande corridor | 45 |
-| **Arizona** | Single cell in the NW Arizona Basin & Range | 1 |
-| **Great Plains → Atlantic** | Stable craton — thick, cold lithosphere (deepest 300 °C is 8–10 km in the East Texas Basin) | **0** |
+Region depths are the **median of the continuous Stanford cells that reach 300 °C within 7 km**
+(the accessible signature — a box-wide median would be dragged down by surrounding deep cells),
+with the shallowest cell in parentheses; coordinates are the median location of that shallow tier.
 
-The shallow resource is **not a single contiguous mega-target**. The interiors of Nevada and Utah are mostly 7–10 km; the genuinely shallow cells sit at the *edges* (northern Nevada, central-southern Utah) and in the volcanic/rift settings above. The **Colorado upper Arkansas corridor between Aspen and Salida** — the northern reach of the Rio Grande rift — is the densest shallow cluster in the interior Rockies, with ≈130 cells ≤6 km.
+| Region / site | State(s) | Rep. lat, lon | Depth to 300 °C | Cells ≤6 / ≤7 / ≤10 km | Coherence | Setting |
+|---|---|---|---:|---:|---|---|
+| **Cascades** (OR/WA/N. CA axis) | OR · WA · CA | 41.96, −121.50 | 6.6 km (min 4.7) | 595 / 5,101 / 14,045 | large coherent belt | Volcanic arc; the shallowest cells in the whole analysis sit on the Cascade crest |
+| **Salton Trough / Imperial Valley** | CA | 33.20, −115.75 | 6.7 km (min 6.1) | 0 / 470 / 734 | large coherent zone | Active spreading center; among the hottest-shallow settings in CONUS |
+| **Snake River Plain / Yellowstone** | ID · WY · MT | 43.45, −112.56 | 6.5 km (min 5.0) | 738 / 5,212 / 10,408 | large coherent belt | Hotspot track arcing NE toward the caldera |
+| **Northern Nevada** (NW corner) | NV | 41.46, −118.58 | 6.7 km (min 4.4) | 100 / 1,048 / 3,304 | large coherent zone | Edge-of-Basin & Range extension, *not* statewide (Black Rock, Surprise Valley) |
+| **Roosevelt Hot Springs / Utah FORGE** | UT | 38.42, −112.83 | 6.2 km (min 4.1) | 54 / 139 / 168 | compact, coherent | DOE EGS field site; small, well-characterized shallow anomaly |
+| **Aspen–Salida / Upper Arkansas** | CO | 38.88, −106.26 | 6.4 km (min 5.3) | 87 / 351 / 504 | coherent cluster | Northern reach of the Rio Grande rift; densest shallow cluster in the interior Rockies |
+| **Rio Grande Rift** (New Mexico) | NM | 34.03, −106.94 | 6.6 km (min 4.4) | 44 / 579 / 2,757 | large coherent zone | Extensional rift; Valles/Jemez, Socorro, Rio Grande corridor |
 
-The very shallowest cells (**4–5 km**, 64 cells) sit on the Oregon/Washington Cascade axis and in California; the 5–6 km tier broadens to pull in the Snake River Plain and the Colorado corridor.
+*Cell counts are grid cells inside each region's bounding box reaching 300 °C within 6, 7 and
+10 km. The boxes are geographic and do not tile CONUS, so they are subsets of — and won't sum
+to — the 2,770-cell ≤6 km total. Interiors of Nevada and Utah are mostly 7–10 km; the genuinely
+shallow cells sit at the province edges and in the volcanic/rift cores above.*
+
+*This is modeled temperature-at-depth only — not a statement about reservoir quality, fluid, or
+whether a well here could produce power. For the coal-plant view of the resource, see
+[Coal infrastructure and modeled geothermal potential](#coal-infrastructure-and-modeled-geothermal-potential).*
 
 ---
 
@@ -319,6 +333,10 @@ latitude-corrected surface area, and tabulate.
 The `source` column matters: Stanford rows carry a genuine continuous depth estimate, SMU
 rows carry only a bin. Filter on it before doing anything quantitative with `depth_300_km`.
 
+The region reference table above is regenerated from this grid by
+[`build_reference_tables.py`](build_reference_tables.py) into
+[`geographic_reference.csv`](data/processed/geographic_reference.csv).
+
 ---
 
 ## Reproduce it
@@ -337,6 +355,7 @@ python create_final_map.py              # points map + interactive Leaflet index
 python create_montana_validation.py     # regional validation plots
 python analyze_coal_geothermal_overlay.py && python create_coal_overlay_map.py
 python calculate_energy_potential.py && python create_energy_visualizations.py && python create_combined_metrics_plot.py
+python build_reference_tables.py        # geographic-reference CSV (region depths + coordinates)
 ```
 
 `digitize_all_smu_maps.py` is self-contained: the fitted Lambert affines are embedded, so a
@@ -428,6 +447,6 @@ Analysis and documentation prepared with [Claude Code](https://claude.ai/code) b
 
 **Christopher Smith** · [@chrissmithphd](https://github.com/chrissmithphd)
 
-*Last updated 2026-09-24*
+*Last updated 2026-09-28*
 
 </div>

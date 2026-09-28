@@ -25,6 +25,7 @@ data/processed/smu_digitized/*.parquet
 !data/processed/energy_generation_potential.csv
 !data/processed/coal_plants_with_geothermal.csv
 !data/processed/coal_geothermal_top_candidates.csv
+!data/processed/geographic_reference.csv
 !data/processed/conus_depth_to_300c.parquet
 !data/processed/smu_digitized/smu_digitized_all_depths.parquet
 

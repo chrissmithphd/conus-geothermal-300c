@@ -45,15 +45,20 @@ Region depths are the **median of the continuous Stanford cells that reach 300 �
 (the accessible signature — a box-wide median would be dragged down by surrounding deep cells),
 with the shallowest cell in parentheses; coordinates are the median location of that shallow tier.
 
-| Region / site | State(s) | Rep. lat, lon | Depth to 300 °C | Cells ≤6 / ≤7 / ≤10 km | Coherence | Setting |
-|---|---|---|---:|---:|---|---|
-| **Cascades** (OR/WA/N. CA axis) | OR · WA · CA | 41.96, −121.50 | 6.6 km (min 4.7) | 595 / 5,101 / 14,045 | large coherent belt | Volcanic arc; the shallowest cells in the whole analysis sit on the Cascade crest |
-| **Salton Trough / Imperial Valley** | CA | 33.20, −115.75 | 6.7 km (min 6.1) | 0 / 470 / 734 | large coherent zone | Active spreading center; among the hottest-shallow settings in CONUS |
-| **Snake River Plain / Yellowstone** | ID · WY · MT | 43.45, −112.56 | 6.5 km (min 5.0) | 738 / 5,212 / 10,408 | large coherent belt | Hotspot track arcing NE toward the caldera |
-| **Northern Nevada** (NW corner) | NV | 41.46, −118.58 | 6.7 km (min 4.4) | 100 / 1,048 / 3,304 | large coherent zone | Edge-of-Basin & Range extension, *not* statewide (Black Rock, Surprise Valley) |
-| **Roosevelt Hot Springs / Utah FORGE** | UT | 38.42, −112.83 | 6.2 km (min 4.1) | 54 / 139 / 168 | compact, coherent | DOE EGS field site; small, well-characterized shallow anomaly |
-| **Aspen–Salida / Upper Arkansas** | CO | 38.88, −106.26 | 6.4 km (min 5.3) | 87 / 351 / 504 | coherent cluster | Northern reach of the Rio Grande rift; densest shallow cluster in the interior Rockies |
-| **Rio Grande Rift** (New Mexico) | NM | 34.03, −106.94 | 6.6 km (min 4.4) | 44 / 579 / 2,757 | large coherent zone | Extensional rift; Valles/Jemez, Socorro, Rio Grande corridor |
+![Numbered map of the suggested accessible-resource regions](plots/accessible_regions_map.png)
+
+*Each numbered star marks the representative location of the correspondingly numbered region
+below; the shaded blob covers its approximate extent.*
+
+| # | Region / site | State(s) | Rep. lat, lon | Depth to 300 °C | Cells ≤6 / ≤7 / ≤10 km | Coherence | Setting |
+|---:|---|---|---|---:|---:|---|---|
+| **1** | **Cascades** (OR/WA/N. CA axis) | OR · WA · CA | 41.96, −121.50 | 6.6 km (min 4.7) | 595 / 5,101 / 14,045 | large coherent belt | Volcanic arc; the shallowest cells in the whole analysis sit on the Cascade crest |
+| **2** | **Salton Trough / Imperial Valley** | CA | 33.20, −115.75 | 6.7 km (min 6.1) | 0 / 470 / 734 | large coherent zone | Active spreading center; among the hottest-shallow settings in CONUS |
+| **3** | **Snake River Plain / Yellowstone** | ID · WY · MT | 43.45, −112.56 | 6.5 km (min 5.0) | 738 / 5,212 / 10,408 | large coherent belt | Hotspot track arcing NE toward the caldera |
+| **4** | **Northern Nevada** (NW corner) | NV | 41.46, −118.58 | 6.7 km (min 4.4) | 100 / 1,048 / 3,304 | large coherent zone | Edge-of-Basin & Range extension, *not* statewide (Black Rock, Surprise Valley) |
+| **5** | **Roosevelt Hot Springs / Utah FORGE** | UT | 38.42, −112.83 | 6.2 km (min 4.1) | 54 / 139 / 168 | compact, coherent | DOE EGS field site; small, well-characterized shallow anomaly |
+| **6** | **Aspen–Salida / Upper Arkansas** | CO | 38.88, −106.26 | 6.4 km (min 5.3) | 87 / 351 / 504 | coherent cluster | Northern reach of the Rio Grande rift; densest shallow cluster in the interior Rockies |
+| **7** | **Rio Grande Rift** (New Mexico) | NM | 34.03, −106.94 | 6.6 km (min 4.4) | 44 / 579 / 2,757 | large coherent zone | Extensional rift; Valles/Jemez, Socorro, Rio Grande corridor |
 
 *Cell counts are grid cells inside each region's bounding box reaching 300 °C within 6, 7 and
 10 km. The boxes are geographic and do not tile CONUS, so they are subsets of — and won't sum

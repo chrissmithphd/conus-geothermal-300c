@@ -48,7 +48,7 @@ with the shallowest cell in parentheses; coordinates are the median location of 
 ![Numbered map of the suggested accessible-resource regions](plots/accessible_regions_map.png)
 
 *Each numbered star marks the representative location of the correspondingly numbered region
-below; the shaded blob covers its approximate extent.*
+below; the depth field itself shows each region's extent.*
 
 | # | Region / site | State(s) | Rep. lat, lon | Depth to 300 °C | Cells ≤6 / ≤7 / ≤10 km | Coherence | Setting |
 |---:|---|---|---|---:|---:|---|---|
@@ -59,6 +59,8 @@ below; the shaded blob covers its approximate extent.*
 | **5** | **Roosevelt Hot Springs / Utah FORGE** | UT | 38.42, −112.83 | 6.2 km (min 4.1) | 54 / 139 / 168 | compact, coherent | DOE EGS field site; small, well-characterized shallow anomaly |
 | **6** | **Aspen–Salida / Upper Arkansas** | CO | 38.88, −106.26 | 6.4 km (min 5.3) | 87 / 351 / 504 | coherent cluster | Northern reach of the Rio Grande rift; densest shallow cluster in the interior Rockies |
 | **7** | **Rio Grande Rift** (New Mexico) | NM | 34.03, −106.94 | 6.6 km (min 4.4) | 44 / 579 / 2,757 | large coherent zone | Extensional rift; Valles/Jemez, Socorro, Rio Grande corridor |
+| **8** | **The Geysers / Clear Lake** | CA | 38.81, −122.76 | 6.0 km (min 4.4) | 222 / 411 / 413 | dense, coherent zone | Clear Lake volcanic field; world's largest operating geothermal complex — shallowest CA cells outside the Salton Trough |
+| **9** | **Coso / Owens Valley** | CA | 36.09, −117.37 | 6.5 km (min 5.0) | 28 / 149 / 396 | coherent cluster | Coso Volcanic Field on the eastern Sierra front; operating flash-steam field at China Lake |
 
 *Cell counts are grid cells inside each region's bounding box reaching 300 °C within 6, 7 and
 10 km. The boxes are geographic and do not tile CONUS, so they are subsets of — and won't sum

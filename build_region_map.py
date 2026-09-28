@@ -16,7 +16,7 @@ import matplotlib.pyplot as plt
 import matplotlib.patheffects as pe
 from matplotlib.colors import ListedColormap, BoundaryNorm
 from matplotlib.path import Path
-from matplotlib.patches import PathPatch, FancyBboxPatch
+from matplotlib.patches import PathPatch
 from scipy.interpolate import griddata
 
 from build_reference_tables import REGIONS, build_reference
@@ -64,21 +64,12 @@ for coll in ax.collections:
 
 states.boundary.plot(ax=ax, linewidth=0.8, edgecolor="white", alpha=0.8, zorder=5)
 
-# --- region blobs + numbered stars ------------------------------------------
+# --- numbered stars ---------------------------------------------------------
+# Stars only: bounding boxes were removed because a lat/lon rectangle does not
+# reflect a region's true data footprint (it over-covers empty ground and
+# under-covers coherent clusters). The star marks the representative location;
+# the depth field itself shows the extent.
 for i, (name, typ, st, (la0, la1, lo0, lo1), setting) in enumerate(REGIONS, start=1):
-    # translucent blob over the region's bounding box (rounded corners)
-    blob = FancyBboxPatch(
-        (lo0, la0), lo1 - lo0, la1 - la0,
-        boxstyle="round,pad=0.15,rounding_size=0.4",
-        linewidth=2.0, edgecolor="#111111", facecolor="#111111",
-        alpha=0.18, zorder=8, mutation_aspect=1.0,
-    )
-    ax.add_patch(blob)
-    ax.add_patch(FancyBboxPatch(
-        (lo0, la0), lo1 - lo0, la1 - la0,
-        boxstyle="round,pad=0.15,rounding_size=0.4",
-        linewidth=2.0, edgecolor="#111111", facecolor="none", zorder=9))
-
     rlat = float(ref.loc[i - 1, "rep_lat"])
     rlon = float(ref.loc[i - 1, "rep_lon"])
     ax.scatter(rlon, rlat, marker="*", s=900, c="#FFD400",

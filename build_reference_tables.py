@@ -43,6 +43,13 @@ REGIONS = [
     ("Rio Grande Rift (New Mexico)", "geothermal region", "NM",
      (33.0, 36.2, -107.5, -106.0),
      "Extensional rift; Valles/Jemez, Socorro, Rio Grande corridor."),
+    ("The Geysers / Clear Lake", "geothermal region", "CA",
+     (38.4, 39.2, -123.2, -122.4),
+     "Clear Lake volcanic field; world's largest operating geothermal complex. "
+     "Shallowest CA cells outside the Salton Trough."),
+    ("Coso / Owens Valley", "geothermal region", "CA",
+     (35.8, 36.6, -117.8, -117.0),
+     "Coso Volcanic Field on the eastern Sierra front; operating flash-steam field at China Lake."),
 ]
 
 

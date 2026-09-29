@@ -227,7 +227,7 @@ Once Stanford data is fully downloaded, perform:
 > **Update (2026-09-23):** A variant of Option B was ultimately pursued — **without purchase**.
 > Rather than buy SMU grids, the public PNG maps were digitized and Lambert-georeferenced,
 > then used only for depths beyond Stanford's 7 km range (never to override Stanford where both
-> exist). Cross-validation at the 7 km overlap: r = 0.690, RMSE = 53.3°C, n = 532,455.
+> exist). Stanford–SMU overlap comparison at 7 km: r = 0.690, RMSE = 53.3°C, n = 532,455.
 
 **Option C: Regional Deep Data (FUTURE ENHANCEMENT)**
 - Identify specific high-interest regions

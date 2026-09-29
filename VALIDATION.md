@@ -74,7 +74,7 @@ Instead, the results show:
 
 ## Cross-comparison: Stanford vs SMU
 
-![Cross-validation](plots/cross_validation_stanford_smu.png)
+![Stanford–SMU overlap comparison](plots/cross_validation_stanford_smu.png)
 
 **At 7 km overlap region** (after the SMU Lambert re-georeferencing):
 - **Correlation**: 0.690

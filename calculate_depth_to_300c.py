@@ -567,7 +567,7 @@ def cross_validate_stanford_smu_overlap(stanford_data, smu_data):
 
     ax.set_xlabel('Stanford 7 km Temperature (°C)\n(Continuous Model)', fontsize=12, fontweight='bold')
     ax.set_ylabel('SMU 7.5 km Temperature (°C)\n(Digitized from Color Maps)', fontsize=12, fontweight='bold')
-    ax.set_title(f'Cross-Validation: Stanford vs SMU in Overlap Region\n'
+    ax.set_title(f'Stanford–SMU overlap comparison (7 km)\n'
                 f'Correlation: {correlation:.3f}, RMSE: {rmse:.1f}°C, n={n_valid:,}',
                 fontsize=14, fontweight='bold')
     ax.grid(True, alpha=0.3)

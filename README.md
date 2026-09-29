@@ -33,9 +33,9 @@ TIGER 2023 boundaries. Grey regions require >10 km drilling depth.*
 
 ## Where the models suggest accessible resources may be
 
-The modeled ≤10 km resource is overwhelmingly west of roughly **−100° longitude** — the divide
-between the actively extending, thin-crust West and the cold, thick, stable craton beneath the
-eastern two-thirds of the country. Even there it is not one contiguous target: the **2,770 cells
+The modeled ≤10 km resource is overwhelmingly west of roughly **−100° longitude**, which broadly
+tracks the transition between the actively extending, thin-crust West and the cold, thick, stable
+craton beneath the eastern two-thirds of the country. Even there it is not one contiguous target: the **2,770 cells
 reaching 300 °C within 6 km** cluster in a handful of distinct volcanic and rift settings. The
 table below grounds each in coordinates and modeled depth, read straight off the grid
 ([`data/processed/geographic_reference.csv`](data/processed/geographic_reference.csv)); the
@@ -73,23 +73,43 @@ whether a well here could produce power. For the coal-plant view of the resource
 
 ---
 
-## Illustrative generation scenario by depth
+## Accessible area by drilling depth (with an illustrative generation scenario)
+
+The directly supported result here is the **area reaching 300 °C at each drilling depth** — the
+cumulative column below. On Stanford's continuous 0–7 km model, roughly **4.70 % of CONUS reaches
+300 °C within 7 km**; carrying the estimate into the exploratory SMU layers raises it to
+**26.30 % by 10 km**. That area-vs-depth relationship is the robust finding. The **Capacity (GW)**
+column is a downstream *scenario* layered on top of it — the same area multiplied by an assumed
+power density and development fraction — so it inherits every uncertainty in the area estimate and
+adds its own. Treat the ~13,371 GW figure as an order-of-magnitude illustration, not a resource or
+generation forecast.
+
+The **Data source** column marks where the estimate stops being Stanford's continuous model
+(≤ 7 km) and becomes the coarser, digitized SMU extension (7.5–10 km).
 
 ![Geothermal metrics by depth](plots/geothermal_metrics_by_depth.png)
 
-| Depth | Area (km²) | % CONUS | Capacity (GW) | × US Total |
-|---|---:|---:|---:|---:|
-| ≤4 km | 0 | 0.00 | 0 | 0.0 |
-| 4–5 km | 867 | 0.01 | 5.2 | 0.0 |
-| 5–6 km | 36,014 | 0.50 | 252 | 0.2 |
-| 6–7 km | 304,350 | 4.19 | 2,130 | 1.7 |
-| 7–8 km | 197,784 | 2.72 | 1,384 | 1.1 |
-| 8–10 km | 1,371,312 | 18.88 | 9,599 | 7.5 |
-| **>10 km** | **5,353,343** | **73.70** | **—** | **—** |
-| **≤10 km** | **1,910,326** | **26.30** | **13,371** | **10.4** |
-| *Total* | *7,263,669* | *100.00* | *13,371** | *10.4** |
+| Depth | Data source | Area (km²) | % CONUS | Cum. % reaching 300 °C (≤ depth) | Capacity (GW) | × US Total |
+|---|---|---:|---:|---:|---:|---:|
+| ≤4 km | Stanford | 0 | 0.00 | 0.00 | 0 | 0.0 |
+| 4–5 km | Stanford | 867 | 0.01 | 0.01 | 5.2 | 0.0 |
+| 5–6 km | Stanford | 36,014 | 0.50 | 0.51 | 252 | 0.2 |
+| 6–7 km | Stanford | 304,350 | 4.19 | **4.70** | 2,130 | 1.7 |
+| 7–8 km | SMU | 197,784 | 2.72 | 7.42 | 1,384 | 1.1 |
+| 8–10 km | SMU | 1,371,312 | 18.88 | **26.30** | 9,599 | 7.5 |
+| **>10 km** | — | **5,353,343** | **73.70** | *unresolved* | **—** | **—** |
+| **≤10 km** | Stanford + SMU | **1,910,326** | **26.30** | **26.30** | **13,371** | **10.4** |
+| *Total* | — | *7,263,669* | *100.00* | — | *13,371** | *10.4** |
 
-Area is **latitude-weighted** (`A = R² · cos φ · Δφ · Δλ`). Capacity values shown only for ≤10 km bins where the analysis identifies 300°C within the modeled range. The >10 km category has no capacity estimate because the actual depth to 300°C is unknown for those cells. Values show the scale implied by assumed 35 MW/km² power density (superhot geothermal, 300-400°C) and 20% development; they are not resource or generation forecasts. IDDP-2 demonstrated 45 MW/well at 427°C. US total capacity: **1,287 GW** (coal: 180 GW). See [`research/ENERGY_GENERATION_RESEARCH.md`](research/ENERGY_GENERATION_RESEARCH.md) for details.
+Area is **latitude-weighted** (`A = R² · cos φ · Δφ · Δλ`). The cumulative column is the share of
+CONUS reaching 300 °C within each depth; the **>10 km** row is the share whose depth to 300 °C is
+deeper than the mapped 10 km range — *not* a claim that 300 °C is unreachable there. Superhot and
+EGS drilling programs target ~15–20 km; this data simply does not resolve the crossing depth past
+10 km, so the row carries no cumulative-reach or capacity value. Capacity values
+show the scale implied by an assumed 35 MW/km² power density (superhot geothermal, 300–400 °C) and
+20 % development; IDDP-2 demonstrated 45 MW/well at 427 °C. US total installed capacity for
+comparison: **1,287 GW** (coal: 180 GW). See
+[`research/ENERGY_GENERATION_RESEARCH.md`](research/ENERGY_GENERATION_RESEARCH.md) for details.
 
 ---
 
@@ -105,9 +125,9 @@ The analysis combines two independent thermal models to map subsurface temperatu
 
 At each grid cell, we interpolate through the temperature profile to identify the depth at which conditions cross 300 °C — the threshold used here for superhot geothermal screening. Stanford layers are sorted by geographic coordinates before combining to ensure spatial alignment. SMU matching uses geodetic distance filtering (50 km threshold, cos(latitude) correction for longitude convergence at high latitudes).
 
-![Cross-validation plot](plots/cross_validation_stanford_smu.png)
+![Stanford–SMU overlap comparison](plots/cross_validation_stanford_smu.png)
 
-*Cross-validation at 7 km overlap: r = 0.690, RMSE = 53 °C across 532,455 matched locations (Stanford runs ~39 °C warmer than the digitized SMU estimates). Horizontal banding in SMU data reflects the discrete temperature bins in the source maps (~25 °C intervals).*
+*Stanford–SMU overlap comparison at 7 km: r = 0.690, RMSE = 53 °C across 532,455 matched locations (Stanford runs ~39 °C warmer than the digitized SMU estimates). Neither dataset is ground truth for the other — this shows how far the two independent models agree where they overlap, not a validation of one against the other. Horizontal banding in SMU data reflects the discrete temperature bins in the source maps (~25 °C intervals).*
 
 ### Data Characteristics
 
@@ -454,6 +474,6 @@ Analysis and documentation prepared with [Claude Code](https://claude.ai/code) b
 
 **Christopher Smith** · [@chrissmithphd](https://github.com/chrissmithphd)
 
-*Last updated 2026-09-28*
+*Last updated 2026-09-29*
 
 </div>

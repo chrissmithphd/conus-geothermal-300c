@@ -243,7 +243,7 @@ plots/
 | 7-10 km | ❌ No | ✅ Yes (7.5, 8.5, 10) |
 | >10 km | ❌ No | ❌ No |
 
-**Overlap:** ~7 km boundary — Stanford's 7 km vs SMU's 7.5 km layer, used for cross-validation (r = 0.690, RMSE 53.3°C, n = 532,455)
+**Overlap:** ~7 km boundary — Stanford's 7 km vs SMU's 7.5 km layer, used for the Stanford–SMU overlap comparison (r = 0.690, RMSE 53.3°C, n = 532,455)
 
 ### Data Quality
 

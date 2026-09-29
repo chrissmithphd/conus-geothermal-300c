@@ -76,7 +76,7 @@ Instead, the results show:
 
 ![Stanford–SMU overlap comparison](plots/cross_validation_stanford_smu.png)
 
-**At 7 km overlap region** (after the SMU Lambert re-georeferencing):
+**At the Stanford 7.0 km / SMU 7.5 km overlap** (the shallowest depths the two sources share, after the SMU Lambert re-georeferencing):
 - **Correlation**: 0.690
 - **RMSE**: 53.3°C, with Stanford averaging 38.7°C warmer than the digitized SMU estimates
 - **Sample size**: 532,455 matched locations (within 50 km)

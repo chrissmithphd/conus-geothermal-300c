@@ -6,7 +6,7 @@ This document checks whether the results are broadly consistent with known geoth
 
 Our analysis combines two independent datasets:
 - **Stanford Thermal Earth Model (2024)**: 0-7 km depth, 534,942 grid cells, continuous thermal model
-- **SMU Geothermal Lab Maps (2011)**: 7.5-10 km depth, 1.65M digitized points, temperature-at-depth measurements
+- **SMU Geothermal Lab Maps (2011)**: 7.5-10 km depth, 1.65M points digitized from published *modeled* temperature-at-depth maps (values read off the maps, not 1.65M direct temperature measurements)
 
 **Critical fix (V2)**: We discovered Stanford JSON files store identical coordinates in different orders. V2 sorts all layers by `(lat, lon)` before combining, with an explicit check that coordinates match across depths.
 

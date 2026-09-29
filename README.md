@@ -113,98 +113,6 @@ comparison: **1,287 GW** (coal: 180 GW). See
 
 ---
 
-## Methodology
-
-Two independent thermal datasets feed two **separate pipelines**; they are combined only at the
-final binning step. Stanford supplies a continuous crossing depth to 7 km; the digitized SMU maps
-extend the screen categorically to 10 km.
-
-```
-Stanford GeoJSON (0–7 km)               SMU PNG maps (7.5–10 km)
-        │                                       │
-        │ 8 depth layers, exact °C per cell     │ colour → temperature class (pixel classification)
-        │ layers aligned by (lat, lon)          │ georeference: Lambert Conformal Conic
-        ▼                                       │ (ESRI:102004) affine, ICP-fit to drawn
-  linear interpolation                          │ state borders (~3 km median error)
-  T(z) → depth where T = 300 °C                 ▼
-        │                              SMU 7.5 / 8.5 / 10 km temperature grids
-        ├── crossing found ≤ 7 km → depth_300_km (continuous)
-        │
-        └── not reached by 7 km ──→ nearest-neighbour match to SMU points,
-                                    Haversine ≤ 50 km filter, first layer ≥ 300 °C
-                                    → categorical depth bound, else > 10 km
-```
-
-### Stanford pipeline — continuous, 0–7 km
-
-The Stanford JSON layers do not share a guaranteed row order, so all eight are **sorted by
-`(lat, lon)` and checked to agree to < 1e-6°** before any vertical profile is built — temperatures
-are never spliced across locations. For each of the 534,942 cells, the eight modelled temperatures
-are linearly interpolated to find where the profile crosses 300 °C:
-
-```python
-# Find first adjacent depth pair that brackets 300°C
-for i in range(len(temperatures) - 1):
-    if temperatures[i] <= 300 < temperatures[i+1]:
-        t_low, t_high = temperatures[i], temperatures[i+1]
-        d_low, d_high = depths[i], depths[i+1]
-        return d_low + (300 - t_low) / (t_high - t_low) * (d_high - d_low)
-return np.nan  # 300 °C not reached within 0–7 km
-```
-
-Worked example — 250 °C at 6 km, 320 °C at 7 km: `6 + (300 − 250)/(320 − 250) × 1 =` **6.71 km**.
-This gives a genuine continuous depth. Result: **25,448 cells (4.8 %)** cross 300 °C within 7 km.
-
-### SMU pipeline — categorical, 7.5–10 km
-
-The three deep SMU maps are published only as rendered PNGs, so they are **digitized** (legend
-colours matched to 25 °C temperature classes, each pixel classified by nearest colour) and then
-**georegistered projection-aware**: each layer is placed with a **Lambert Conformal Conic
-(ESRI:102004) affine fitted by ICP against the maps' own drawn state borders**, then reprojected to
-WGS 84. Positional accuracy is **~3 km median / ~9 km at the 90th percentile**. This corrects an
-earlier plate-carrée assumption (a linear lat/lon stretch to the CONUS box) that mis-registered the
-maps by ~28 km median and pushed hot zones offshore.
-
-For the 509,494 cells that do **not** cross 300 °C inside Stanford's range, the pipeline takes the
-**nearest-neighbour SMU point** and then applies a **Haversine ≤ 50 km distance filter**; the first
-SMU layer (7.5, 8.5 or 10 km) at ≥ 300 °C is reported as a **categorical depth bound**. This
-recovers **116,499** more cells; the remaining **392,995** are classified `> 10 km`. The full
-digitization + registration is reproducible from tracked code:
-[`digitize_all_smu_maps.py`](digitize_all_smu_maps.py) is self-contained (the fitted Lambert affines
-are embedded), and [`register_smu_maps.py`](register_smu_maps.py) re-derives and verifies those
-affines from the source maps (see the [registration report](docs/SMU_REGISTRATION_REPORT.md)).
-
-### Combine, bin, area-weight
-
-Continuous Stanford depths and categorical SMU bounds are assigned to the seven project depth bins,
-each cell weighted by its true latitude-corrected surface area (`A = R² · cos φ · Δφ · Δλ`), and
-tabulated.
-
-### Stanford vs SMU precision
-
-The two sources differ in kind, and the difference is preserved end to end:
-
-- **Stanford** — continuous depth estimate (e.g. "300 °C at 6.37 km").
-- **SMU** — categorical upper bound (e.g. "≥ 300 °C by 8.5 km" → the crossing lies in the
-  7.5–8.5 km range). Both assume linear, monotonic temperature increase between sampled depths.
-
-![Stanford–SMU overlap comparison](plots/cross_validation_stanford_smu.png)
-
-*Stanford 7.0 km vs SMU 7.5 km — the shallowest depths the two sources share: r = 0.690,
-RMSE = 53 °C across 532,455 matched locations (Stanford runs ~39 °C warmer than the digitized SMU
-estimates). Neither dataset is ground truth for the other — this shows how far two independent
-models agree where they overlap, not a validation of one against the other. Horizontal banding in
-the SMU values is the 25 °C class quantization, not noise.*
-
-**Coverage** (of 534,942 cells) — *within 7 km:* 4.8 % of cells / 4.7 % of CONUS area (Stanford);
-*within 10 km:* 26.5 % of cells / 26.3 % of CONUS area (Stanford + SMU). Area-weighted percentages
-run lower because they down-weight the smaller ground footprint of high-latitude cells; the area
-figures are the ones used in the headline and generation table.
-
-**[→ Regional sanity checks (Montana/Yellowstone) and the grid-alignment debugging history](VALIDATION.md)**
-
----
-
 ## Coal infrastructure and modeled geothermal potential
 
 ![Coal plants and geothermal overlay](plots/coal_plants_geothermal_overlay.png)
@@ -346,6 +254,98 @@ the 90th percentile. The fit is fully reproducible from
 > ⚠️ **This is an approximate re-digitisation of published figures, not the original SMU
 > model.** It is used only to bin depths *beyond* Stanford's validated range, never to
 > override Stanford where both exist.
+
+---
+
+## Methodology
+
+Two independent thermal datasets feed two **separate pipelines**; they are combined only at the
+final binning step. Stanford supplies a continuous crossing depth to 7 km; the digitized SMU maps
+extend the screen categorically to 10 km.
+
+```
+Stanford GeoJSON (0–7 km)               SMU PNG maps (7.5–10 km)
+        │                                       │
+        │ 8 depth layers, exact °C per cell     │ colour → temperature class (pixel classification)
+        │ layers aligned by (lat, lon)          │ georeference: Lambert Conformal Conic
+        ▼                                       │ (ESRI:102004) affine, ICP-fit to drawn
+  linear interpolation                          │ state borders (~3 km median error)
+  T(z) → depth where T = 300 °C                 ▼
+        │                              SMU 7.5 / 8.5 / 10 km temperature grids
+        ├── crossing found ≤ 7 km → depth_300_km (continuous)
+        │
+        └── not reached by 7 km ──→ nearest-neighbour match to SMU points,
+                                    Haversine ≤ 50 km filter, first layer ≥ 300 °C
+                                    → categorical depth bound, else > 10 km
+```
+
+### Stanford pipeline — continuous, 0–7 km
+
+The Stanford JSON layers do not share a guaranteed row order, so all eight are **sorted by
+`(lat, lon)` and checked to agree to < 1e-6°** before any vertical profile is built — temperatures
+are never spliced across locations. For each of the 534,942 cells, the eight modelled temperatures
+are linearly interpolated to find where the profile crosses 300 °C:
+
+```python
+# Find first adjacent depth pair that brackets 300°C
+for i in range(len(temperatures) - 1):
+    if temperatures[i] <= 300 < temperatures[i+1]:
+        t_low, t_high = temperatures[i], temperatures[i+1]
+        d_low, d_high = depths[i], depths[i+1]
+        return d_low + (300 - t_low) / (t_high - t_low) * (d_high - d_low)
+return np.nan  # 300 °C not reached within 0–7 km
+```
+
+Worked example — 250 °C at 6 km, 320 °C at 7 km: `6 + (300 − 250)/(320 − 250) × 1 =` **6.71 km**.
+This gives a genuine continuous depth. Result: **25,448 cells (4.8 %)** cross 300 °C within 7 km.
+
+### SMU pipeline — categorical, 7.5–10 km
+
+The three deep SMU maps are published only as rendered PNGs, so they are **digitized** (legend
+colours matched to 25 °C temperature classes, each pixel classified by nearest colour) and then
+**georegistered projection-aware**: each layer is placed with a **Lambert Conformal Conic
+(ESRI:102004) affine fitted by ICP against the maps' own drawn state borders**, then reprojected to
+WGS 84. Positional accuracy is **~3 km median / ~9 km at the 90th percentile**. This corrects an
+earlier plate-carrée assumption (a linear lat/lon stretch to the CONUS box) that mis-registered the
+maps by ~28 km median and pushed hot zones offshore.
+
+For the 509,494 cells that do **not** cross 300 °C inside Stanford's range, the pipeline takes the
+**nearest-neighbour SMU point** and then applies a **Haversine ≤ 50 km distance filter**; the first
+SMU layer (7.5, 8.5 or 10 km) at ≥ 300 °C is reported as a **categorical depth bound**. This
+recovers **116,499** more cells; the remaining **392,995** are classified `> 10 km`. The full
+digitization + registration is reproducible from tracked code:
+[`digitize_all_smu_maps.py`](digitize_all_smu_maps.py) is self-contained (the fitted Lambert affines
+are embedded), and [`register_smu_maps.py`](register_smu_maps.py) re-derives and verifies those
+affines from the source maps (see the [registration report](docs/SMU_REGISTRATION_REPORT.md)).
+
+### Combine, bin, area-weight
+
+Continuous Stanford depths and categorical SMU bounds are assigned to the seven project depth bins,
+each cell weighted by its true latitude-corrected surface area (`A = R² · cos φ · Δφ · Δλ`), and
+tabulated.
+
+### Stanford vs SMU precision
+
+The two sources differ in kind, and the difference is preserved end to end:
+
+- **Stanford** — continuous depth estimate (e.g. "300 °C at 6.37 km").
+- **SMU** — categorical upper bound (e.g. "≥ 300 °C by 8.5 km" → the crossing lies in the
+  7.5–8.5 km range). Both assume linear, monotonic temperature increase between sampled depths.
+
+![Stanford–SMU overlap comparison](plots/cross_validation_stanford_smu.png)
+
+*Stanford 7.0 km vs SMU 7.5 km — the shallowest depths the two sources share: r = 0.690,
+RMSE = 53 °C across 532,455 matched locations (Stanford runs ~39 °C warmer than the digitized SMU
+estimates). Neither dataset is ground truth for the other — this shows how far two independent
+models agree where they overlap, not a validation of one against the other. Horizontal banding in
+the SMU values is the 25 °C class quantization, not noise.*
+
+**Coverage** (of 534,942 cells) — *within 7 km:* 4.8 % of cells / 4.7 % of CONUS area (Stanford);
+*within 10 km:* 26.5 % of cells / 26.3 % of CONUS area (Stanford + SMU). Area-weighted percentages
+run lower because they down-weight the smaller ground footprint of high-latitude cells; the area
+figures are the ones used in the headline and generation table.
+
+**[→ Regional sanity checks (Montana/Yellowstone) and the grid-alignment debugging history](VALIDATION.md)**
 
 ---
 

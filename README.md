@@ -10,7 +10,7 @@
 [![License](https://img.shields.io/badge/code-MIT-green)](#license)
 
 **How deep must you drill to hit 300 °C?**
-In the Stanford thermal model, roughly **5% of CONUS reaches 300 °C within 7 km** — the best-constrained part of this estimate. Extending the modeled drilling envelope to **10 km** with the digitized SMU maps raises the estimated accessible area to **roughly 26%** (~1.9 million km²); the remaining ~74% would require drilling deeper than 10 km. These are **modeled, exploratory figures — a screening estimate, not a measured resource assessment.**
+In the Stanford thermal model, roughly **5% of CONUS reaches 300 °C within 7 km**. Extending the modeled drilling envelope to **10 km** by digitizing SMU maps raises the estimated accessible area to **roughly 26%** of the CONUS (~1.9 million km²); the remaining ~74% would require drilling deeper than 10 km. These are **modeled, exploratory figures — not a measured resource assessment.**
 
 </div>
 
@@ -20,7 +20,7 @@ In the Stanford thermal model, roughly **5% of CONUS reaches 300 °C within 7 km
 
 ![Depth required to reach 300 °C — continuous field](plots/depth_to_300c_heatmap.png)
 
-*Continuous nearest-neighbour field at ~3 km resolution. State outlines are US Census
+*Continuous nearest-neighbor field at ~3 km resolution. State outlines are US Census
 TIGER 2023 boundaries. Grey regions require >10 km drilling depth.*
 
 **🔍 [Open the interactive, zoomable version →](https://chrissmithphd.github.io/conus-geothermal-300c/)**
@@ -73,15 +73,13 @@ whether a well here could produce power. For the coal-plant view of the resource
 
 ---
 
-## Accessible area by drilling depth (with an illustrative generation scenario)
+## Accessible area by drilling depth
 
-The directly supported result here is the **area reaching 300 °C at each drilling depth** — the
-cumulative column below. On Stanford's continuous 0–7 km model, roughly **4.70 % of CONUS reaches
-300 °C within 7 km**; carrying the estimate into the exploratory SMU layers raises it to
+On Stanford's continuous 0–7 km model, roughly **4.70 % of CONUS reaches 300 °C within 7 km**; 
+carrying the estimate into the exploratory SMU layers raises it to
 **26.30 % by 10 km**. That area-vs-depth relationship is the robust finding. The **Capacity (GW)**
 column is a downstream *scenario* layered on top of it — the same area multiplied by an assumed
-power density and development fraction — so it inherits every uncertainty in the area estimate and
-adds its own. Treat the ~13,371 GW figure as an order-of-magnitude illustration, not a resource or
+power density and development fraction. Treat the ~13,371 GW figure as an order-of-magnitude illustration, not a resource or
 generation forecast.
 
 The **Data source** column marks where the estimate stops being Stanford's continuous model
@@ -465,7 +463,7 @@ Analysis and documentation prepared with [Claude Code](https://claude.ai/code) b
 
 <div align="center">
 
-**Christopher Smith** · [@chrissmithphd](https://github.com/chrissmithphd)
+**Chris Smith** · [@chrissmithphd](https://github.com/chrissmithphd)
 
 *Last updated 2026-09-29*
 
